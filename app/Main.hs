@@ -5,6 +5,7 @@
 module Main where
 
 import Data.List (intercalate)
+import Data.Monoid
 import qualified Data.Text as T
 import Data.Word
 
@@ -69,7 +70,7 @@ data Modifier = forall a. (ToString a) => Black a
               | forall a. (ToString a) => Underline a
               | forall a. (ToString a) => Inverse a
               | forall a. (ToString a) => Strike a
-              | forall a. (ToString a) => Multi [a]
+              | Multi [Modifier]
 
 class ToString a where
     toString :: a -> String
@@ -135,6 +136,13 @@ instance ToString Modifier where
     toString (Strike a)    = concat [strikeOn, toString a, strikeOff]
     toString (Multi as)    = concat $ map toString as
 
+instance Monoid Modifier where
+    mempty = Multi []
+    mappend (Multi as) (Multi bs) = Multi $ as ++ bs
+    mappend (Multi as) b = Multi $ as ++ [b]
+    mappend a (Multi bs) = Multi $ [a] ++ bs
+    mappend a b = Multi [a, b]
+
 putColorLn :: Modifier -> IO ()
 putColorLn = putStrLn . toString
 
@@ -157,4 +165,5 @@ main = do
     putColorLn m2
     putColorLn $ Cyan $ T.pack "Cyan Text"
     putColorLn $ Magenta $ (10::Word64)
-    putColorLn m3
+    putColorLn $ Multi [Red "RED", Yellow "YELLOW"] <> Multi [Default " ", White 1, Default " ", Underline "Hello"]
+    putColorLn $ Red "RED" <> Default " " <> Yellow "YELLOW" <> Default " " <> White 1 <> Default " " <> Underline "Hello"
