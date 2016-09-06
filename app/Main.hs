@@ -108,31 +108,31 @@ instance ToString Double where
     toString a = show a
 
 instance ToString Modifier where
-    toString (Black a)     = black ++ toString a ++ defaultColor
-    toString (Red a)       = red ++ toString a ++ defaultColor
-    toString (Green a)     = green ++ toString a ++ defaultColor
-    toString (Yellow a)    = yellow ++ toString a ++ defaultColor
-    toString (Blue a)      = blue ++ toString a ++ defaultColor
-    toString (Magenta a)   = magenta ++ toString a ++ defaultColor
-    toString (Cyan a)      = cyan ++ toString a ++ defaultColor
-    toString (White a)     = white ++ toString a ++ defaultColor
+    toString (Black a)     = concat [black, toString a, defaultColor]
+    toString (Red a)       = concat [red, toString a, defaultColor]
+    toString (Green a)     = concat [green, toString a, defaultColor]
+    toString (Yellow a)    = concat [yellow, toString a, defaultColor]
+    toString (Blue a)      = concat [blue, toString a, defaultColor]
+    toString (Magenta a)   = concat [magenta, toString a, defaultColor]
+    toString (Cyan a)      = concat [cyan, toString a, defaultColor]
+    toString (White a)     = concat [white, toString a, defaultColor]
 
-    toString (BgBlack a)   = bgblack ++ toString a ++ defaultBgColor
-    toString (BgRed a)     = bgred ++ toString a ++ defaultBgColor
-    toString (BgGreen a)   = bggreen ++ toString a ++ defaultBgColor
-    toString (BgYellow a)  = bgyellow ++ toString a ++ defaultBgColor
-    toString (BgBlue a)    = bgblue ++ toString a ++ defaultBgColor
-    toString (BgMagenta a) = bgmagenta ++ toString a ++ defaultBgColor
-    toString (BgCyan a)    = bgcyan ++ toString a ++ defaultBgColor
-    toString (BgWhite a)   = bgwhite ++ toString a ++ defaultBgColor
+    toString (BgBlack a)   = concat [bgblack, toString a, defaultBgColor]
+    toString (BgRed a)     = concat [bgred, toString a, defaultBgColor]
+    toString (BgGreen a)   = concat [bggreen, toString a, defaultBgColor]
+    toString (BgYellow a)  = concat [bgyellow, toString a, defaultBgColor]
+    toString (BgBlue a)    = concat [bgblue, toString a, defaultBgColor]
+    toString (BgMagenta a) = concat [bgmagenta, toString a, defaultBgColor]
+    toString (BgCyan a)    = concat [bgcyan, toString a, defaultBgColor]
+    toString (BgWhite a)   = concat [bgwhite, toString a, defaultBgColor]
 
-    toString (Default a)   = defaultColor ++ toString a
-    toString (BgDefault a) = defaultBgColor ++ toString a
+    toString (Default a)   = concat [defaultColor, toString a]
+    toString (BgDefault a) = concat [defaultBgColor, toString a]
 
-    toString (Bright a)    = brightOn ++ toString a ++ brightOff
-    toString (Underline a) = underlineOn ++ toString a ++ underlineOff
-    toString (Inverse a)   = inverseOn ++ toString a ++ inverseOff
-    toString (Strike a)    = strikeOn ++ toString a ++ strikeOff
+    toString (Bright a)    = concat [brightOn, toString a, brightOff]
+    toString (Underline a) = concat [underlineOn, toString a, underlineOff]
+    toString (Inverse a)   = concat [inverseOn, toString a, inverseOff]
+    toString (Strike a)    = concat [strikeOn, toString a, strikeOff]
     toString (Multi as)    = concat $ map toString as
 
 putColorLn :: Modifier -> IO ()
@@ -145,13 +145,16 @@ x = [BgWhite $ Black "black", Red "red", Green "green", Yellow "yellow", Blue "B
 y = map Underline x
 z = Underline (Green 5)
 
-m1 = Default $ Inverse $ Multi [Underline $ Blue "Hello Green", Bright $ Blue "Hello Blue"]
+m1 = Inverse $ Multi [Underline $ Green "Hello Green", Bright $ Blue "Hello Blue"]
 m2 = Red "Hello RED"
+
+m3 = Inverse $ BgRed $ White $ Bright "Hello World"
 
 -- main = putColorLn $ Multi [BgYellow "Hello", BgYellow $ Multi [m1, m2]]
 main = do
     mapM_ putColorLn x
     putColorLn m1
     putColorLn m2
-    (putColorLn $ Cyan $ T.pack "Cyan Text")
+    putColorLn $ Cyan $ T.pack "Cyan Text"
     putColorLn $ Magenta $ (10::Word64)
+    putColorLn m3
