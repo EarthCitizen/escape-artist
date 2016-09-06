@@ -118,6 +118,12 @@ instance ToString Modifier where
     toString (Strike a)    = strikeOn ++ toString a ++ strikeOff
     toString (Multi as)    = concat $ map toString as
 
+putColorLn :: Modifier -> IO ()
+putColorLn = putStrLn . toString
+
+putColor :: Modifier -> IO ()
+putColor = putStr . toString
+
 x = [Black "black", Red "red", Green "green", Yellow "yellow", Blue "Blue", Magenta "magenta", Cyan "cyan", White "white"]
 y = map Underline x
 z = Underline (Green 5)
@@ -125,4 +131,5 @@ z = Underline (Green 5)
 m1 = Default $ Inverse $ Multi [Underline $ Blue "Hello Green", Bright $ Blue "Hello Blue"]
 m2 = Red "Hello RED"
 
-main = putStrLn $ toString $ Multi [BgYellow "Hello", BgYellow $ Multi [m1, m2]]
+-- main = putColorLn $ Multi [BgYellow "Hello", BgYellow $ Multi [m1, m2]]
+main = mapM_ putColorLn x
