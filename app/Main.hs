@@ -5,6 +5,8 @@
 module Main where
 
 import Data.List (intercalate)
+import qualified Data.Text as T
+import Data.Word
 
 black   = "\x1B[30m"
 red     = "\x1B[31m"
@@ -78,7 +80,22 @@ instance ToString String where
 instance ToString Char where
     toString a = [a]
 
+instance ToString T.Text where
+    toString a = T.unpack a
+
 instance ToString Int where
+    toString a = show a
+
+instance ToString Word8 where
+    toString a = show a
+
+instance ToString Word16 where
+    toString a = show a
+
+instance ToString Word32 where
+    toString a = show a
+
+instance ToString Word64 where
     toString a = show a
 
 instance ToString Integer where
@@ -124,7 +141,7 @@ putColorLn = putStrLn . toString
 putColor :: Modifier -> IO ()
 putColor = putStr . toString
 
-x = [Black "black", Red "red", Green "green", Yellow "yellow", Blue "Blue", Magenta "magenta", Cyan "cyan", White "white"]
+x = [BgWhite $ Black "black", Red "red", Green "green", Yellow "yellow", Blue "Blue", Magenta "magenta", Cyan "cyan", White "white"]
 y = map Underline x
 z = Underline (Green 5)
 
@@ -132,4 +149,9 @@ m1 = Default $ Inverse $ Multi [Underline $ Blue "Hello Green", Bright $ Blue "H
 m2 = Red "Hello RED"
 
 -- main = putColorLn $ Multi [BgYellow "Hello", BgYellow $ Multi [m1, m2]]
-main = mapM_ putColorLn x
+main = do
+    mapM_ putColorLn x
+    putColorLn m1
+    putColorLn m2
+    (putColorLn $ Cyan $ T.pack "Cyan Text")
+    putColorLn $ Magenta $ (10::Word64)
