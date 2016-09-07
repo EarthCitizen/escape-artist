@@ -12,7 +12,13 @@ spec :: Spec
 spec = do
     describe "putColor" $ do
         context "when passed a visual modifier" $ do
-            it "outputs the contained valued in the corresponding modification" $ forM_ modTestCases $
+            it "outputs the contained valued with the corresponding modification" $ forM_ modTestCases $
+                \(TestCase modifier expectation) -> do
+                    (out, result) <- capture $ putColor $ modifier
+                    out `shouldBe` expectation
+                    result `shouldBe` ()
+        context "when passed a multi modifier" $ do
+            it "outputs all of the contained values with the corresponding modifications" $ forM_ multiTestCases $
                 \(TestCase modifier expectation) -> do
                     (out, result) <- capture $ putColor $ modifier
                     out `shouldBe` expectation

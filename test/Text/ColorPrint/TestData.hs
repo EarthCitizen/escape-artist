@@ -3,7 +3,7 @@ module Text.ColorPrint.TestData where
 import Text.ColorPrint
 import Text.ColorPrint.Internal
 
-data TestCase = TestCase Modifier String
+data TestCase = TestCase { getModifier :: Modifier, getExpected :: String }
 
 openCloseCons = [
         (black,   defaultColor, Black  ),
@@ -54,3 +54,9 @@ stringValueExp = [("ASDASDASD", "ASDASDASD"), ("%%$\":98^tug'kjgh\"", "%%$\":98^
 stringTestCases = genTestCases stringValueExp
 
 modTestCases = intTestCases ++ integerTestCases ++ floatTestCases ++ doubleTestCases ++ stringTestCases
+
+
+
+multiTestCases = let modifiers = map getModifier intTestCases
+                     expected = concat $ map getExpected intTestCases
+                  in [TestCase (Multi modifiers) expected]
