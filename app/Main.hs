@@ -1,4 +1,4 @@
-{-# LANGUAGE ExtendedDefaultRules #-}
+{-# LANGUAGE ExtendedDefaultRules, NoMonomorphismRestriction #-}
 
 import Data.Monoid ((<>))
 import Text.ColorPrint
