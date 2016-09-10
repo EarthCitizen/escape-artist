@@ -1,7 +1,7 @@
 module Text.ColorPrint (Modifier(..), putColorLn, putColor) where
 
 import Data.List (intercalate)
-import Data.Monoid
+import Data.Monoid hiding (Sum)
 import qualified Data.Text as T
 import Data.Word
 import Text.ColorPrint.Internal
@@ -31,7 +31,7 @@ data Modifier = forall a. (ToString a) => Black a
               | forall a. (ToString a) => Underline a
               | forall a. (ToString a) => Inverse a
               | forall a. (ToString a) => Strike a
-              | Multi [Modifier]
+              | Sum [Modifier]
 
 instance ToString String where
     toString a = a
@@ -67,39 +67,39 @@ instance ToString Double where
     toString a = show a
 
 instance ToString Modifier where
-    toString (Black     a) = concat [black, toString a, defaultColor]
-    toString (Red       a) = concat [red, toString a, defaultColor]
-    toString (Green     a) = concat [green, toString a, defaultColor]
-    toString (Yellow    a) = concat [yellow, toString a, defaultColor]
-    toString (Blue      a) = concat [blue, toString a, defaultColor]
+    toString (Black     a) = concat [black  , toString a, defaultColor]
+    toString (Red       a) = concat [red    , toString a, defaultColor]
+    toString (Green     a) = concat [green  , toString a, defaultColor]
+    toString (Yellow    a) = concat [yellow , toString a, defaultColor]
+    toString (Blue      a) = concat [blue   , toString a, defaultColor]
     toString (Magenta   a) = concat [magenta, toString a, defaultColor]
-    toString (Cyan      a) = concat [cyan, toString a, defaultColor]
-    toString (White     a) = concat [white, toString a, defaultColor]
+    toString (Cyan      a) = concat [cyan   , toString a, defaultColor]
+    toString (White     a) = concat [white  , toString a, defaultColor]
 
-    toString (BgBlack   a) = concat [bgblack, toString a, defaultBgColor]
-    toString (BgRed     a) = concat [bgred, toString a, defaultBgColor]
-    toString (BgGreen   a) = concat [bggreen, toString a, defaultBgColor]
-    toString (BgYellow  a) = concat [bgyellow, toString a, defaultBgColor]
-    toString (BgBlue    a) = concat [bgblue, toString a, defaultBgColor]
+    toString (BgBlack   a) = concat [bgblack  , toString a, defaultBgColor]
+    toString (BgRed     a) = concat [bgred    , toString a, defaultBgColor]
+    toString (BgGreen   a) = concat [bggreen  , toString a, defaultBgColor]
+    toString (BgYellow  a) = concat [bgyellow , toString a, defaultBgColor]
+    toString (BgBlue    a) = concat [bgblue   , toString a, defaultBgColor]
     toString (BgMagenta a) = concat [bgmagenta, toString a, defaultBgColor]
-    toString (BgCyan    a) = concat [bgcyan, toString a, defaultBgColor]
-    toString (BgWhite   a) = concat [bgwhite, toString a, defaultBgColor]
+    toString (BgCyan    a) = concat [bgcyan   , toString a, defaultBgColor]
+    toString (BgWhite   a) = concat [bgwhite  , toString a, defaultBgColor]
 
-    toString (Default   a) = concat [defaultColor, toString a]
+    toString (Default   a) = concat [defaultColor  , toString a]
     toString (BgDefault a) = concat [defaultBgColor, toString a]
 
-    toString (Bright    a) = concat [brightOn, toString a, brightOff]
+    toString (Bright    a) = concat [brightOn   , toString a, brightOff   ]
     toString (Underline a) = concat [underlineOn, toString a, underlineOff]
-    toString (Inverse   a) = concat [inverseOn, toString a, inverseOff]
-    toString (Strike    a) = concat [strikeOn, toString a, strikeOff]
-    toString (Multi    as) = concat $ map toString as
+    toString (Inverse   a) = concat [inverseOn  , toString a, inverseOff  ]
+    toString (Strike    a) = concat [strikeOn   , toString a, strikeOff   ]
+    toString (Sum      as) = concat $ map toString as
 
 instance Monoid Modifier where
-    mempty = Multi []
-    mappend (Multi as) (Multi bs) = Multi $ as ++ bs
-    mappend (Multi as) b          = Multi $ as ++ [b]
-    mappend a          (Multi bs) = Multi $ [a] ++ bs
-    mappend a          b          = Multi [a, b]
+    mempty = Sum []
+    mappend (Sum as) (Sum bs) = Sum $ as ++ bs
+    mappend (Sum as) b        = Sum $ as ++ [b]
+    mappend a        (Sum bs) = Sum $ [a] ++ bs
+    mappend a        b        = Sum [a, b]
 
 putColorLn :: Modifier -> IO ()
 putColorLn = putStrLn . toString
