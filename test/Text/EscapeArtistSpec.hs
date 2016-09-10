@@ -4,7 +4,7 @@ import Control.Monad (forM_)
 import System.IO.Silently
 import Test.QuickCheck
 import Test.Hspec
-import Text.EscapeArtist
+import Text.EscapeArtist.Constants
 import Text.EscapeArtist.Internal
 import Text.EscapeArtistSpec.TestData
 

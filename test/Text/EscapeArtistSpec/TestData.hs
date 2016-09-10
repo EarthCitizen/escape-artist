@@ -1,7 +1,7 @@
 module Text.EscapeArtistSpec.TestData where
 
-import Text.EscapeArtist
 import Text.EscapeArtist.Internal
+import Text.EscapeArtist.Constants
 
 data TestCase = TestCase { getEscapable :: Escapable, getExpected :: String }
 
