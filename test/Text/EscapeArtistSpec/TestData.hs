@@ -1,9 +1,9 @@
-module Text.ColorPrint.TestData where
+module Text.EscapeArtistSpec.TestData where
 
-import Text.ColorPrint
-import Text.ColorPrint.Internal
+import Text.EscapeArtist
+import Text.EscapeArtist.Internal
 
-data TestCase = TestCase { getModifier :: Modifier, getExpected :: String }
+data TestCase = TestCase { getEscapable :: Escapable, getExpected :: String }
 
 openCloseCons = [
         (black,   defaultColor, Black  ),
@@ -57,6 +57,6 @@ modTestCases = intTestCases ++ integerTestCases ++ floatTestCases ++ doubleTestC
 
 
 
-multiTestCases = let modifiers = map getModifier intTestCases
-                     expected = concat $ map getExpected intTestCases
-                  in [TestCase (Multi modifiers) expected]
+sumTestCases = let modifiers = map getEscapable intTestCases
+                   expected = concat $ map getExpected intTestCases
+                in [TestCase (Sum modifiers) expected]

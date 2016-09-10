@@ -1,4 +1,4 @@
-module Text.ColorPrint.Internal where
+module Text.EscapeArtist.Internal where
 
 black   = "\x1B[30m"
 red     = "\x1B[31m"
@@ -35,6 +35,3 @@ inverseOff = "\x1B[27m"
 
 strikeOn = "\x1B[9m"
 strikeOff = "\x1B[29m"
-
-class ToString a where
-    toString :: a -> String
