@@ -1,6 +1,6 @@
 {-# LANGUAGE ExtendedDefaultRules, NoMonomorphismRestriction #-}
 
 import Data.Monoid ((<>))
-import Text.ColorPrint
+import Text.EscapeArtist
 
-main = putColorLn $ Red 123 <> Blue 4
+main = putEscLn $ Red 123 <> Blue 4
