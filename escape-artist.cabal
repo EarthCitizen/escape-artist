@@ -30,6 +30,7 @@ executable escape-artist-exe
   default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances, NoMonomorphismRestriction
   build-depends:       base
                      , escape-artist
+                     , regex-compat
   default-language:    Haskell2010
 
 test-suite escape-artist-test

@@ -1,4 +1,4 @@
-module Text.EscapeArtist.Internal (Escapable(..), putEscLn, putEsc, escToString) where
+module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString) where
 
 import Data.Monoid hiding (Sum)
 import qualified Data.Text as T
@@ -114,8 +114,8 @@ instance Monoid Escapable where
     mappend a        (Sum bs) = Sum $ mconcat [[a], bs ]
     mappend a        b        = Sum [a, b]
 
-putEscLn :: Escapable -> IO ()
-putEscLn = putStrLn . escToString
+putEscLn :: (ToEscapable a) => a -> IO ()
+putEscLn = putStrLn . escToString . toEscapable
 
-putEsc :: Escapable -> IO ()
-putEsc = putStr . escToString
+putEsc :: (ToEscapable a) => a -> IO ()
+putEsc = putStr . escToString . toEscapable
