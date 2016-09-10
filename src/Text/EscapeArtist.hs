@@ -75,35 +75,35 @@ instance ToEscapable Escapable where
 
 escToString :: Escapable -> String
 escToString (Text a) = a
-escToString esc      = renderEnclosed "" "" esc
+escToString esc      = escToStringEnclosed "" "" esc
 
 escToStringEnclosed :: String -> String -> Escapable -> String
-escToStringEnclosed prefix suffix (Black     a) = renderEnclosed (prefix ++ black  ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Red       a) = renderEnclosed (prefix ++ red    ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Green     a) = renderEnclosed (prefix ++ green  ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Yellow    a) = renderEnclosed (prefix ++ yellow ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Blue      a) = renderEnclosed (prefix ++ blue   ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Magenta   a) = renderEnclosed (prefix ++ magenta) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Cyan      a) = renderEnclosed (prefix ++ cyan   ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (White     a) = renderEnclosed (prefix ++ white  ) (defaultColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (Black     a) = escToStringEnclosed (prefix ++ black  ) (defaultColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (Red       a) = escToStringEnclosed (prefix ++ red    ) (defaultColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (Green     a) = escToStringEnclosed (prefix ++ green  ) (defaultColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (Yellow    a) = escToStringEnclosed (prefix ++ yellow ) (defaultColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (Blue      a) = escToStringEnclosed (prefix ++ blue   ) (defaultColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (Magenta   a) = escToStringEnclosed (prefix ++ magenta) (defaultColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (Cyan      a) = escToStringEnclosed (prefix ++ cyan   ) (defaultColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (White     a) = escToStringEnclosed (prefix ++ white  ) (defaultColor ++ suffix) (toEscapable a)
 
-escToStringEnclosed prefix suffix (BgBlack   a) = renderEnclosed (prefix ++ bgblack  ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgRed     a) = renderEnclosed (prefix ++ bgred    ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgGreen   a) = renderEnclosed (prefix ++ bggreen  ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgYellow  a) = renderEnclosed (prefix ++ bgyellow ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgBlue    a) = renderEnclosed (prefix ++ bgblue   ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgMagenta a) = renderEnclosed (prefix ++ bgmagenta) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgCyan    a) = renderEnclosed (prefix ++ bgcyan   ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgWhite   a) = renderEnclosed (prefix ++ bgwhite  ) (defaultBgColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (BgBlack   a) = escToStringEnclosed (prefix ++ bgblack  ) (defaultBgColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (BgRed     a) = escToStringEnclosed (prefix ++ bgred    ) (defaultBgColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (BgGreen   a) = escToStringEnclosed (prefix ++ bggreen  ) (defaultBgColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (BgYellow  a) = escToStringEnclosed (prefix ++ bgyellow ) (defaultBgColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (BgBlue    a) = escToStringEnclosed (prefix ++ bgblue   ) (defaultBgColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (BgMagenta a) = escToStringEnclosed (prefix ++ bgmagenta) (defaultBgColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (BgCyan    a) = escToStringEnclosed (prefix ++ bgcyan   ) (defaultBgColor ++ suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (BgWhite   a) = escToStringEnclosed (prefix ++ bgwhite  ) (defaultBgColor ++ suffix) (toEscapable a)
 
-escToStringEnclosed prefix suffix (Default   a) = renderEnclosed (prefix ++ defaultColor  ) (suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgDefault a) = renderEnclosed (prefix ++ defaultBgColor) (suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (Default   a) = escToStringEnclosed (prefix ++ defaultColor  ) (suffix) (toEscapable a)
+escToStringEnclosed prefix suffix (BgDefault a) = escToStringEnclosed (prefix ++ defaultBgColor) (suffix) (toEscapable a)
 
-escToStringEnclosed prefix suffix (Bright    a) = renderEnclosed (prefix ++ brightOn   ) (brightOff    ++ suffix) (toEscapable  a)
-escToStringEnclosed prefix suffix (Underline a) = renderEnclosed (prefix ++ underlineOn) (underlineOff ++ suffix) (toEscapable  a)
-escToStringEnclosed prefix suffix (Inverse   a) = renderEnclosed (prefix ++ inverseOn  ) (inverseOff   ++ suffix) (toEscapable  a)
-escToStringEnclosed prefix suffix (Strike    a) = renderEnclosed (prefix ++ strikeOn   ) (strikeOff    ++ suffix) (toEscapable  a)
-escToStringEnclosed prefix suffix (Sum  a) = concat $ map (renderEnclosed prefix suffix) a
+escToStringEnclosed prefix suffix (Bright    a) = escToStringEnclosed (prefix ++ brightOn   ) (brightOff    ++ suffix) (toEscapable  a)
+escToStringEnclosed prefix suffix (Underline a) = escToStringEnclosed (prefix ++ underlineOn) (underlineOff ++ suffix) (toEscapable  a)
+escToStringEnclosed prefix suffix (Inverse   a) = escToStringEnclosed (prefix ++ inverseOn  ) (inverseOff   ++ suffix) (toEscapable  a)
+escToStringEnclosed prefix suffix (Strike    a) = escToStringEnclosed (prefix ++ strikeOn   ) (strikeOff    ++ suffix) (toEscapable  a)
+escToStringEnclosed prefix suffix (Sum  a) = concat $ map (escToStringEnclosed prefix suffix) a
 escToStringEnclosed prefix suffix (Text a) = concat [prefix, a, suffix]
 
 instance Monoid Escapable where
