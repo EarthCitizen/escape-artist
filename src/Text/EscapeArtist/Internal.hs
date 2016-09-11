@@ -2,6 +2,7 @@ module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, put
 
 import Data.Monoid hiding (Sum)
 import qualified Data.Text as T
+import Data.Typeable (Typeable, cast)
 import Data.Word
 import Text.EscapeArtist.Constants
 
@@ -25,6 +26,7 @@ data Escapable = forall a. (ToEscapable a) => Black a
 
                | forall a. (ToEscapable a) => Default a
                | forall a. (ToEscapable a) => BgDefault a
+               | forall a. (ToEscapable a) => Context a
 
                | forall a. (ToEscapable a) => Bright a
                | forall a. (ToEscapable a) => Underline a
@@ -33,7 +35,75 @@ data Escapable = forall a. (ToEscapable a) => Black a
                | Sum [Escapable]
                | Text String
 
-class ToEscapable a where
+instance Show Escapable where
+    show (Black     a) = "Black ("     ++ show a ++ ")"
+    show (Red       a) = "Red ("       ++ show a ++ ")"
+    show (Green     a) = "Green ("     ++ show a ++ ")"
+    show (Yellow    a) = "Yellow ("    ++ show a ++ ")"
+    show (Blue      a) = "Blue ("      ++ show a ++ ")"
+    show (Magenta   a) = "Magenta ("   ++ show a ++ ")"
+    show (Cyan      a) = "Cyan ("      ++ show a ++ ")"
+    show (White     a) = "White ("     ++ show a ++ ")"
+
+    show (BgBlack   a) = "BgBlack ("   ++ show a ++ ")"
+    show (BgRed     a) = "BgRed ("     ++ show a ++ ")"
+    show (BgGreen   a) = "BgGreen ("   ++ show a ++ ")"
+    show (BgYellow  a) = "BgYellow ("  ++ show a ++ ")"
+    show (BgBlue    a) = "BgBlue ("    ++ show a ++ ")"
+    show (BgMagenta a) = "BgMagenta (" ++ show a ++ ")"
+    show (BgCyan    a) = "BgCyan ("    ++ show a ++ ")"
+    show (BgWhite   a) = "BgWhite ("   ++ show a ++ ")"
+
+    show (Default   a) = "Default ("   ++ show a ++ ")"
+    show (BgDefault a) = "BgDefault (" ++ show a ++ ")"
+    show (Context   a) = "Context ("   ++ show a ++ ")"
+
+    show (Bright    a) = "Bright ("    ++ show a ++ ")"
+    show (Underline a) = "Underline (" ++ show a ++ ")"
+    show (Inverse   a) = "Inverse ("   ++ show a ++ ")"
+    show (Strike    a) = "Strike ("    ++ show a ++ ")"
+
+    show (Sum       a) = "Sum "  ++ show a
+    show (Text      a) = "Text " ++ show a
+
+toCompStr :: (Show a, Typeable a) => a -> String
+toCompStr a = case cast a :: Maybe String of
+                (Just s) -> s
+                _ -> show a
+
+instance Eq Escapable where
+    (Black     a) == (Black     b) = toCompStr a == toCompStr b
+    (Red       a) == (Red       b) = toCompStr a == toCompStr b
+    (Green     a) == (Green     b) = toCompStr a == toCompStr b
+    (Yellow    a) == (Yellow    b) = toCompStr a == toCompStr b
+    (Blue      a) == (Blue      b) = toCompStr a == toCompStr b
+    (Magenta   a) == (Magenta   b) = toCompStr a == toCompStr b
+    (Cyan      a) == (Cyan      b) = toCompStr a == toCompStr b
+    (White     a) == (White     b) = toCompStr a == toCompStr b
+
+    (BgBlack   a) == (BgBlack   b) = toCompStr a == toCompStr b
+    (BgRed     a) == (BgRed     b) = toCompStr a == toCompStr b
+    (BgGreen   a) == (BgGreen   b) = toCompStr a == toCompStr b
+    (BgYellow  a) == (BgYellow  b) = toCompStr a == toCompStr b
+    (BgBlue    a) == (BgBlue    b) = toCompStr a == toCompStr b
+    (BgMagenta a) == (BgMagenta b) = toCompStr a == toCompStr b
+    (BgCyan    a) == (BgCyan    b) = toCompStr a == toCompStr b
+    (BgWhite   a) == (BgWhite   b) = toCompStr a == toCompStr b
+
+    (Default   a) == (Default   b) = toCompStr a == toCompStr b
+    (BgDefault a) == (BgDefault b) = toCompStr a == toCompStr b
+    (Context   a) == (Context   b) = toCompStr a == toCompStr b
+
+    (Bright    a) == (Bright    b) = toCompStr a == toCompStr b
+    (Underline a) == (Underline b) = toCompStr a == toCompStr b
+    (Inverse   a) == (Inverse   b) = toCompStr a == toCompStr b
+    (Strike    a) == (Strike    b) = toCompStr a == toCompStr b
+
+    (Sum       a) == (Sum       b) = toCompStr a == toCompStr b
+    (Text      a) == (Text      b) = toCompStr a == toCompStr b
+    _ == _ = False
+
+class (Eq a, Show a, Typeable a) => ToEscapable a where
     toEscapable :: a -> Escapable
 
 instance ToEscapable String where
@@ -74,36 +144,42 @@ instance ToEscapable Escapable where
 
 escToString :: Escapable -> String
 escToString (Text a) = a
-escToString esc      = escToStringEnclosed "" "" esc
+escToString esc      = escToStrEncl "" "" esc
 
-escToStringEnclosed :: String -> String -> Escapable -> String
-escToStringEnclosed prefix suffix (Black     a) = escToStringEnclosed (prefix ++ black  ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Red       a) = escToStringEnclosed (prefix ++ red    ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Green     a) = escToStringEnclosed (prefix ++ green  ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Yellow    a) = escToStringEnclosed (prefix ++ yellow ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Blue      a) = escToStringEnclosed (prefix ++ blue   ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Magenta   a) = escToStringEnclosed (prefix ++ magenta) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (Cyan      a) = escToStringEnclosed (prefix ++ cyan   ) (defaultColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (White     a) = escToStringEnclosed (prefix ++ white  ) (defaultColor ++ suffix) (toEscapable a)
+recur = escToStrEncl
+dc = defaultColor
+dbc = defaultBgColor
+te = toEscapable
 
-escToStringEnclosed prefix suffix (BgBlack   a) = escToStringEnclosed (prefix ++ bgblack  ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgRed     a) = escToStringEnclosed (prefix ++ bgred    ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgGreen   a) = escToStringEnclosed (prefix ++ bggreen  ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgYellow  a) = escToStringEnclosed (prefix ++ bgyellow ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgBlue    a) = escToStringEnclosed (prefix ++ bgblue   ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgMagenta a) = escToStringEnclosed (prefix ++ bgmagenta) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgCyan    a) = escToStringEnclosed (prefix ++ bgcyan   ) (defaultBgColor ++ suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgWhite   a) = escToStringEnclosed (prefix ++ bgwhite  ) (defaultBgColor ++ suffix) (toEscapable a)
+escToStrEncl :: String -> String -> Escapable -> String
+escToStrEncl pref suff (Black     a) = recur (pref ++ black  ) (dc ++ suff) (te a)
+escToStrEncl pref suff (Red       a) = recur (pref ++ red    ) (dc ++ suff) (te a)
+escToStrEncl pref suff (Green     a) = recur (pref ++ green  ) (dc ++ suff) (te a)
+escToStrEncl pref suff (Yellow    a) = recur (pref ++ yellow ) (dc ++ suff) (te a)
+escToStrEncl pref suff (Blue      a) = recur (pref ++ blue   ) (dc ++ suff) (te a)
+escToStrEncl pref suff (Magenta   a) = recur (pref ++ magenta) (dc ++ suff) (te a)
+escToStrEncl pref suff (Cyan      a) = recur (pref ++ cyan   ) (dc ++ suff) (te a)
+escToStrEncl pref suff (White     a) = recur (pref ++ white  ) (dc ++ suff) (te a)
 
-escToStringEnclosed prefix suffix (Default   a) = escToStringEnclosed (prefix ++ defaultColor  ) (suffix) (toEscapable a)
-escToStringEnclosed prefix suffix (BgDefault a) = escToStringEnclosed (prefix ++ defaultBgColor) (suffix) (toEscapable a)
+escToStrEncl pref suff (BgBlack   a) = recur (pref ++ bgblack  ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgRed     a) = recur (pref ++ bgred    ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgGreen   a) = recur (pref ++ bggreen  ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgYellow  a) = recur (pref ++ bgyellow ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgBlue    a) = recur (pref ++ bgblue   ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgMagenta a) = recur (pref ++ bgmagenta) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgCyan    a) = recur (pref ++ bgcyan   ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgWhite   a) = recur (pref ++ bgwhite  ) (dbc ++ suff) (te a)
 
-escToStringEnclosed prefix suffix (Bright    a) = escToStringEnclosed (prefix ++ brightOn   ) (brightOff    ++ suffix) (toEscapable  a)
-escToStringEnclosed prefix suffix (Underline a) = escToStringEnclosed (prefix ++ underlineOn) (underlineOff ++ suffix) (toEscapable  a)
-escToStringEnclosed prefix suffix (Inverse   a) = escToStringEnclosed (prefix ++ inverseOn  ) (inverseOff   ++ suffix) (toEscapable  a)
-escToStringEnclosed prefix suffix (Strike    a) = escToStringEnclosed (prefix ++ strikeOn   ) (strikeOff    ++ suffix) (toEscapable  a)
-escToStringEnclosed prefix suffix (Sum  a) = concat $ map (escToStringEnclosed prefix suffix) a
-escToStringEnclosed prefix suffix (Text a) = concat [prefix, a, suffix]
+escToStrEncl pref suff (Default   a) = recur (pref ++ dc ) (suff) (te a)
+escToStrEncl pref suff (BgDefault a) = recur (pref ++ dbc) (suff) (te a)
+escToStrEncl pref suff (Context   a) = recur (pref)        (suff) (te a)
+
+escToStrEncl pref suff (Bright    a) = recur (pref ++ brightOn   ) (brightOff    ++ suff) (te a)
+escToStrEncl pref suff (Underline a) = recur (pref ++ underlineOn) (underlineOff ++ suff) (te a)
+escToStrEncl pref suff (Inverse   a) = recur (pref ++ inverseOn  ) (inverseOff   ++ suff) (te a)
+escToStrEncl pref suff (Strike    a) = recur (pref ++ strikeOn   ) (strikeOff    ++ suff) (te a)
+escToStrEncl pref suff (Sum  a) = concat $ map (recur pref suff) a
+escToStrEncl pref suff (Text a) = concat [pref, a, suff]
 
 instance Monoid Escapable where
     mempty = Sum []
