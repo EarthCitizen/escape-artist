@@ -1,10 +1,13 @@
-module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString) where
+module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (<|)) where
 
 import Data.Monoid hiding (Sum)
 import qualified Data.Text as T
 import Data.Typeable (Typeable, cast)
 import Data.Word
 import Text.EscapeArtist.Constants
+
+infixr 7 <|
+(<|) = ($)
 
 data Escapable = forall a. (ToEscapable a) => Black a
                | forall a. (ToEscapable a) => Red a
@@ -26,12 +29,17 @@ data Escapable = forall a. (ToEscapable a) => Black a
 
                | forall a. (ToEscapable a) => Default a
                | forall a. (ToEscapable a) => BgDefault a
-               | forall a. (ToEscapable a) => Context a
+               | forall a. (ToEscapable a) => Inherited a
+               | forall a. (ToEscapable a) => Normal a
 
+               | forall a. (ToEscapable a) => Blink a
+               | forall a. (ToEscapable a) => BlinkOff a
                | forall a. (ToEscapable a) => Bright a
+               | forall a. (ToEscapable a) => BrightOff a
                | forall a. (ToEscapable a) => Underline a
+               | forall a. (ToEscapable a) => UnderlineOff a
                | forall a. (ToEscapable a) => Inverse a
-               | forall a. (ToEscapable a) => Strike a
+               | forall a. (ToEscapable a) => InverseOff a
                | Sum [Escapable]
                | Text String
 
@@ -56,12 +64,17 @@ instance Show Escapable where
 
     show (Default   a) = "Default ("   ++ show a ++ ")"
     show (BgDefault a) = "BgDefault (" ++ show a ++ ")"
-    show (Context   a) = "Context ("   ++ show a ++ ")"
+    show (Inherited a) = "Inherited (" ++ show a ++ ")"
+    show (Normal    a) = "Normal ("    ++ show a ++ ")"
 
-    show (Bright    a) = "Bright ("    ++ show a ++ ")"
-    show (Underline a) = "Underline (" ++ show a ++ ")"
-    show (Inverse   a) = "Inverse ("   ++ show a ++ ")"
-    show (Strike    a) = "Strike ("    ++ show a ++ ")"
+    show (Blink        a) = "Blink ("        ++ show a ++ ")"
+    show (BlinkOff     a) = "BlinkOff ("     ++ show a ++ ")"
+    show (Bright       a) = "Bright ("       ++ show a ++ ")"
+    show (BrightOff    a) = "BrightOff ("    ++ show a ++ ")"
+    show (Underline    a) = "Underline ("    ++ show a ++ ")"
+    show (UnderlineOff a) = "UnderlineOff (" ++ show a ++ ")"
+    show (Inverse      a) = "Inverse ("      ++ show a ++ ")"
+    show (InverseOff   a) = "InverseOff ("   ++ show a ++ ")"
 
     show (Sum       a) = "Sum "  ++ show a
     show (Text      a) = "Text " ++ show a
@@ -92,12 +105,17 @@ instance Eq Escapable where
 
     (Default   a) == (Default   b) = toCompStr a == toCompStr b
     (BgDefault a) == (BgDefault b) = toCompStr a == toCompStr b
-    (Context   a) == (Context   b) = toCompStr a == toCompStr b
+    (Inherited a) == (Inherited b) = toCompStr a == toCompStr b
+    (Normal    a) == (Normal    b) = toCompStr a == toCompStr b
 
-    (Bright    a) == (Bright    b) = toCompStr a == toCompStr b
-    (Underline a) == (Underline b) = toCompStr a == toCompStr b
-    (Inverse   a) == (Inverse   b) = toCompStr a == toCompStr b
-    (Strike    a) == (Strike    b) = toCompStr a == toCompStr b
+    (Blink        a) == (Blink        b) = toCompStr a == toCompStr b
+    (BlinkOff     a) == (BlinkOff     b) = toCompStr a == toCompStr b
+    (Bright       a) == (Bright       b) = toCompStr a == toCompStr b
+    (BrightOff    a) == (BrightOff    b) = toCompStr a == toCompStr b
+    (Underline    a) == (Underline    b) = toCompStr a == toCompStr b
+    (UnderlineOff a) == (UnderlineOff b) = toCompStr a == toCompStr b
+    (Inverse      a) == (Inverse      b) = toCompStr a == toCompStr b
+    (InverseOff   a) == (InverseOff   b) = toCompStr a == toCompStr b
 
     (Sum       a) == (Sum       b) = toCompStr a == toCompStr b
     (Text      a) == (Text      b) = toCompStr a == toCompStr b
@@ -149,6 +167,7 @@ escToString esc      = escToStrEncl "" "" esc
 recur = escToStrEncl
 dc = defaultColor
 dbc = defaultBgColor
+res = reset
 te = toEscapable
 
 escToStrEncl :: String -> String -> Escapable -> String
@@ -172,12 +191,18 @@ escToStrEncl pref suff (BgWhite   a) = recur (pref ++ bgwhite  ) (dbc ++ suff) (
 
 escToStrEncl pref suff (Default   a) = recur (pref ++ dc ) (suff) (te a)
 escToStrEncl pref suff (BgDefault a) = recur (pref ++ dbc) (suff) (te a)
-escToStrEncl pref suff (Context   a) = recur (pref)        (suff) (te a)
+escToStrEncl pref suff (Inherited a) = recur (pref)        (suff) (te a)
+escToStrEncl pref suff (Normal    a) = recur (pref ++ res) (suff) (te a)
 
-escToStrEncl pref suff (Bright    a) = recur (pref ++ brightOn   ) (brightOff    ++ suff) (te a)
-escToStrEncl pref suff (Underline a) = recur (pref ++ underlineOn) (underlineOff ++ suff) (te a)
-escToStrEncl pref suff (Inverse   a) = recur (pref ++ inverseOn  ) (inverseOff   ++ suff) (te a)
-escToStrEncl pref suff (Strike    a) = recur (pref ++ strikeOn   ) (strikeOff    ++ suff) (te a)
+escToStrEncl pref suff (Blink        a) = recur (pref ++ blinkOn     ) (blinkOff    ++ suff)  (te a)
+escToStrEncl pref suff (BlinkOff     a) = recur (pref ++ blinkOff    ) suff                   (te a)
+escToStrEncl pref suff (Bright       a) = recur (pref ++ brightOn    ) (brightOff    ++ suff) (te a)
+escToStrEncl pref suff (BrightOff    a) = recur (pref ++ brightOff   ) suff                   (te a)
+escToStrEncl pref suff (Underline    a) = recur (pref ++ underlineOn ) (underlineOff ++ suff) (te a)
+escToStrEncl pref suff (UnderlineOff a) = recur (pref ++ underlineOff) suff                   (te a)
+escToStrEncl pref suff (Inverse      a) = recur (pref ++ inverseOn   ) (inverseOff   ++ suff) (te a)
+escToStrEncl pref suff (InverseOff   a) = recur (pref ++ inverseOff  ) suff                   (te a)
+
 escToStrEncl pref suff (Sum  a) = concat $ map (recur pref suff) a
 escToStrEncl pref suff (Text a) = concat [pref, a, suff]
 

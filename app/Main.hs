@@ -7,7 +7,7 @@ import Text.Regex
 
 
 instance (ToEscapable a) => ToEscapable (Maybe a) where
-    toEscapable (Just a) = Green "Just" <> Context " " <> (Bright $ Yellow a)
+    toEscapable (Just a) = Green "Just" <> Inherited " " <> (Bright $ Yellow a)
     toEscapable (Nothing) = Inverse $ Red "Nothing"
 
 alterString :: String -> Escapable
@@ -15,7 +15,7 @@ alterString [] = Default ""
 alterString a  = mconcat $ zipWith (\c v -> c v) (cycle [Inverse . Red, Red, Inverse . Blue, Red]) a
 
 rainbowString :: String -> Escapable
-rainbowString [] = Context ""
+rainbowString [] = Inherited ""
 rainbowString a = mconcat $ zipWith (\ c v -> c v) (cycle [Red, Blue, Yellow, Cyan, Magenta]) a
 
 posNeg :: (Integral a, ToEscapable a) => a -> Escapable
@@ -26,16 +26,16 @@ replaceNumbers :: String -> String
 replaceNumbers searchIn = subRegex (mkRegex "([0-9]+)") searchIn (escToString $ Red "\\1")
 
 numberAts :: Escapable
-numberAts =  mconcat $ intersperse (Context "@") $ map Default [1..10]
+numberAts =  mconcat $ intersperse (Inherited "@") $ map Default [1..10]
 
-numberAtsWithContextYellow = Yellow $ numberAts
-numberAtsWithContextCyan = Cyan $ numberAts
+numberAtsWithInheritedYellow = Yellow $ numberAts
+numberAtsWithInheritedCyan = Cyan $ numberAts
 
 main = do
     putEscLn $ replaceNumbers "7 times 3 is 21"
-    putEscLn $ mconcat $ intersperse (Context " ") $ map posNeg [-10..10]
-    putEscLn $ numberAtsWithContextYellow
-    putEscLn $ numberAtsWithContextCyan
+    putEscLn $ mconcat $ intersperse (Inherited " ") $ map posNeg [-10..10]
+    putEscLn $ numberAtsWithInheritedYellow
+    putEscLn $ numberAtsWithInheritedCyan
     putEscLn 10
     putEscLn $ Just 10
     putEscLn $ Underline $ Just 100

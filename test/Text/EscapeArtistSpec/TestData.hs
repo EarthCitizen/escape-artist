@@ -32,12 +32,17 @@ openCloseCons = [
 
         (defaultColor,   "", Default  ),
         (defaultBgColor, "", BgDefault),
-        ("",             "", Context  ),
+        ("",             "", Inherited),
+        (reset,          "", Normal   ),
 
-        (brightOn,    brightOff,    Bright   ),
-        (underlineOn, underlineOff, Underline),
-        (inverseOn,   inverseOff,   Inverse  ),
-        (strikeOn,    strikeOff,    Strike   )
+        (blinkOn,      blinkOff,     Blink       ),
+        (blinkOff,     "",           BlinkOff    ),
+        (brightOn,     brightOff,    Bright      ),
+        (brightOff,    "",           BrightOff   ),
+        (underlineOn,  underlineOff, Underline   ),
+        (underlineOff, "",           UnderlineOff),
+        (inverseOn,    inverseOff,   Inverse     ),
+        (inverseOff,   "",           InverseOff  )
         ]
 
 genTestCases valueList = [
@@ -85,12 +90,12 @@ twoNestedSumExp = concat [
     underlineOn, brightOn, blue,  "999",  defaultColor, brightOff, underlineOff
     ]
 
-threeNestedSum = Strike $ Sum [Underline $ Yellow "Hello", Bright $ Sum [Inverse $ Sum [Green 1000, Cyan "C"], Blue 999]]
+threeNestedSum = Inverse $ Sum [Underline $ Yellow "Hello", Bright $ Sum [Inverse $ Sum [Green 1000, Cyan "C"], Blue 999]]
 threeNestedSumExp = concat [
-    strikeOn, underlineOn, yellow, "Hello", defaultColor, underlineOff, strikeOff,
-    strikeOn, brightOn, inverseOn, green, "1000", defaultColor, inverseOff, brightOff, strikeOff,
-    strikeOn, brightOn, inverseOn, cyan,  "C",    defaultColor, inverseOff, brightOff, strikeOff,
-    strikeOn, brightOn, blue, "999", defaultColor, brightOff, strikeOff
+    inverseOn, underlineOn, yellow, "Hello", defaultColor, underlineOff, inverseOff,
+    inverseOn, brightOn, inverseOn, green, "1000", defaultColor, inverseOff, brightOff, inverseOff,
+    inverseOn, brightOn, inverseOn, cyan,  "C",    defaultColor, inverseOff, brightOff, inverseOff,
+    inverseOn, brightOn, blue, "999", defaultColor, brightOff, inverseOff
     ]
 
 nestedSumTestCases = [

@@ -16,7 +16,7 @@ spec = do
             it "outputs contained valued with corresponding escape codes" $ forM_ escSingleTestCases $
                 \(TestCase escapable expectation) -> do
                     escToString escapable `shouldBe` expectation
-        context "when passed a Context" $ do
+        context "when passed a Inherited" $ do
             it "outputs contained value with only parent escape codes" $ forM_ contextTestCases $ do
                 \(TestCase escapable expectation) -> do
                     escToString escapable `shouldBe` expectation

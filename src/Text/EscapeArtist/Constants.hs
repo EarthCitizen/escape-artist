@@ -24,6 +24,9 @@ defaultColor = "\x1B[39m"
 
 defaultBgColor = "\x1B[49m"
 
+blinkOn  = "\x1B[5m"
+blinkOff = "\x1B[25m"
+
 brightOn  = "\x1B[1m"
 brightOff = "\x1B[22m"
 
@@ -33,5 +36,5 @@ underlineOff = "\x1B[24m"
 inverseOn = "\x1B[7m"
 inverseOff = "\x1B[27m"
 
-strikeOn = "\x1B[9m"
-strikeOff = "\x1B[29m"
+-- strikeOn = "\x1B[9m"
+-- strikeOff = "\x1B[29m"
