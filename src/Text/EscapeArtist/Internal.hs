@@ -82,7 +82,9 @@ instance Show Escapable where
 toCompStr :: (Show a, Typeable a) => a -> String
 toCompStr a = case cast a :: Maybe String of
                 (Just s) -> s
-                _ -> show a
+                _ -> case cast a :: Maybe Char of
+                    (Just c) -> [c]
+                    _ -> show a
 
 instance Eq Escapable where
     (Black     a) == (Black     b) = toCompStr a == toCompStr b
