@@ -1,14 +1,14 @@
 module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (<|)) where
 
-import Data.Monoid hiding (Sum)
-import qualified Data.Text as T
-import Data.Typeable (Typeable, cast)
+import Control.Applicative ((<|>))
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSLC
+import Data.Monoid hiding (Sum)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
+import Data.Typeable (Typeable, cast)
 import Data.Word
 import Text.EscapeArtist.Constants
 
@@ -93,12 +93,28 @@ instance Show Escapable where
 --           | TLAtom  TL.Text
 --           deriving (Eq, Show)
 
-toCompStr :: (Show a, Typeable a) => a -> String
-toCompStr a = case cast a :: Maybe String of
+tryCast :: forall a b. (Show b, Typeable a, Typeable b) => a -> (b -> String) -> Maybe String
+tryCast a f = case cast a of
+                (Just s) -> Just $ f s
+                _ -> Nothing
+
+tryString a = tryCast a id
+tryChar   a = tryCast a (\b -> [b :: Char]  )
+tryBS     a = tryCast a (\b -> BSC.unpack  b)
+tryBSL    a = tryCast a (\b -> BSLC.unpack b)
+tryT      a = tryCast a (\b -> T.unpack    b)
+tryTL     a = tryCast a (\b -> TL.unpack   b)
+
+toCompStr :: forall a. (Show a, Typeable a) => a -> String
+toCompStr a = case options of
                 (Just s) -> s
-                _ -> case cast a :: Maybe Char of
-                    (Just c) -> [c]
-                    _ -> show a
+                _ -> show a
+    where options = tryString a
+                  <|> tryChar a
+                  <|> tryBS a
+                  <|> tryBSL a
+                  <|> tryT a
+                  <|> tryTL a
 
 instance Eq Escapable where
     (Black     a) == (Black     b) = toCompStr a == toCompStr b

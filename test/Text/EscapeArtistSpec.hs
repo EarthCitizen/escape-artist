@@ -43,9 +43,10 @@ spec = do
                     result `shouldBe` ()
 
     describe "Eq Escapable" $ do
-        it "considers escapables equal when strings of contained values are same" $ do
-            (Red 6 == Red "6") `shouldBe` True
-            (Blue (3.2 :: Float) == Blue (3.2 :: Double)) `shouldBe` True
+        it "considers escapables equal when strings of contained values are same" $ forM_ allEqTestCases $ do
+            \(TestCaseEq a b) -> a `shouldBe` b
+        it "considers escapables not equal when strings of contained values are not same" $ forM_ allNotEqTestCases $ do
+            \(TestCaseEq a b) -> a `shouldNotBe` b
 
     describe "Monoid Escapable" $ do
         it "obeys left identity" $ property $
