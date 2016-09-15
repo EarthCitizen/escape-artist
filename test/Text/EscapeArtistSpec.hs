@@ -17,7 +17,7 @@ spec = do
                 \(TestCase escapable expectation) -> do
                     escToString escapable `shouldBe` expectation
         context "when passed a Inherited" $ do
-            it "outputs contained value with only parent escape codes" $ forM_ contextTestCases $ do
+            it "outputs contained value with only parent escape codes" $ forM_ inheritedTestCases $ do
                 \(TestCase escapable expectation) -> do
                     escToString escapable `shouldBe` expectation
         context "when passed a Sum" $ do

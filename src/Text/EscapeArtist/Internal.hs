@@ -3,6 +3,12 @@ module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, put
 import Data.Monoid hiding (Sum)
 import qualified Data.Text as T
 import Data.Typeable (Typeable, cast)
+import qualified Data.ByteString as BS
+import qualified Data.ByteString.Char8 as BSC
+import qualified Data.ByteString.Lazy as BSL
+import qualified Data.ByteString.Lazy.Char8 as BSLC
+import qualified Data.Text as T
+import qualified Data.Text.Lazy as TL
 import Data.Word
 import Text.EscapeArtist.Constants
 
@@ -41,7 +47,7 @@ data Escapable = forall a. (ToEscapable a) => Black a
                | forall a. (ToEscapable a) => Inverse a
                | forall a. (ToEscapable a) => InverseOff a
                | Sum [Escapable]
-               | Text String
+               | Atom String
 
 instance Show Escapable where
     show (Black     a) = "Black ("     ++ show a ++ ")"
@@ -77,7 +83,15 @@ instance Show Escapable where
     show (InverseOff   a) = "InverseOff ("   ++ show a ++ ")"
 
     show (Sum       a) = "Sum "  ++ show a
-    show (Text      a) = "Text " ++ show a
+    show (Atom      a) = "Atom " ++ show a
+
+-- TODO: Replace Atom contents with this type?
+-- data Atom = BSAtom  BS.ByteString
+--           | BSLAtom BSL.ByteString
+--           | SAtom   String
+--           | TAtom   T.Text
+--           | TLAtom  TL.Text
+--           deriving (Eq, Show)
 
 toCompStr :: (Show a, Typeable a) => a -> String
 toCompStr a = case cast a :: Maybe String of
@@ -120,50 +134,59 @@ instance Eq Escapable where
     (InverseOff   a) == (InverseOff   b) = toCompStr a == toCompStr b
 
     (Sum       a) == (Sum       b) = toCompStr a == toCompStr b
-    (Text      a) == (Text      b) = toCompStr a == toCompStr b
+    (Atom      a) == (Atom      b) = toCompStr a == toCompStr b
     _ == _ = False
 
 class (Eq a, Show a, Typeable a) => ToEscapable a where
     toEscapable :: a -> Escapable
 
 instance ToEscapable String where
-    toEscapable a = Text a
+    toEscapable a = Atom a
 
 instance ToEscapable Char where
-    toEscapable a = Text [a]
+    toEscapable a = Atom [a]
+
+instance ToEscapable BS.ByteString where
+    toEscapable a = Atom $ BSC.unpack a
+
+instance ToEscapable BSL.ByteString where
+    toEscapable a = Atom $ BSLC.unpack a
 
 instance ToEscapable T.Text where
-    toEscapable a = Text $ T.unpack a
+    toEscapable a = Atom $ T.unpack a
+
+instance ToEscapable TL.Text where
+    toEscapable a = Atom $ TL.unpack a
 
 instance ToEscapable Int where
-    toEscapable a = Text $ show a
+    toEscapable a = Atom $ show a
 
 instance ToEscapable Word8 where
-    toEscapable a = Text $ show a
+    toEscapable a = Atom $ show a
 
 instance ToEscapable Word16 where
-    toEscapable a = Text $ show a
+    toEscapable a = Atom $ show a
 
 instance ToEscapable Word32 where
-    toEscapable a = Text $ show a
+    toEscapable a = Atom $ show a
 
 instance ToEscapable Word64 where
-    toEscapable a = Text $ show a
+    toEscapable a = Atom $ show a
 
 instance ToEscapable Integer where
-    toEscapable a = Text $ show a
+    toEscapable a = Atom $ show a
 
 instance ToEscapable Float where
-    toEscapable a = Text $ show a
+    toEscapable a = Atom $ show a
 
 instance ToEscapable Double where
-    toEscapable a = Text $ show a
+    toEscapable a = Atom $ show a
 
 instance ToEscapable Escapable where
     toEscapable = id
 
 escToString :: Escapable -> String
-escToString (Text a) = a
+escToString (Atom a) = a
 escToString esc      = escToStrEncl "" "" esc
 
 recur = escToStrEncl
@@ -206,7 +229,7 @@ escToStrEncl pref suff (Inverse      a) = recur (pref ++ inverseOn   ) (inverseO
 escToStrEncl pref suff (InverseOff   a) = recur (pref ++ inverseOff  ) suff                   (te a)
 
 escToStrEncl pref suff (Sum  a) = concat $ map (recur pref suff) a
-escToStrEncl pref suff (Text a) = concat [pref, a, suff]
+escToStrEncl pref suff (Atom a) = concat [pref, a, suff]
 
 instance Monoid Escapable where
     mempty = Sum []

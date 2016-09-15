@@ -1,12 +1,16 @@
 module Text.EscapeArtistSpec.TestData (
                                 TestCase(..)
                               , allEscTestCases
-                              , contextTestCases
+                              , inheritedTestCases
                               , escSingleTestCases
                               , nestedSumTestCases
                               , sumTestCases
                               ) where
 
+import qualified Data.ByteString.Char8 as BSC
+import qualified Data.ByteString.Lazy.Char8 as BSLC
+import qualified Data.Text as T
+import qualified Data.Text.Lazy as TL
 import Test.QuickCheck
 import Text.EscapeArtist.Internal
 import Text.EscapeArtist.Constants
@@ -64,14 +68,35 @@ floatTestCases = genTestCases floatValueExp
 doubleValueExp = [(4.5, "4.5"), (0.0001, "1.0e-4"), (-0.003, "-3.0e-3")] :: [(Double, String)]
 doubleTestCases = genTestCases doubleValueExp
 
+bsValueExp = [(BSC.pack "ASDASDASD", "ASDASDASD"), (BSC.pack "%%$\":98^tug'kjgh\"", "%%$\":98^tug'kjgh\""), (BSC.pack "aaa\nggg\thhh\n", "aaa\nggg\thhh\n")]
+bsTestCases = genTestCases bsValueExp
+
+bslValueExp = [(BSLC.pack "ASDASDASD", "ASDASDASD"), (BSLC.pack "%%$\":98^tug'kjgh\"", "%%$\":98^tug'kjgh\""), (BSLC.pack "aaa\nggg\thhh\n", "aaa\nggg\thhh\n")]
+bslTestCases = genTestCases bslValueExp
+
 stringValueExp = [("ASDASDASD", "ASDASDASD"), ("%%$\":98^tug'kjgh\"", "%%$\":98^tug'kjgh\""), ("aaa\nggg\thhh\n", "aaa\nggg\thhh\n")]
 stringTestCases = genTestCases stringValueExp
 
-textTestCases = [TestCase (Text v) e | (v, e) <- stringValueExp]
+textValueExp = [(T.pack "ASDASDASD", "ASDASDASD"), (T.pack "%%$\":98^tug'kjgh\"", "%%$\":98^tug'kjgh\""), (T.pack "aaa\nggg\thhh\n", "aaa\nggg\thhh\n")]
+textTestCases = genTestCases textValueExp
 
-escSingleTestCases = intTestCases ++ integerTestCases ++ floatTestCases ++ doubleTestCases ++ stringTestCases ++ textTestCases
+textLazyValueExp = [(TL.pack "ASDASDASD", "ASDASDASD"), (TL.pack "%%$\":98^tug'kjgh\"", "%%$\":98^tug'kjgh\""), (TL.pack "aaa\nggg\thhh\n", "aaa\nggg\thhh\n")]
+textLazyTestCases = genTestCases textLazyValueExp
 
-contextTestCases = [TestCase (Underline $ Bright 6) (underlineOn ++ brightOn ++ "6" ++ brightOff ++ underlineOff)]
+atomTestCases = [TestCase (Atom v) e | (v, e) <- stringValueExp]
+
+escSingleTestCases = intTestCases
+                   ++ integerTestCases
+                   ++ floatTestCases
+                   ++ doubleTestCases
+                   ++ bsTestCases
+                   ++ bslTestCases
+                   ++ stringTestCases
+                   ++ textTestCases
+                   ++ textLazyTestCases
+                   ++ atomTestCases
+
+inheritedTestCases = [TestCase (Underline $ Bright 6) (underlineOn ++ brightOn ++ "6" ++ brightOff ++ underlineOff)]
 
 sumTestCases = let escapables = map getEscapable intTestCases
                    expected = concat $ map getExpected intTestCases
@@ -104,7 +129,7 @@ nestedSumTestCases = [
     TestCase threeNestedSum threeNestedSumExp
     ]
 
-allEscTestCases = contextTestCases ++ escSingleTestCases ++ sumTestCases ++ nestedSumTestCases
+allEscTestCases = inheritedTestCases ++ escSingleTestCases ++ sumTestCases ++ nestedSumTestCases
 
 instance Arbitrary Escapable where
     arbitrary = oneof $ map return [
