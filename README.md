@@ -1,4 +1,4 @@
-# escape-artist [![Build Status] (https://travis-ci.org/EarthCitizen/escape-artist.svg?branch=master)](https://travis-ci.org/EarthCitizen/escape-artist)
+# escape-artist   [![Build Status] (https://travis-ci.org/EarthCitizen/escape-artist.svg?branch=master)](https://travis-ci.org/EarthCitizen/escape-artist)
 
 A Haskell library for ASCII escape codes made easy. Decorate your terminal text expressively while staying in your normal Haskell coding style.
 
@@ -31,17 +31,19 @@ Red '6'
 Red (6 :: Float)
 Red (6 :: Double)
 ```
+![Red 6] (images/six.png?raw=true)
 
 And can all dwell in the same list:
 
 ```haskell
 {-# LANGUAGE ExtendedDefaultRules #-}
 
+import Data.List (intersperse)
 import Text.EscapeArtist
 
 let redList = [Red 6, Red "6", Red '6', Red (6 :: Float), Red (6 :: Double)]
 
-putEscLn $ mconcat redList
+putEscLn $ mconcat $ intersperse (Inherited " ") redList
 ```
 
 The following data types already come with an implementation of `ToEscapable`:
