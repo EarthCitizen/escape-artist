@@ -1,5 +1,8 @@
 sudo: false
 
+# barest possible VM
+language: c
+
 # Caching so the next build will be fast too.
 cache:
   directories:
