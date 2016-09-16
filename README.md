@@ -68,15 +68,38 @@ import Data.Monoid ((<>))
 let series = Blink 5 <> Blue 6
 ```
 
-### Foreground Color Constructors
+When a constructor is applied to a series of appended `Escapable`s using the `$`, the constructor will be applied to each member of the series.
+
+```haskell
+{-# LANGUAGE ExtendedDefaultRules #-}
+
+import Data.Monoid ((<>))
+
+let result = Underline $ Blink 5 <> Blue 6
+```
+
+XML equivalent:
+```XML
+<underline>
+    <blink>5</blink>
+</underline>
+<underline>
+    <blue>6</blue>
+</underline>
+```
+*NOTE:* The `Underline` is re-applied to each element of the series, and not once for all of them.
+
+## Constructors
+
+### Foreground Color
 
 `Black Red Green Yellow Magenta Cyan White`
 
-### Background Color Constructors
+### Background Color
 
 `BgBlack BgRed BgGreen BgYellow BgBlue BgMagenta BgCyan BgWhite`
 
-### Other Types of Constructors
+### Other Types
 
 Name           | Effect on Applied Value
 -------------- | -----------------------
