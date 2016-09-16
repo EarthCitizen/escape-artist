@@ -45,7 +45,7 @@ let redList = [Red 6, Red "6", Red '6', Red (6 :: Float), Red (6 :: Double)]
 putEscLn $ mconcat $ intersperse (Inherited " ") redList
 ```
 
-<img src="images/six.png?raw=true" width="130">
+<img src="images/six.png?raw=true" width="150">
 
 The following data types already come with an implementation of `ToEscapable`:
 
