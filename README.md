@@ -37,16 +37,54 @@ And can all dwell in the same list:
 ```haskell
 {-# LANGUAGE ExtendedDefaultRules #-}
 
+import Text.EscapeArtist
+
 let redList = [Red 6, Red "6", Red '6', Red (6 :: Float), Red (6 :: Double)]
+```
+
+The following data types already come with an implementation of `ToEscapable`:
+
+* Char
+* Data.ByteString.ByteString
+* Data.ByteString.Lazy.ByteString
+* Data.Text.Text
+* Data.Text.Lazy.Text
+* Double
+* Float
+* Int
+* Integer
+* String
+* Word8
+* Word16
+* Word32
+* Word64
+
+Implementing `ToEscapable` for other data types is fairly simple:
+
+```haskell
+import Data.Typeable
+import Text.EscapeArtist
+
+data ABC = A | B deriving (Show, Eq, Typeable)
+
+instance ToEscapable ABC where
+   toEscapable (A) = Red $ show A
+   toEscapable (B) = Green $ show B
+
+instance (ToEscapable a) => ToEscapable (Maybe a) where
+    toEscapable (Just a) = Green "Just" <> Inherited " " <> Yellow a
+    toEscapable a = Red $ show a
 ```
 
 When constructors are combined with the application operator (`$`), the effects accumulate and wrap around the applied value:
 
 ```haskell
-Red $ Underline $ Blink "Hello World!"
+import Text.EscapeArtist
+
+let combined = Red $ Underline $ Blink "Hello World!"
 ```
 
-would be equivalent the following in XML:
+would be equivalent to the following in XML:
 
 ```xml
 <red>
@@ -64,6 +102,7 @@ would be equivalent the following in XML:
 {-# LANGUAGE ExtendedDefaultRules #-}
 
 import Data.Monoid ((<>))
+import Text.EscapeArtist
 
 let series = Blink 5 <> Blue 6
 ```
@@ -74,6 +113,7 @@ When a constructor is applied to a series of appended `Escapable`s using the `$`
 {-# LANGUAGE ExtendedDefaultRules #-}
 
 import Data.Monoid ((<>))
+import Text.EscapeArtist
 
 let result = Underline $ Blink 5 <> Blue 6
 ```
@@ -87,7 +127,7 @@ XML equivalent:
     <blue>6</blue>
 </underline>
 ```
-*NOTE:* The `Underline` is re-applied to each element of the series, and not once for all of them.
+*NOTE:* The `Underline` is re-applied to each member of the series, and not once for all of them.
 
 ## Constructors
 
