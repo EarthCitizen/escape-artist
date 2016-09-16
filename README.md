@@ -1,9 +1,9 @@
 # escape-artist
-* * *
+
 A Haskell library for ASCII escape codes made easy. Decorate your terminal text expressively while staying in your normal Haskell coding style.
 
 ## Getting Started
-* * *
+
 ### Building from Source
 #### Prerequisites
 
@@ -68,15 +68,15 @@ import Data.Monoid ((<>))
 let series = Blink 5 <> Blue 6
 ```
 
-#### Foreground Color Constructors
+### Foreground Color Constructors
 
 `Black Red Green Yellow Magenta Cyan White`
 
-#### Background Color Constructors
+### Background Color Constructors
 
 `BgBlack BgRed BgGreen BgYellow BgBlue BgMagenta BgCyan BgWhite`
 
-#### Other Types of Constructors
+### Other Types of Constructors
 
 Name           | Effect on Applied Value
 -------------- | -----------------------
