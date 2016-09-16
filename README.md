@@ -40,6 +40,8 @@ And can all dwell in the same list:
 import Text.EscapeArtist
 
 let redList = [Red 6, Red "6", Red '6', Red (6 :: Float), Red (6 :: Double)]
+
+putEscLn $ mconcat redList
 ```
 
 The following data types already come with an implementation of `ToEscapable`:
@@ -62,10 +64,9 @@ The following data types already come with an implementation of `ToEscapable`:
 Implementing `ToEscapable` for other data types is fairly simple:
 
 ```haskell
-import Data.Typeable
 import Text.EscapeArtist
 
-data ABC = A | B deriving (Show, Eq, Typeable)
+data ABC = A | B deriving (Show, Eq)
 
 instance ToEscapable ABC where
    toEscapable (A) = Red $ show A
@@ -74,6 +75,11 @@ instance ToEscapable ABC where
 instance (ToEscapable a) => ToEscapable (Maybe a) where
     toEscapable (Just a) = Green "Just" <> Inherited " " <> Yellow a
     toEscapable a = Red $ show a
+
+putEscLn A
+putEscLn B
+putEscLn $ Just 15
+putEscLn Nothin
 ```
 
 When constructors are combined with the application operator (`$`), the effects accumulate and wrap around the applied value:
@@ -105,6 +111,8 @@ import Data.Monoid ((<>))
 import Text.EscapeArtist
 
 let series = Blink 5 <> Blue 6
+
+putEscLn series
 ```
 
 When a constructor is applied to a series of appended `Escapable`s using the `$`, the constructor will be applied to each member of the series.
@@ -116,6 +124,8 @@ import Data.Monoid ((<>))
 import Text.EscapeArtist
 
 let result = Underline $ Blink 5 <> Blue 6
+
+putEscLn result
 ```
 
 XML equivalent:
