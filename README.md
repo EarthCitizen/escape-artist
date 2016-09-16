@@ -45,7 +45,7 @@ let redList = [Red 6, Red "6", Red '6', Red (6 :: Float), Red (6 :: Double)]
 putEscLn $ mconcat $ intersperse (Inherited " ") redList
 ```
 
-<img src="images/six.png?raw=true">
+<img src="images/six.png?raw=true" width="130">
 
 The following data types already come with an implementation of `ToEscapable`:
 
@@ -67,6 +67,7 @@ The following data types already come with an implementation of `ToEscapable`:
 Implementing `ToEscapable` for other data types is fairly simple:
 
 ```haskell
+import Data.Monoid ((<>))
 import Text.EscapeArtist
 
 data ABC = A | B deriving (Show, Eq)
@@ -82,8 +83,10 @@ instance (ToEscapable a) => ToEscapable (Maybe a) where
 putEscLn A
 putEscLn B
 putEscLn $ Just 15
-putEscLn Nothin
+putEscLn (Nothing :: Maybe Int)
 ```
+
+<img src="images/abc_maybe.png?raw=true" width="300">
 
 When constructors are combined with the application operator (`$`), the effects accumulate and wrap around the applied value:
 
@@ -113,7 +116,7 @@ would be equivalent to the following in XML:
 import Data.Monoid ((<>))
 import Text.EscapeArtist
 
-let series = Blink 5 <> Blue 6
+let series = Yellow 5 <> White 6
 
 putEscLn series
 ```
@@ -126,10 +129,12 @@ When a constructor is applied to a series of appended `Escapable`s using the `$`
 import Data.Monoid ((<>))
 import Text.EscapeArtist
 
-let result = Underline $ Blink 5 <> Blue 6
+let result = Underline $ Yellow 5 <> White 6
 
 putEscLn result
 ```
+
+<img src="images/56yw.png?raw=true" width="50">
 
 XML equivalent:
 ```XML
