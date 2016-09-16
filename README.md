@@ -139,10 +139,10 @@ putEscLn result
 XML equivalent:
 ```XML
 <underline>
-    <blink>5</blink>
+    <yellow>5</yellow>
 </underline>
 <underline>
-    <blue>6</blue>
+    <white>6</white>
 </underline>
 ```
 *NOTE:* The `Underline` is re-applied to each member of the series, and not once for all of them.
