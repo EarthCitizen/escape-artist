@@ -27,7 +27,7 @@ matrix:
         sources:
         - hvr-ghc
         packages:
-        - ghc-8.10.1
+        - ghc-8.0.1
 
 script:
   - stack --no-terminal --skip-ghc-check test
