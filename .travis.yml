@@ -10,6 +10,7 @@ before_install:
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+- export PATH=/opt/ghc/$GHCVER/bin:$PATH
 
 matrix:
   include:
@@ -27,13 +28,6 @@ matrix:
         - hvr-ghc
         packages:
         - ghc-8.10.1
-
-before_install:
-  # ghc
-  - export PATH=/opt/ghc/$GHCVER/bin:$PATH
-  - echo "================================"
-  - echo "${PATH}"
-  - echo "================================"
 
 script:
   - stack --no-terminal --skip-ghc-check test
