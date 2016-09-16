@@ -44,20 +44,20 @@ let redList = [Red 6, Red "6", Red '6', Red (6 :: Float), Red (6 :: Double)]
 
 The following data types already come with an implementation of `ToEscapable`:
 
-* Char
-* Data.ByteString.ByteString
-* Data.ByteString.Lazy.ByteString
-* Data.Text.Text
-* Data.Text.Lazy.Text
-* Double
-* Float
-* Int
-* Integer
-* String
-* Word8
-* Word16
-* Word32
-* Word64
+* `Char`
+* `Data.ByteString.ByteString`
+* `Data.ByteString.Lazy.ByteString`
+* `Data.Text.Text`
+* `Data.Text.Lazy.Text`
+* `Double`
+* `Float`
+* `Int`
+* `Integer`
+* `String`
+* `Word8`
+* `Word16`
+* `Word32`
+* `Word64`
 
 Implementing `ToEscapable` for other data types is fairly simple:
 
