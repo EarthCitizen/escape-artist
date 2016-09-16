@@ -31,6 +31,9 @@ matrix:
 before_install:
   # ghc
   - export PATH=/opt/ghc/$GHCVER/bin:$PATH
+  - echo "================================"
+  - echo "${PATH}"
+  - echo "================================"
 
 script:
   - stack --no-terminal --skip-ghc-check test
