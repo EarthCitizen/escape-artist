@@ -20,7 +20,7 @@ stack build
 
 ### Using
 
-The data type used to perform text decoration is `Escapable`. This defines the constructors for text decoration. Each constructor takes a single argument which can be any type which has implemented the class `ToEscapable`. This means that all of the following are perfectly valid:
+The data type used to perform text decoration is `Escapable`. This defines the constructors for the decoration. Each constructor takes a single argument which can be any type which has implemented the class `ToEscapable`. This means that all of the following are perfectly valid:
 
 ```haskell
 {-# LANGUAGE ExtendedDefaultRules #-}
