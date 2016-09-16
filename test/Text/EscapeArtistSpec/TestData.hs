@@ -26,6 +26,7 @@ openCloseCons = [
         (red,     defaultColor, Red    ),
         (green,   defaultColor, Green  ),
         (yellow,  defaultColor, Yellow ),
+        (blue,    defaultColor, Blue   ),
         (magenta, defaultColor, Magenta),
         (cyan,    defaultColor, Cyan   ),
         (white,   defaultColor, White  ),
@@ -34,6 +35,7 @@ openCloseCons = [
         (bgred,     defaultBgColor, BgRed    ),
         (bggreen,   defaultBgColor, BgGreen  ),
         (bgyellow,  defaultBgColor, BgYellow ),
+        (bgblue,    defaultBgColor, BgBlue   ),
         (bgmagenta, defaultBgColor, BgMagenta),
         (bgcyan,    defaultBgColor, BgCyan   ),
         (bgwhite,   defaultBgColor, BgWhite  ),
@@ -59,6 +61,9 @@ genTestCases valueList = [
                 (v, vs) <- valueList,
                 let e = open ++ vs ++ close
                 ]
+
+charValueExp = [('5', "5"), ('X', "X"), ('@', "@")] :: [(Char, String)]
+charTestCases = genTestCases charValueExp
 
 intValueExp = [(500, "500"), ((-4000), "-4000"), (9999999, "9999999")] :: [(Int, String)]
 intTestCases = genTestCases intValueExp
@@ -89,7 +94,8 @@ textLazyTestCases = genTestCases textLazyValueExp
 
 atomTestCases = [TestCase (Atom v) e | (v, e) <- stringValueExp]
 
-escSingleTestCases = intTestCases
+escSingleTestCases = charTestCases
+                   ++ intTestCases
                    ++ integerTestCases
                    ++ floatTestCases
                    ++ doubleTestCases
@@ -144,8 +150,8 @@ eq2testCases = [TestCaseEq x y | x <- eq2List, y <- eq2List]
 
 allEqTestCases = eq1TestCases ++ eq2testCases
 
-notEqList11 = [Yellow 10, Blue "100", Green (3.4 :: Float), Cyan "3000"]
-notEqList12 = [Yellow 11, Blue "101", Green (3.5 :: Float), Cyan "3001"]
+notEqList11 = [Yellow 10, Blue "100", Green (3.4 :: Float), Cyan "3000", White 'W']
+notEqList12 = [Yellow 11, Blue "101", Green (3.5 :: Float), Cyan "3001", White 'Z']
 notEq1TestCases = [TestCaseEq x y | x <- notEqList11, y <- notEqList12]
 
 notEqList21 = [White 1, White 2, White 3, White 4, White 5]
