@@ -2,3 +2,4 @@
 .stack-work
 dist
 *.tix
+scripts/make_eq.sh
