@@ -108,6 +108,8 @@ would be equivalent to the following in XML:
 </red>
 ```
 
+*NOTE:* This library does not produce nor interact with XML. This example is just for the purpose of explanation.
+
 `Escapable` is an instance of `Monoid`, so a series of `Escapable`s can be appended together into a single value:
 
 ```haskell
