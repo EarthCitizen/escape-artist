@@ -154,6 +154,7 @@ instance Eq Escapable where
     _ == _ = False
 
 class (Eq a, Show a, Typeable a) => ToEscapable a where
+class (Show a, Typeable a) => ToEscapable a where
     toEscapable :: a -> Escapable
 
 instance ToEscapable String where
