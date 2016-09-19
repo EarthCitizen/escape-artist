@@ -181,8 +181,8 @@ Name           | Effect on Applied Value
 Name          | Description
 ------------- | -----------
 `escToString` | Renders anything implementing `ToEscapable` to a `String`
-`putEsc`      | Renders anything implementing `ToEscapable` to a `String` then writes it to standard out
-`putEscLn`    | Renders anything implementing `ToEscapable` to a `String` then writes it to standard out followed by a newline
+`putEsc`      | Renders anything implementing `ToEscapable` to a `String`, then writes it to standard out
+`putEscLn`    | Renders anything implementing `ToEscapable` to a `String`, then writes it to standard out followed by a newline
 
 ## Operators
 
