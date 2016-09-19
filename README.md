@@ -183,3 +183,9 @@ Name          | Description
 `escToString` | Renders anything implementing `ToEscapable` to a `String`
 `putEsc`      | Renders anything implementing `ToEscapable` to a `String` then writes it to standard out
 `putEscLn`    | Renders anything implementing `ToEscapable` to a `String` then writes it to standard out followed by a newline
+
+## Operators
+
+Symbol | Purpose
+------ | -------
+`^$`   | Same as `$`, but one level of precedence higher than `<>` for avoiding the use of parentheses when needing to use `$` in the same expression as `<>`. See examples below.
