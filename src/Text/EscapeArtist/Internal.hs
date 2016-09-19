@@ -14,6 +14,8 @@ import Text.EscapeArtist.Constants
 
 infixr 7 <|
 (<|) = ($)
+infixr 7 ^$
+(^$) = ($)
 
 data Escapable = forall a. (ToEscapable a) => Black a
                | forall a. (ToEscapable a) => Red a
