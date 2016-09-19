@@ -12,11 +12,11 @@ import Text.EscapeArtistSpec.TestData
 spec :: Spec
 spec = do
     describe "escToString" $ do
-        context "when passed any Escapable" $ do
+        context "when passed any instance of ToEscapable" $ do
             it "outputs contained valued with corresponding escape codes" $ forM_ escSingleTestCases $
                 \(TestCase escapable expectation) -> do
                     escToString escapable `shouldBe` expectation
-        context "when passed a Inherited" $ do
+        context "when passed an Inherited" $ do
             it "outputs contained value with only parent escape codes" $ forM_ inheritedTestCases $ do
                 \(TestCase escapable expectation) -> do
                     escToString escapable `shouldBe` expectation
@@ -28,14 +28,14 @@ spec = do
                 \(TestCase escapable expectation) -> do
                     escToString escapable `shouldBe` expectation
     describe "putEsc" $ do
-        context "when passed any Escapable" $ do
+        context "when passed any instance of ToEscapable" $ do
             it "outputs contained values with corresponding escape codes" $ forM_ allEscTestCases $
                 \(TestCase escapable expectation) -> do
                     (out, result) <- capture $ putEsc $ escapable
                     out `shouldBe` expectation
                     result `shouldBe` ()
     describe "putEscLn" $ do
-        context "when passed any Escapable" $ do
+        context "when passed any instance of ToEscapable" $ do
             it "outputs contained values with corresponding escape codes and newline" $ forM_ allEscTestCases $
                 \(TestCase escapable expectation) -> do
                     (out, result) <- capture $ putEscLn $ escapable

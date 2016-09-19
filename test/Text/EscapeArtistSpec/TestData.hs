@@ -14,12 +14,15 @@ import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy.Char8 as BSLC
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
+import Data.Typeable
 import Test.QuickCheck
 import Text.EscapeArtist.Internal
 import Text.EscapeArtist.Constants
 
-data TestCase = TestCase { getEscapable :: Escapable, getExpected :: String }
+data TestCase = forall a. (ToEscapable a) => TestCase a String
 data TestCaseEq = TestCaseEq Escapable Escapable
+
+-----------------------------------------------------------
 
 openCloseCons = [
         (black,   defaultColor, Black  ),
@@ -62,6 +65,8 @@ genTestCases valueList = [
                 let e = open ++ vs ++ close
                 ]
 
+-- Atom terminating type tests
+
 charValueExp = [('5', "5"), ('X', "X"), ('@', "@")] :: [(Char, String)]
 charTestCases = genTestCases charValueExp
 
@@ -92,7 +97,20 @@ textTestCases = genTestCases textValueExp
 textLazyValueExp = [(TL.pack "ASDASDASD", "ASDASDASD"), (TL.pack "%%$\":98^tug'kjgh\"", "%%$\":98^tug'kjgh\""), (TL.pack "aaa\nggg\thhh\n", "aaa\nggg\thhh\n")]
 textLazyTestCases = genTestCases textLazyValueExp
 
+-- Atom tests
+
 atomTestCases = [TestCase (Atom v) e | (v, e) <- stringValueExp]
+
+-- Other types of ToEscapable tests
+
+data SomeToEscapable = A deriving (Show)
+
+instance ToEscapable SomeToEscapable where
+    toEscapable (A) = Red $ "A"
+
+toEscTestCases = [TestCase 5 "5", TestCase "Some String" "Some String", TestCase A (red ++ "A" ++ defaultColor)]
+
+-- Put them all together to run through the same test
 
 escSingleTestCases = charTestCases
                    ++ intTestCases
@@ -105,12 +123,21 @@ escSingleTestCases = charTestCases
                    ++ textTestCases
                    ++ textLazyTestCases
                    ++ atomTestCases
+                   ++ toEscTestCases
+
+-----------------------------------------------------------
+
+-- Inherited tests
 
 inheritedTestCases = [TestCase (Underline $ Bright 6) (underlineOn ++ brightOn ++ "6" ++ brightOff ++ underlineOff)]
 
-sumTestCases = let escapables = map getEscapable intTestCases
-                   expected = concat $ map getExpected intTestCases
-                in [TestCase (Sum escapables) expected]
+-----------------------------------------------------------
+
+-- Sum tests
+
+sumTestCases1esc = Sum [Red 6, Blue "Color", Yellow "Hello"]
+sumTestCases1exp = concat [red, "6", defaultColor, blue, "Color", defaultColor, yellow, "Hello", defaultColor]
+sumTestCases = [TestCase sumTestCases1esc sumTestCases1exp]
 
 oneNestedSum = Bright $ Red $ Underline $ Sum [Underline $ Yellow "Hello", Green 1000 ]
 oneNestedSumExp = concat [
@@ -139,8 +166,15 @@ nestedSumTestCases = [
     TestCase threeNestedSum threeNestedSumExp
     ]
 
+-----------------------------------------------------------
+
+-- Tests for putEsc and putEscLn
+
 allEscTestCases = inheritedTestCases ++ escSingleTestCases ++ sumTestCases ++ nestedSumTestCases
 
+-----------------------------------------------------------
+
+-- Equality tests
 
 eq1List = [Red 6, Red "6", Red $ BSC.pack "6", Red $ BSLC.pack "6", Red $ T.pack "6", Red $ TL.pack "6"]
 eq1TestCases = [TestCaseEq x y | x <- eq1List, y <- eq1List]
@@ -159,6 +193,10 @@ notEqList22 = [White 11, White 12, White 13, White 14, White 15]
 notEq2TestCases = [TestCaseEq x y | x <- notEqList21, y <- notEqList22]
 
 allNotEqTestCases = notEq1TestCases ++ notEq2TestCases
+
+-----------------------------------------------------------
+
+-- Monoid law test data
 
 instance Arbitrary Escapable where
     arbitrary = oneof $ map return [
