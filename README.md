@@ -189,3 +189,7 @@ Name          | Description
 Symbol | Purpose
 ------ | -------
 `^$`   | Same as `$`, but one level of precedence higher than `<>` for avoiding the use of parentheses when needing to use `$` in the same expression as `<>`. See examples below.
+
+## Examples
+
+Coming soon
