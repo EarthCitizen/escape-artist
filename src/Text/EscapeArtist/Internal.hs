@@ -12,8 +12,6 @@ import Data.Typeable (Typeable, cast)
 import Data.Word
 import Text.EscapeArtist.Constants
 
-infixr 7 <|
-(<|) = ($)
 infixr 7 ^$
 (^$) = ($)
 
@@ -155,7 +153,6 @@ instance Eq Escapable where
     (Atom      a) == (Atom      b) = toCompStr a == toCompStr b
     _ == _ = False
 
-class (Eq a, Show a, Typeable a) => ToEscapable a where
 class (Show a, Typeable a) => ToEscapable a where
     toEscapable :: a -> Escapable
 
@@ -204,9 +201,8 @@ instance ToEscapable Double where
 instance ToEscapable Escapable where
     toEscapable = id
 
-escToString :: Escapable -> String
-escToString (Atom a) = a
-escToString esc      = escToStrEncl "" "" esc
+escToString :: (ToEscapable a) => a -> String
+escToString esc = escToStrEncl "" "" $ toEscapable esc
 
 recur = escToStrEncl
 dc = defaultColor
@@ -260,7 +256,7 @@ instance Monoid Escapable where
     mappend a        b        = Sum [a, b]
 
 putEscLn :: (ToEscapable a) => a -> IO ()
-putEscLn = putStrLn . escToString . toEscapable
+putEscLn = putStrLn . escToString
 
 putEsc :: (ToEscapable a) => a -> IO ()
-putEsc = putStr . escToString . toEscapable
+putEsc = putStr . escToString
