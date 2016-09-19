@@ -173,3 +173,11 @@ Name           | Effect on Applied Value
 `UnderlineOff` | NOT to end an underlined series, but rather to nest a non-underlined segment inside a series of underlined outputs
 `Inverse`      | Switches the foreground and background colors
 `InverseOff`   | NOT to end an inverse series, but rather to nest a non-inverse segment inside a series of inverse outputs
+
+## Functions
+
+Name          | Description
+------------- | -----------
+`escToString` | Renders anything implementing `ToEscapable` to a `String`
+`putEsc`      | Renders anything implementing `ToEscapable` to a `String` then writes it to standard out
+`putEscLn`    | Renders anything implementing `ToEscapable` to a `String` then writes it to standard out followed by a newline
