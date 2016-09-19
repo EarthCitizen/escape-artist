@@ -1,4 +1,4 @@
-module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (<|)) where
+module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (^$)) where
 
 import Control.Applicative ((<|>))
 import qualified Data.ByteString as BS
