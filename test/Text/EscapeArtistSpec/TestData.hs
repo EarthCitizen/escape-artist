@@ -45,7 +45,7 @@ openCloseCons = [
 
         (defaultColor,   "", Default  ),
         (defaultBgColor, "", BgDefault),
-        ("",             "", Inherited),
+        ("",             "", Inherit  ),
         (reset,          "", Normal   ),
 
         (blinkOn,      blinkOff,     Blink       ),
@@ -127,7 +127,7 @@ escSingleTestCases = charTestCases
 
 -----------------------------------------------------------
 
--- Inherited tests
+-- Inherit tests
 
 inheritedTestCases = [TestCase (Underline $ Bright 6) (underlineOn ++ brightOn ++ "6" ++ brightOff ++ underlineOff)]
 

@@ -9,10 +9,10 @@ rainbowString s = fn s (cycle [Red, White, Green, Blue, Yellow, Cyan])
     where fn [] _ = mempty
           fn _ [] = mempty
           fn (s:ss) ca@(c:cs)
-              | s `elem` " \t\n\r" = Inherited s <> fn ss ca
+              | s `elem` " \t\n\r" = Inherit s <> fn ss ca
               | otherwise = c s <> fn ss cs
 
-spacesInherit = Red '@' <> Inherited ' ' <> Yellow '@' <> Inherited ' ' <> Green '@'
+spacesInherit = Red '@' <> Inherit ' ' <> Yellow '@' <> Inherit ' ' <> Green '@'
 
 underlineOff = Underline $ Cyan "I am underlined" <> UnderlineOff " but I am not " <> Magenta "and I am over here"
 

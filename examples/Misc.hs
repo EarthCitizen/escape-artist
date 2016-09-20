@@ -6,7 +6,7 @@ import Data.List (intersperse)
 import Text.Regex
 
 instance (ToEscapable a) => ToEscapable (Maybe a) where
-    toEscapable (Just a) = Green "Just" <> Inherited " " <> (Bright $ Yellow a)
+    toEscapable (Just a) = Green "Just" <> Inherit " " <> (Bright $ Yellow a)
     toEscapable (Nothing) = Inverse $ Red "Nothing"
 
 alterString :: String -> Escapable
@@ -14,7 +14,7 @@ alterString [] = Default ""
 alterString a  = mconcat $ zipWith (\c v -> c v) (cycle [Inverse . Red, Red, Inverse . Blue, Red]) a
 
 rainbowString :: String -> Escapable
-rainbowString [] = Inherited ""
+rainbowString [] = Inherit ""
 rainbowString a = mconcat $ zipWith (\ c v -> c v) (cycle [Red, Blue, Yellow, Cyan, Magenta]) a
 
 takeFromZip :: Escapable
@@ -22,14 +22,14 @@ takeFromZip = mconcat $ take 10 $ zipWith (<>) (cycle [alterString "Zip"]) (cycl
 
 posNeg :: (Integral a, ToEscapable a) => a -> Escapable
 posNeg a | a < 0 = Red a
-         | a == 0 = Inherited a
+         | a == 0 = Inherit a
          | otherwise = Green a
 
 replaceNumbers :: String -> String
 replaceNumbers searchIn = subRegex (mkRegex "([0-9]+)") searchIn (escToString $ Red "\\1")
 
 numberAts :: Escapable
-numberAts =  mconcat $ intersperse (Inherited "@") $ map Default [1..10]
+numberAts =  mconcat $ intersperse (Inherit "@") $ map Default [1..10]
 
 main = do
     putStrLn "Numbers in Red"
@@ -38,7 +38,7 @@ main = do
     putStrLn ""
     putStrLn "Negative Numbers in Red, Positive Numbers in Green"
     putStrLn "=================================================="
-    putEscLn $ mconcat $ intersperse (Inherited " ") $ map posNeg [-10..10]
+    putEscLn $ mconcat $ intersperse (Inherit " ") $ map posNeg [-10..10]
     putStrLn ""
     putStrLn "@ Inherits Parent Color"
     putStrLn "======================="

@@ -35,7 +35,7 @@ data Escapable = forall a. (ToEscapable a) => Black a
 
                | forall a. (ToEscapable a) => Default a
                | forall a. (ToEscapable a) => BgDefault a
-               | forall a. (ToEscapable a) => Inherited a
+               | forall a. (ToEscapable a) => Inherit a
                | forall a. (ToEscapable a) => Normal a
 
                | forall a. (ToEscapable a) => Blink a
@@ -70,7 +70,7 @@ instance Show Escapable where
 
     show (Default   a) = "Default ("   ++ show a ++ ")"
     show (BgDefault a) = "BgDefault (" ++ show a ++ ")"
-    show (Inherited a) = "Inherited (" ++ show a ++ ")"
+    show (Inherit   a) = "Inherit ("   ++ show a ++ ")"
     show (Normal    a) = "Normal ("    ++ show a ++ ")"
 
     show (Blink        a) = "Blink ("        ++ show a ++ ")"
@@ -137,7 +137,7 @@ instance Eq Escapable where
 
     (Default   a) == (Default   b) = toCompStr a == toCompStr b
     (BgDefault a) == (BgDefault b) = toCompStr a == toCompStr b
-    (Inherited a) == (Inherited b) = toCompStr a == toCompStr b
+    (Inherit a) == (Inherit b) = toCompStr a == toCompStr b
     (Normal    a) == (Normal    b) = toCompStr a == toCompStr b
 
     (Blink        a) == (Blink        b) = toCompStr a == toCompStr b
@@ -231,7 +231,7 @@ escToStrEncl pref suff (BgWhite   a) = recur (pref ++ bgwhite  ) (dbc ++ suff) (
 
 escToStrEncl pref suff (Default   a) = recur (pref ++ dc ) (suff) (te a)
 escToStrEncl pref suff (BgDefault a) = recur (pref ++ dbc) (suff) (te a)
-escToStrEncl pref suff (Inherited a) = recur (pref)        (suff) (te a)
+escToStrEncl pref suff (Inherit   a) = recur (pref)        (suff) (te a)
 escToStrEncl pref suff (Normal    a) = recur (pref ++ res) (suff) (te a)
 
 escToStrEncl pref suff (Blink        a) = recur (pref ++ blinkOn     ) (blinkOff    ++ suff)  (te a)

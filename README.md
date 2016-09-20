@@ -42,7 +42,7 @@ import Text.EscapeArtist
 
 let redList = [Red 6, Red "6", Red '6', Red (6 :: Float), Red (6 :: Double)]
 
-putEscLn $ mconcat $ intersperse (Inherited " ") redList
+putEscLn $ mconcat $ intersperse (Inherit " ") redList
 ```
 
 <img src="images/six.png?raw=true" height="20">
@@ -77,7 +77,7 @@ instance ToEscapable ABC where
    toEscapable (B) = Green $ show B
 
 instance (ToEscapable a) => ToEscapable (Maybe a) where
-    toEscapable (Just a) = Green "Just" <> Inherited " " <> Yellow a
+    toEscapable (Just a) = Green "Just" <> Inherit " " <> Yellow a
     toEscapable a = Red $ show a
 
 putEscLn A
@@ -165,7 +165,7 @@ Name           | Effect on Applied Value
 -------------- | -----------------------
 `Default`      | Default foreground color of the terminal
 `BgDefault`    | Default background color of the terminal
-`Inherited`    | Applies attributes of parent constructors. Useful for a value interspersed in a series with other `Escapable`s. See examples below.
+`Inherit`    | Applies attributes of parent constructors. Useful for a value interspersed in a series with other `Escapable`s. See examples below.
 `Normal`       | Even when other constructors are applied, the contained value will have the default attributes of the terminal
 `Blink`        | Output blinks in terminal
 `BlinkOff`     | NOT to end a blinking series, but rather to nest a non-blinking segment inside a series of blinking outputs
@@ -192,13 +192,13 @@ Symbol | Purpose
 
 ## Examples
 
-### Inherited
+### Inherit
 
 ```haskell
 import Data.Monoid ((<>))
 import Text.EscapeArtist
 
-spacesInherit = Red '@' <> Inherited ' ' <> Yellow '@' <> Inherited ' ' <> Green '@'
+spacesInherit = Red '@' <> Inherit ' ' <> Yellow '@' <> Inherit ' ' <> Green '@'
 
 putEscLn spacesInherit
 ```
@@ -270,7 +270,7 @@ rainbowString s = fn s (cycle [Red, White, Green, Blue, Yellow, Cyan])
     where fn [] _ = mempty
           fn _ [] = mempty
           fn (s:ss) ca@(c:cs)
-              | s `elem` " \t\n\r" = Inherited s <> fn ss ca
+              | s `elem` " \t\n\r" = Inherit s <> fn ss ca
               | otherwise = c s <> fn ss cs
 
 putEscLn $ rainbowString "Hello World!"
