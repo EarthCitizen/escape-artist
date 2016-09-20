@@ -1,4 +1,4 @@
-{-# LANGUAGE ExtendedDefaultRules, NoMonomorphismRestriction #-}
+{-# LANGUAGE ExtendedDefaultRules #-}
 
 import Data.Monoid ((<>))
 import Text.EscapeArtist

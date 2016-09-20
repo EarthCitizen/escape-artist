@@ -45,7 +45,7 @@ let redList = [Red 6, Red "6", Red '6', Red (6 :: Float), Red (6 :: Double)]
 putEscLn $ mconcat $ intersperse (Inherited " ") redList
 ```
 
-<img src="images/six.png?raw=true" width="150">
+<img src="images/six.png?raw=true" height="20">
 
 The following data types already come with an implementation of `ToEscapable`:
 
@@ -86,7 +86,7 @@ putEscLn $ Just 15
 putEscLn (Nothing :: Maybe Int)
 ```
 
-<img src="images/abc_maybe.png?raw=true" width="300">
+<img src="images/abc_maybe.png?raw=true" height="150">
 
 When constructors are combined with the application operator (`$`), the effects accumulate and wrap around the applied value:
 
@@ -136,7 +136,7 @@ let result = Underline $ Yellow 5 <> White 6
 putEscLn result
 ```
 
-<img src="images/56yw.png?raw=true" width="50">
+<img src="images/56yw.png?raw=true" height="20">
 
 XML equivalent:
 ```XML
@@ -165,7 +165,7 @@ Name           | Effect on Applied Value
 -------------- | -----------------------
 `Default`      | Default foreground color of the terminal
 `BgDefault`    | Default background color of the terminal
-`Inherited`    | Applies attributes of parent constructors. Useful for a value in a series with other `Escapable`s. See examples below.
+`Inherited`    | Applies attributes of parent constructors. Useful for a value interspersed in a series with other `Escapable`s. See examples below.
 `Normal`       | Even when other constructors are applied, the contained value will have the default attributes of the terminal
 `Blink`        | Output blinks in terminal
 `BlinkOff`     | NOT to end a blinking series, but rather to nest a non-blinking segment inside a series of blinking outputs
@@ -192,4 +192,134 @@ Symbol | Purpose
 
 ## Examples
 
-Coming soon
+### Inherited
+
+```haskell
+import Data.Monoid ((<>))
+import Text.EscapeArtist
+
+spacesInherit = Red '@' <> Inherited ' ' <> Yellow '@' <> Inherited ' ' <> Green '@'
+
+putEscLn spacesInherit
+```
+
+<img src="images/inherit_none.png?raw=true" height="20">
+
+```haskell
+putEscLn $ Underline spacesInherit
+```
+
+<img src="images/inherit_underline.png?raw=true" height="22">
+
+```haskell
+putEscLn $ Inverse spacesInherit
+```
+
+<img src="images/inherit_inverse.png?raw=true" height="24">
+
+```haskell
+putEscLn $ BgBlue spacesInherit
+```
+
+<img src="images/inherit_bgblue.png?raw=true" height="24">
+
+### UnderlineOff
+
+```haskell
+import Data.Monoid ((<>))
+import Text.EscapeArtist
+
+underlineOff = Underline $ Cyan "I am underlined" <> UnderlineOff " but I am not " <> Magenta "and I am over here"
+
+putEscLn $ underlineOff
+```
+
+<img src="images/underline_off.png?raw=true" height="20">
+
+The same type of functionality applies as well to `BlinkOff`, `BrightOff` and `InverseOff`.
+
+### Operator ^$
+
+This operator allows you to avoid parentheses in cases where you need to use `$` and `<>` in he same expression.
+
+```haskell
+import Data.Monoid ((<>))
+import Text.EscapeArtist
+
+op1 = Underline $ Bright ^$ Green "GREEN" <> Normal " " <> Yellow "YELLOW"
+
+putEscLn op1
+```
+
+<img src="images/high_prec_apply_op.png?raw=true" height="20">
+
+Without `^$`, this would have to be written as:
+
+```haskell
+Underline $ (Bright $ Green "GREEN") <> Normal " " <> Yellow "YELLOW"
+```
+
+### Some Slightly More Advanced Examples
+
+```haskell
+import Data.Monoid (mempty, (<>))
+import Text.EscapeArtist
+
+rainbowString :: String -> Escapable
+rainbowString s = fn s (cycle [Red, White, Green, Blue, Yellow, Cyan])
+    where fn [] _ = mempty
+          fn _ [] = mempty
+          fn (s:ss) ca@(c:cs)
+              | s `elem` " \t\n\r" = Inherited s <> fn ss ca
+              | otherwise = c s <> fn ss cs
+
+putEscLn $ rainbowString "Hello World!"
+```
+
+<img src="images/rainbow_string.png?raw=true" height="20">
+
+```haskell
+import Text.EscapeArtist
+import Text.Regex
+
+replaceNumbers :: String -> String
+replaceNumbers searchIn = subRegex (mkRegex "([0-9]+)") searchIn (escToString $ Red "\\1")
+
+putStrLn $ replaceNumbers "Line 7 of 23"
+```
+
+<img src="images/highlight_numbers.png?raw=true" height="20">
+
+```haskell
+{-# LANGUAGE FlexibleInstances #-}
+
+import Data.Monoid ((<>))
+import Text.EscapeArtist
+
+type FileName = String
+type LineNumber = Integer
+type ColumnNumber = Integer
+data ErrorType = SyntaxError FileName LineNumber ColumnNumber deriving (Show)
+
+instance ToEscapable ErrorType where
+    toEscapable (SyntaxError fn ln cn) = Normal "Syntax error in file "
+                                       <> Yellow ^$ Underline fn
+                                       <> Normal " at "
+                                       <> Red (show ln ++ ":" ++ show cn)
+
+instance ToEscapable (Either ErrorType String) where
+    toEscapable (Left e) = toEscapable e
+    toEscapable (Right m) = Green m
+
+gotSyntaxError :: Either ErrorType String
+gotSyntaxError = Left $ SyntaxError "some/File.hs" 1 23
+
+gotMessage :: Either ErrorType String
+gotMessage = Right "Status OK"
+
+putEscLn $ gotSyntaxError
+putStrLn ""
+putEscLn $ gotMessage
+```
+
+<img src="images/either_error.png?raw=true" height="53">
