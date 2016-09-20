@@ -1,5 +1,7 @@
 module Text.EscapeArtist.Constants where
 
+black, red, green, yellow, blue, magenta, cyan, white :: String
+
 black   = "\x1B[30m"
 red     = "\x1B[31m"
 green   = "\x1B[32m"
@@ -8,6 +10,8 @@ blue    = "\x1B[34m"
 magenta = "\x1B[35m"
 cyan    = "\x1B[36m"
 white   = "\x1B[37m"
+
+bgblack, bgred, bggreen, bgyellow, bgblue, bgmagenta, bgcyan, bgwhite :: String
 
 bgblack   = "\x1B[40m"
 bgred     = "\x1B[41m"
@@ -18,17 +22,23 @@ bgmagenta = "\x1B[45m"
 bgcyan    = "\x1B[46m"
 bgwhite   = "\x1B[47m"
 
+reset, defaultColor, defaultBgColor :: String
+
 reset = "\x1B[0m"
 
 defaultColor = "\x1B[39m"
 
 defaultBgColor = "\x1B[49m"
 
+blinkOn, blinkOff, brightOn, brightOff :: String
+
 blinkOn  = "\x1B[5m"
 blinkOff = "\x1B[25m"
 
 brightOn  = "\x1B[1m"
 brightOff = "\x1B[22m"
+
+underlineOn, underlineOff, inverseOn, inverseOff :: String
 
 underlineOn = "\x1B[4m"
 underlineOff = "\x1B[24m"

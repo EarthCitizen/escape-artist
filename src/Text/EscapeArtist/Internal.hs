@@ -5,7 +5,6 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSLC
-import Data.Monoid hiding (Sum)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import Data.Typeable (Typeable, cast)
@@ -13,6 +12,8 @@ import Data.Word
 import Text.EscapeArtist.Constants
 
 infixr 7 ^$
+
+(^$) :: (a -> b) -> a -> b
 (^$) = ($)
 
 data Escapable = forall a. (ToEscapable a) => Black a
@@ -97,6 +98,8 @@ tryCast :: forall a b. (Show b, Typeable a, Typeable b) => a -> (b -> String) ->
 tryCast a f = case cast a of
                 (Just s) -> Just $ f s
                 _ -> Nothing
+
+tryString, tryChar, tryBS, tryBSL, tryT, tryTL :: Typeable a => a -> Maybe String
 
 tryString a = tryCast a id
 tryChar   a = tryCast a (\b -> [b :: Char]  )
@@ -204,10 +207,19 @@ instance ToEscapable Escapable where
 escToString :: (ToEscapable a) => a -> String
 escToString esc = escToStrEncl "" "" $ toEscapable esc
 
+recur :: String -> String -> Escapable -> String
 recur = escToStrEncl
+
+dc :: String
 dc = defaultColor
+
+dbc :: String
 dbc = defaultBgColor
+
+res :: String
 res = reset
+
+te :: (ToEscapable a) => a -> Escapable
 te = toEscapable
 
 escToStrEncl :: String -> String -> Escapable -> String
