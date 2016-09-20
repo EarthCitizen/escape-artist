@@ -160,7 +160,7 @@ class (Show a, Typeable a) => ToEscapable a where
     toEscapable :: a -> Escapable
 
 instance ToEscapable String where
-    toEscapable a = Atom a
+    toEscapable = Atom
 
 instance ToEscapable Char where
     toEscapable a = Atom [a]
@@ -241,12 +241,12 @@ escToStrEncl pref suff (BgMagenta a) = recur (pref ++ bgmagenta) (dbc ++ suff) (
 escToStrEncl pref suff (BgCyan    a) = recur (pref ++ bgcyan   ) (dbc ++ suff) (te a)
 escToStrEncl pref suff (BgWhite   a) = recur (pref ++ bgwhite  ) (dbc ++ suff) (te a)
 
-escToStrEncl pref suff (Default   a) = recur (pref ++ dc ) (suff) (te a)
-escToStrEncl pref suff (BgDefault a) = recur (pref ++ dbc) (suff) (te a)
-escToStrEncl pref suff (Inherit   a) = recur (pref)        (suff) (te a)
-escToStrEncl pref suff (Normal    a) = recur (pref ++ res) (suff) (te a)
+escToStrEncl pref suff (Default   a) = recur (pref ++ dc ) suff (te a)
+escToStrEncl pref suff (BgDefault a) = recur (pref ++ dbc) suff (te a)
+escToStrEncl pref suff (Inherit   a) = recur pref          suff (te a)
+escToStrEncl pref suff (Normal    a) = recur (pref ++ res) suff (te a)
 
-escToStrEncl pref suff (Blink        a) = recur (pref ++ blinkOn     ) (blinkOff    ++ suff)  (te a)
+escToStrEncl pref suff (Blink        a) = recur (pref ++ blinkOn     ) (blinkOff     ++ suff) (te a)
 escToStrEncl pref suff (BlinkOff     a) = recur (pref ++ blinkOff    ) suff                   (te a)
 escToStrEncl pref suff (Bright       a) = recur (pref ++ brightOn    ) (brightOff    ++ suff) (te a)
 escToStrEncl pref suff (BrightOff    a) = recur (pref ++ brightOff   ) suff                   (te a)
@@ -255,7 +255,7 @@ escToStrEncl pref suff (UnderlineOff a) = recur (pref ++ underlineOff) suff     
 escToStrEncl pref suff (Inverse      a) = recur (pref ++ inverseOn   ) (inverseOff   ++ suff) (te a)
 escToStrEncl pref suff (InverseOff   a) = recur (pref ++ inverseOff  ) suff                   (te a)
 
-escToStrEncl pref suff (Sum  a) = concat $ map (recur pref suff) a
+escToStrEncl pref suff (Sum  a) = concatMap (recur pref suff) a
 escToStrEncl pref suff (Atom a) = concat [pref, a, suff]
 
 instance Monoid Escapable where
