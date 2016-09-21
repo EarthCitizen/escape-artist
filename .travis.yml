@@ -38,4 +38,8 @@ script:
 
 after_script:
   - stack install hpc-coveralls
-  - hpc-coveralls --exclude-dir test --exclude-dir examples --exclude-dir scripts tests escape-artist-test
+  - hpc-coveralls --exclude-dir test
+                  --exclude-dir examples
+                  --exclude-dir scripts
+                  --coverage-mode=StrictlyFullLines
+                  escape-artist-test
