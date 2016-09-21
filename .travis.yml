@@ -38,9 +38,4 @@ script:
 
 after_script:
   - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
-  - ./shc --exclude-dir=test
-          --exclude-dir=examples
-          --exclude-dir=scripts
-          --display-report
-          --repo-token=${COVERALLS_TOKEN}
-          escape-artist-test
+  - ./shc --partial-coverage --repo-token=${COVERALLS_TOKEN}  Text.EscapeArtist escape-artist-test
