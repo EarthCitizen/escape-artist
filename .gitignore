@@ -2,5 +2,6 @@
 .stack-work
 dist
 *.dump-hi
+*.prof
 *.tix
 scripts/make_eq.sh
