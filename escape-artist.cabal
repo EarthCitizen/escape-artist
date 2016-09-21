@@ -39,7 +39,7 @@ test-suite escape-artist-test
                      , text
                      , QuickCheck
   -- Extra include prevents needing to expose constants module
-  ghc-options:         -i/Users/ryan/github/escape-artist/src -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -i./src -threaded -rtsopts -with-rtsopts=-N
   default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances, NoMonomorphismRestriction
   default-language:    Haskell2010
 
