@@ -41,5 +41,6 @@ after_script:
   - hpc-coveralls --exclude-dir test
                   --exclude-dir examples
                   --exclude-dir scripts
-                  --coverage-mode=StrictlyFullLines
+                  --display-report
+                  --repo-token=${COVERALLS_TOKEN}
                   escape-artist-test
