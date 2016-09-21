@@ -1,3 +1,5 @@
+{-# OPTIONS_HADDOCK hide #-}
+
 module Text.EscapeArtist.Constants where
 
 black, red, green, yellow, blue, magenta, cyan, white :: String

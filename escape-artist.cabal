@@ -1,6 +1,6 @@
 name:                escape-artist
 version:             0.1.0
-synopsis:            Initial project template from stack
+synopsis:            Haskell ASCII Escape Codes Made Easy
 description:         Please see README.md
 homepage:            https://github.com/EarthCitizen/escape-artist#readme
 license:             BSD3
@@ -10,29 +10,20 @@ maintainer:          example@example.com
 copyright:           2016 Author name here
 category:            Web
 build-type:          Simple
--- extra-source-files:
+extra-source-files:  src/Text/EscapeArtist/Constants.hs
 cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
   exposed-modules:     Text.EscapeArtist
-                     , Text.EscapeArtist.Constants
                      , Text.EscapeArtist.Internal
   default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances, NoMonomorphismRestriction
   build-depends:       base >= 4.7 && < 5
                      , bytestring
                      , text
+  ghc-options:
   default-language:    Haskell2010
-
--- executable escape-artist-exe
---   hs-source-dirs:      app
---   main-is:             Main.hs
---   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
---   default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances
---   build-depends:       base
---                      , escape-artist
---                      , regex-compat
---   default-language:    Haskell2010
+  other-modules:       Text.EscapeArtist.Constants
 
 test-suite escape-artist-test
   type:                exitcode-stdio-1.0
@@ -47,8 +38,9 @@ test-suite escape-artist-test
                      , silently
                      , text
                      , QuickCheck
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  default-extensions:  ExistentialQuantification, ExtendedDefaultRules, NoMonomorphismRestriction
+  -- Extra include prevents needing to expose constants module
+  ghc-options:         -i/Users/ryan/github/escape-artist/src -threaded -rtsopts -with-rtsopts=-N
+  default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances, NoMonomorphismRestriction
   default-language:    Haskell2010
 
 source-repository head

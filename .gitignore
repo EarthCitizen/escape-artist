@@ -1,5 +1,6 @@
 .DS_Store
 .stack-work
 dist
+*.dump-hi
 *.tix
 scripts/make_eq.sh

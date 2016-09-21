@@ -1,3 +1,5 @@
+{-# OPTIONS_HADDOCK hide #-}
+
 module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (^$)) where
 
 import Control.Applicative ((<|>))
@@ -16,37 +18,39 @@ infixr 7 ^$
 (^$) :: (a -> b) -> a -> b
 (^$) = ($)
 
-data Escapable = forall a. (ToEscapable a) => Black a
-               | forall a. (ToEscapable a) => Red a
-               | forall a. (ToEscapable a) => Green a
-               | forall a. (ToEscapable a) => Yellow a
-               | forall a. (ToEscapable a) => Blue a
-               | forall a. (ToEscapable a) => Magenta a
-               | forall a. (ToEscapable a) => Cyan a
-               | forall a. (ToEscapable a) => White a
+-- | The constructors used to apply attributes to values
+-- for terminal output
+data Escapable = forall a. (ToEscapable a) => Black   a -- ^ Forground color black
+               | forall a. (ToEscapable a) => Red     a -- ^ Forground color red
+               | forall a. (ToEscapable a) => Green   a -- ^ Forground color green
+               | forall a. (ToEscapable a) => Yellow  a -- ^ Forground color yellow
+               | forall a. (ToEscapable a) => Blue    a -- ^ Forground color blue
+               | forall a. (ToEscapable a) => Magenta a -- ^ Forground color magenta
+               | forall a. (ToEscapable a) => Cyan    a -- ^ Forground color cyan
+               | forall a. (ToEscapable a) => White   a -- ^ Forground color white
 
-               | forall a. (ToEscapable a) => BgBlack a
-               | forall a. (ToEscapable a) => BgRed a
-               | forall a. (ToEscapable a) => BgGreen a
-               | forall a. (ToEscapable a) => BgYellow a
-               | forall a. (ToEscapable a) => BgBlue a
-               | forall a. (ToEscapable a) => BgMagenta a
-               | forall a. (ToEscapable a) => BgCyan a
-               | forall a. (ToEscapable a) => BgWhite a
+               | forall a. (ToEscapable a) => BgBlack   a -- ^ Background color black
+               | forall a. (ToEscapable a) => BgRed     a -- ^ Background color red
+               | forall a. (ToEscapable a) => BgGreen   a -- ^ Background color green
+               | forall a. (ToEscapable a) => BgYellow  a -- ^ Background color yellow
+               | forall a. (ToEscapable a) => BgBlue    a -- ^ Background color blue
+               | forall a. (ToEscapable a) => BgMagenta a -- ^ Background color magenta
+               | forall a. (ToEscapable a) => BgCyan    a -- ^ Background color cyan
+               | forall a. (ToEscapable a) => BgWhite   a -- ^ Background color white
 
-               | forall a. (ToEscapable a) => Default a
-               | forall a. (ToEscapable a) => BgDefault a
-               | forall a. (ToEscapable a) => Inherit a
-               | forall a. (ToEscapable a) => Normal a
+               | forall a. (ToEscapable a) => Default   a -- ^ Applies default terminal foreground color
+               | forall a. (ToEscapable a) => BgDefault a -- ^ Applies default terminal background color
+               | forall a. (ToEscapable a) => Inherit   a -- ^ Inherit attributes from the parent, but apply none directly
+               | forall a. (ToEscapable a) => Normal    a -- ^ Applied value will not inherit any attribute from parent
 
-               | forall a. (ToEscapable a) => Blink a
-               | forall a. (ToEscapable a) => BlinkOff a
-               | forall a. (ToEscapable a) => Bright a
-               | forall a. (ToEscapable a) => BrightOff a
-               | forall a. (ToEscapable a) => Underline a
-               | forall a. (ToEscapable a) => UnderlineOff a
-               | forall a. (ToEscapable a) => Inverse a
-               | forall a. (ToEscapable a) => InverseOff a
+               | forall a. (ToEscapable a) => Blink        a -- ^ Blinking text
+               | forall a. (ToEscapable a) => BlinkOff     a -- ^ Will not inherit blink attribute from parent
+               | forall a. (ToEscapable a) => Bright       a -- ^ Color mode to bright
+               | forall a. (ToEscapable a) => BrightOff    a -- ^ Will not inherit bright attribute from parent
+               | forall a. (ToEscapable a) => Underline    a -- ^ Underlined text
+               | forall a. (ToEscapable a) => UnderlineOff a -- ^ Will not inherit underline attribute from parent
+               | forall a. (ToEscapable a) => Inverse      a -- ^ Swap the background and foreground colors
+               | forall a. (ToEscapable a) => InverseOff   a -- ^ Will not inherit inverse attribute from parent
                | Sum [Escapable]
                | Atom String
 
@@ -157,6 +161,7 @@ instance Eq Escapable where
     _ == _ = False
 
 class (Show a, Typeable a) => ToEscapable a where
+    -- | Convert the given type to an Escapable
     toEscapable :: a -> Escapable
 
 instance ToEscapable String where
@@ -204,6 +209,7 @@ instance ToEscapable Double where
 instance ToEscapable Escapable where
     toEscapable = id
 
+-- | Convert any instance of ToEscapable to a String
 escToString :: (ToEscapable a) => a -> String
 escToString esc = escToStrEncl "" "" $ toEscapable esc
 
@@ -267,8 +273,10 @@ instance Monoid Escapable where
     mappend a        (Sum bs) = Sum $ mconcat [[a], bs ]
     mappend a        b        = Sum [a, b]
 
+-- | Convert any instance of ToEscapable to a String and output it to the terminal
 putEscLn :: (ToEscapable a) => a -> IO ()
 putEscLn = putStrLn . escToString
 
+-- | Convert any instance of ToEscapable to a String and output it to the terminal follow by a newline
 putEsc :: (ToEscapable a) => a -> IO ()
 putEsc = putStr . escToString
