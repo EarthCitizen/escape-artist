@@ -37,10 +37,10 @@ script:
   - stack --no-terminal --skip-ghc-check runhaskell scripts/VisualTest.hs
 
 after_script:
-  - stack install hpc-coveralls
-  - hpc-coveralls --exclude-dir test
-                  --exclude-dir examples
-                  --exclude-dir scripts
-                  --display-report
-                  --repo-token=${COVERALLS_TOKEN}
-                  escape-artist-test
+  - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
+  - ./shc --exclude-dir=test
+          --exclude-dir=examples
+          --exclude-dir=scripts
+          --display-report
+          --repo-token=${COVERALLS_TOKEN}
+          escape-artist-test
