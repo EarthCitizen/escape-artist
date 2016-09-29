@@ -4,49 +4,49 @@ module Text.EscapeArtist.Constants where
 
 black, red, green, yellow, blue, magenta, cyan, white :: String
 
-black   = "\x1B[30m"
-red     = "\x1B[31m"
-green   = "\x1B[32m"
-yellow  = "\x1B[33m"
-blue    = "\x1B[34m"
-magenta = "\x1B[35m"
-cyan    = "\x1B[36m"
-white   = "\x1B[37m"
+black   = "\ESC[30m"
+red     = "\ESC[31m"
+green   = "\ESC[32m"
+yellow  = "\ESC[33m"
+blue    = "\ESC[34m"
+magenta = "\ESC[35m"
+cyan    = "\ESC[36m"
+white   = "\ESC[37m"
 
 bgblack, bgred, bggreen, bgyellow, bgblue, bgmagenta, bgcyan, bgwhite :: String
 
-bgblack   = "\x1B[40m"
-bgred     = "\x1B[41m"
-bggreen   = "\x1B[42m"
-bgyellow  = "\x1B[43m"
-bgblue    = "\x1B[44m"
-bgmagenta = "\x1B[45m"
-bgcyan    = "\x1B[46m"
-bgwhite   = "\x1B[47m"
+bgblack   = "\ESC[40m"
+bgred     = "\ESC[41m"
+bggreen   = "\ESC[42m"
+bgyellow  = "\ESC[43m"
+bgblue    = "\ESC[44m"
+bgmagenta = "\ESC[45m"
+bgcyan    = "\ESC[46m"
+bgwhite   = "\ESC[47m"
 
 reset, defaultColor, defaultBgColor :: String
 
-reset = "\x1B[0m"
+reset = "\ESC[0m"
 
-defaultColor = "\x1B[39m"
+defaultColor = "\ESC[39m"
 
-defaultBgColor = "\x1B[49m"
+defaultBgColor = "\ESC[49m"
 
 blinkOn, blinkOff, brightOn, brightOff :: String
 
-blinkOn  = "\x1B[5m"
-blinkOff = "\x1B[25m"
+blinkOn  = "\ESC[5m"
+blinkOff = "\ESC[25m"
 
-brightOn  = "\x1B[1m"
-brightOff = "\x1B[22m"
+brightOn  = "\ESC[1m"
+brightOff = "\ESC[22m"
 
 underlineOn, underlineOff, inverseOn, inverseOff :: String
 
-underlineOn = "\x1B[4m"
-underlineOff = "\x1B[24m"
+underlineOn = "\ESC[4m"
+underlineOff = "\ESC[24m"
 
-inverseOn = "\x1B[7m"
-inverseOff = "\x1B[27m"
+inverseOn = "\ESC[7m"
+inverseOff = "\ESC[27m"
 
--- strikeOn = "\x1B[9m"
--- strikeOff = "\x1B[29m"
+-- strikeOn = "\ESC[9m"
+-- strikeOff = "\ESC[29m"
