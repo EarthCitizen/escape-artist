@@ -17,7 +17,7 @@ spec = do
                 \(TestCase escapable expectation) -> do
                     escToString escapable `shouldBe` expectation
         context "when passed an Inherit" $ do
-            it "outputs contained value with only parent escape codes" $ forM_ inheritedTestCases $ do
+            it "outputs contained value with only parent escape codes" $ forM_ inheritTestCases $ do
                 \(TestCase escapable expectation) -> do
                     escToString escapable `shouldBe` expectation
         context "when passed a Sum" $ do
@@ -61,3 +61,7 @@ spec = do
             -- associativity
             -- (x <> y) <> z = x <> (y <> z)
             \x y z -> (x <> y) <> z `shouldBe` (x :: Escapable) <> ((y :: Escapable) <> (z :: Escapable))
+
+    describe "Show Escapable" $ do
+        it "returns the String representation of the given value" $ forM_ showTestCases $ do
+            \(TestCase escapable expectation) -> show escapable `shouldBe` expectation

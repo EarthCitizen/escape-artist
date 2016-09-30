@@ -2,19 +2,20 @@ module Text.EscapeArtistSpec.TestData (
                                 TestCase(..)
                               , TestCaseEq(..)
                               , allEscTestCases
-                              , inheritedTestCases
+                              , inheritTestCases
                               , escSingleTestCases
                               , nestedSumTestCases
                               , sumTestCases
                               , allEqTestCases
                               , allNotEqTestCases
+                              , showTestCases
                               ) where
 
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy.Char8 as BSLC
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
-import Data.Typeable
+import Data.Word
 import Test.QuickCheck
 import Text.EscapeArtist.Internal
 import Text.EscapeArtist.Constants
@@ -70,18 +71,6 @@ genTestCases valueList = [
 charValueExp = [('5', "5"), ('X', "X"), ('@', "@")] :: [(Char, String)]
 charTestCases = genTestCases charValueExp
 
-intValueExp = [(500, "500"), ((-4000), "-4000"), (9999999, "9999999")] :: [(Int, String)]
-intTestCases = genTestCases intValueExp
-
-integerValueExp = [(500, "500"), ((-4000), "-4000"), (9999999, "9999999")] :: [(Integer, String)]
-integerTestCases = genTestCases integerValueExp
-
-floatValueExp = [(4.5, "4.5"), (0.0001, "1.0e-4"), (-0.003, "-3.0e-3")] :: [(Float, String)]
-floatTestCases = genTestCases floatValueExp
-
-doubleValueExp = [(4.5, "4.5"), (0.0001, "1.0e-4"), (-0.003, "-3.0e-3")] :: [(Double, String)]
-doubleTestCases = genTestCases doubleValueExp
-
 bsValueExp = [(BSC.pack "ASDASDASD", "ASDASDASD"), (BSC.pack "%%$\":98^tug'kjgh\"", "%%$\":98^tug'kjgh\""), (BSC.pack "aaa\nggg\thhh\n", "aaa\nggg\thhh\n")]
 bsTestCases = genTestCases bsValueExp
 
@@ -96,6 +85,33 @@ textTestCases = genTestCases textValueExp
 
 textLazyValueExp = [(TL.pack "ASDASDASD", "ASDASDASD"), (TL.pack "%%$\":98^tug'kjgh\"", "%%$\":98^tug'kjgh\""), (TL.pack "aaa\nggg\thhh\n", "aaa\nggg\thhh\n")]
 textLazyTestCases = genTestCases textLazyValueExp
+
+intValueExp = [(500, "500"), ((-4000), "-4000"), (9999999, "9999999")] :: [(Int, String)]
+intTestCases = genTestCases intValueExp
+
+integerValueExp = [(500, "500"), ((-4000), "-4000"), (9999999, "9999999")] :: [(Integer, String)]
+integerTestCases = genTestCases integerValueExp
+
+wValueExp = [(500, "500"), ((4), "4"), (999, "999")] :: [(Word, String)]
+wTestCases = genTestCases wValueExp
+
+w8ValueExp = [(200, "200"), (4, "4"), (99, "99")] :: [(Word8, String)]
+w8TestCases = genTestCases w8ValueExp
+
+w16ValueExp = [(500, "500"), ((4), "4"), (999, "999")] :: [(Word16, String)]
+w16TestCases = genTestCases w16ValueExp
+
+w32ValueExp = [(500, "500"), ((400), "400"), (99999, "99999")] :: [(Word32, String)]
+w32TestCases = genTestCases w32ValueExp
+
+w64ValueExp = [(500, "500"), ((400), "400"), (99999, "99999")] :: [(Word64, String)]
+w64TestCases = genTestCases w64ValueExp
+
+floatValueExp = [(4.5, "4.5"), (0.0001, "1.0e-4"), (-0.003, "-3.0e-3")] :: [(Float, String)]
+floatTestCases = genTestCases floatValueExp
+
+doubleValueExp = [(4.5, "4.5"), (0.0001, "1.0e-4"), (-0.003, "-3.0e-3")] :: [(Double, String)]
+doubleTestCases = genTestCases doubleValueExp
 
 -- Atom tests
 
@@ -113,10 +129,6 @@ toEscTestCases = [TestCase 5 "5", TestCase "Some String" "Some String", TestCase
 -- Put them all together to run through the same test
 
 escSingleTestCases = charTestCases
-                   ++ intTestCases
-                   ++ integerTestCases
-                   ++ floatTestCases
-                   ++ doubleTestCases
                    ++ bsTestCases
                    ++ bslTestCases
                    ++ stringTestCases
@@ -124,12 +136,21 @@ escSingleTestCases = charTestCases
                    ++ textLazyTestCases
                    ++ atomTestCases
                    ++ toEscTestCases
+                   ++ intTestCases
+                   ++ integerTestCases
+                   ++ wTestCases
+                   ++ w8TestCases
+                   ++ w16TestCases
+                   ++ w32TestCases
+                   ++ w64TestCases
+                   ++ floatTestCases
+                   ++ doubleTestCases
 
 -----------------------------------------------------------
 
 -- Inherit tests
 
-inheritedTestCases = [TestCase (Underline $ Bright 6) (underlineOn ++ brightOn ++ "6" ++ brightOff ++ underlineOff)]
+inheritTestCases = [TestCase (Underline $ Bright 6) (underlineOn ++ brightOn ++ "6" ++ brightOff ++ underlineOff)]
 
 -----------------------------------------------------------
 
@@ -170,7 +191,7 @@ nestedSumTestCases = [
 
 -- Tests for putEsc and putEscLn
 
-allEscTestCases = inheritedTestCases ++ escSingleTestCases ++ sumTestCases ++ nestedSumTestCases
+allEscTestCases = inheritTestCases ++ escSingleTestCases ++ sumTestCases ++ nestedSumTestCases
 
 -----------------------------------------------------------
 
@@ -206,3 +227,43 @@ instance Arbitrary Escapable where
         twoNestedSum,
         threeNestedSum
         ]
+
+-----------------------------------------------------------
+
+-- Show test data
+
+showValueExp = [
+    (Black 1,         "Black (1)"),
+    (Red 2,           "Red (2)"),
+    (Green 3,         "Green (3)"),
+    (Yellow 4,        "Yellow (4)"),
+    (Blue 5,          "Blue (5)"),
+    (Magenta 6,       "Magenta (6)"),
+    (Cyan 7,          "Cyan (7)"),
+    (White 8,         "White (8)"),
+    (BgBlack 9,       "BgBlack (9)"),
+    (BgRed 10,        "BgRed (10)"),
+    (BgGreen 11,      "BgGreen (11)"),
+    (BgYellow 12,     "BgYellow (12)"),
+    (BgBlue 13,       "BgBlue (13)"),
+    (BgMagenta 14,    "BgMagenta (14)"),
+    (BgCyan 15,       "BgCyan (15)"),
+    (BgWhite 16,      "BgWhite (16)"),
+    (Default 17,      "Default (17)"),
+    (BgDefault 18,    "BgDefault (18)"),
+    (Inherit 19,      "Inherit (19)"),
+    (Normal 20,       "Normal (20)"),
+    (Blink 21,        "Blink (21)"),
+    (BlinkOff 22,     "BlinkOff (22)"),
+    (Bright 23,       "Bright (23)"),
+    (BrightOff 24,    "BrightOff (24)"),
+    (Underline 25,    "Underline (25)"),
+    (UnderlineOff 26, "UnderlineOff (26)"),
+    (Inverse 27,      "Inverse (27)"),
+    (InverseOff 28,   "InverseOff (28)"),
+
+    (Sum [Red 6, Blue 3], "Sum [Red (6),Blue (3)]"),
+
+    (Atom "text", "Atom \"text\"")
+    ]
+showTestCases = [TestCase v e | (v, e) <- showValueExp]

@@ -144,7 +144,7 @@ instance Eq Escapable where
 
     (Default   a) == (Default   b) = toCompStr a == toCompStr b
     (BgDefault a) == (BgDefault b) = toCompStr a == toCompStr b
-    (Inherit a) == (Inherit b) = toCompStr a == toCompStr b
+    (Inherit   a) == (Inherit   b) = toCompStr a == toCompStr b
     (Normal    a) == (Normal    b) = toCompStr a == toCompStr b
 
     (Blink        a) == (Blink        b) = toCompStr a == toCompStr b
@@ -185,6 +185,12 @@ instance ToEscapable TL.Text where
 instance ToEscapable Int where
     toEscapable a = Atom $ show a
 
+instance ToEscapable Integer where
+    toEscapable a = Atom $ show a
+
+instance ToEscapable Word where
+    toEscapable a = Atom $ show a
+
 instance ToEscapable Word8 where
     toEscapable a = Atom $ show a
 
@@ -195,9 +201,6 @@ instance ToEscapable Word32 where
     toEscapable a = Atom $ show a
 
 instance ToEscapable Word64 where
-    toEscapable a = Atom $ show a
-
-instance ToEscapable Integer where
     toEscapable a = Atom $ show a
 
 instance ToEscapable Float where

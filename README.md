@@ -62,6 +62,7 @@ The following data types already come with an implementation of `ToEscapable`:
 * `Int`
 * `Integer`
 * `String`
+* `Word`
 * `Word8`
 * `Word16`
 * `Word32`
