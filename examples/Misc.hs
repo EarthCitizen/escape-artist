@@ -1,7 +1,7 @@
 {-# LANGUAGE ExtendedDefaultRules #-}
 
 import Data.Monoid ((<>))
-import Text.EscapeArtist
+import EscapeArtist
 import Data.List (intersperse)
 import Text.Regex
 

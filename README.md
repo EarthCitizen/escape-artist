@@ -41,7 +41,7 @@ And can all dwell in the same list:
 {-# LANGUAGE ExtendedDefaultRules #-}
 
 import Data.List (intersperse)
-import Text.EscapeArtist
+import EscapeArtist
 
 let redList = [Red 6, Red "6", Red '6', Red (6 :: Float), Red (6 :: Double)]
 
@@ -72,7 +72,7 @@ Implementing `ToEscapable` for other data types is fairly simple:
 
 ```haskell
 import Data.Monoid ((<>))
-import Text.EscapeArtist
+import EscapeArtist
 
 data ABC = A | B deriving (Show, Eq)
 
@@ -95,7 +95,7 @@ putEscLn (Nothing :: Maybe Int)
 When constructors are combined with the application operator (`$`), the effects accumulate and wrap around the applied value:
 
 ```haskell
-import Text.EscapeArtist
+import EscapeArtist
 
 let combined = Red $ Underline $ Blink "Hello World!"
 ```
@@ -120,7 +120,7 @@ would be equivalent to the following in XML:
 {-# LANGUAGE ExtendedDefaultRules #-}
 
 import Data.Monoid ((<>))
-import Text.EscapeArtist
+import EscapeArtist
 
 let series = Yellow 5 <> White 6
 
@@ -133,7 +133,7 @@ When a constructor is applied to a series of appended `Escapable`s using the `$`
 {-# LANGUAGE ExtendedDefaultRules #-}
 
 import Data.Monoid ((<>))
-import Text.EscapeArtist
+import EscapeArtist
 
 let result = Underline $ Yellow 5 <> White 6
 
@@ -200,7 +200,7 @@ Symbol | Purpose
 
 ```haskell
 import Data.Monoid ((<>))
-import Text.EscapeArtist
+import EscapeArtist
 
 spacesInherit = Red '@' <> Inherit ' ' <> Yellow '@' <> Inherit ' ' <> Green '@'
 
@@ -231,7 +231,7 @@ putEscLn $ BgBlue spacesInherit
 
 ```haskell
 import Data.Monoid ((<>))
-import Text.EscapeArtist
+import EscapeArtist
 
 underlineOff = Underline $ Cyan "I am underlined" <> UnderlineOff " but I am not " <> Magenta "and I am over here"
 
@@ -248,7 +248,7 @@ This operator allows you to avoid parentheses in cases where you need to use `$`
 
 ```haskell
 import Data.Monoid ((<>))
-import Text.EscapeArtist
+import EscapeArtist
 
 op1 = Underline $ Bright ^$ Green "GREEN" <> Normal " " <> Yellow "YELLOW"
 
@@ -267,7 +267,7 @@ Underline $ (Bright $ Green "GREEN") <> Normal " " <> Yellow "YELLOW"
 
 ```haskell
 import Data.Monoid (mempty, (<>))
-import Text.EscapeArtist
+import EscapeArtist
 
 rainbowString :: String -> Escapable
 rainbowString s = fn s (cycle [Red, White, Green, Blue, Yellow, Cyan])
@@ -283,7 +283,7 @@ putEscLn $ rainbowString "Hello World!"
 <img src="images/rainbow_string.png?raw=true" height="20">
 
 ```haskell
-import Text.EscapeArtist
+import EscapeArtist
 import Text.Regex
 
 replaceNumbers :: String -> String
@@ -298,7 +298,7 @@ putStrLn $ replaceNumbers "Line 7 of 23"
 {-# LANGUAGE FlexibleInstances #-}
 
 import Data.Monoid ((<>))
-import Text.EscapeArtist
+import EscapeArtist
 
 type FileName = String
 type LineNumber = Integer

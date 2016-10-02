@@ -14,9 +14,9 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Text.EscapeArtist
-                     , Text.EscapeArtist.Constants
-                     , Text.EscapeArtist.Internal
+  exposed-modules:     EscapeArtist
+                     , EscapeArtist.Constants
+                     , EscapeArtist.Internal
   default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances, NoMonomorphismRestriction
   build-depends:       base >= 4.7 && < 5
                      , bytestring
@@ -27,8 +27,8 @@ library
 test-suite escape-artist-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
-  other-modules:       Text.EscapeArtistSpec
-                     , Text.EscapeArtistSpec.TestData
+  other-modules:       EscapeArtistSpec
+                     , EscapeArtistSpec.TestData
   main-is:             Spec.hs
   build-depends:       base
                      , bytestring

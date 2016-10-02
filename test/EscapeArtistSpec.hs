@@ -1,13 +1,13 @@
-module Text.EscapeArtistSpec (spec) where
+module EscapeArtistSpec (spec) where
 
 import Control.Monad (forM_)
 import Data.Monoid ((<>), mempty)
+import EscapeArtist.Constants
+import EscapeArtist.Internal
+import EscapeArtistSpec.TestData
 import System.IO.Silently
 import Test.QuickCheck
 import Test.Hspec
-import Text.EscapeArtist.Constants
-import Text.EscapeArtist.Internal
-import Text.EscapeArtistSpec.TestData
 
 spec :: Spec
 spec = do
