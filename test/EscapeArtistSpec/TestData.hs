@@ -1,6 +1,6 @@
 module EscapeArtistSpec.TestData (
-                                TestCase(..)
-                              , TestCaseEq(..)
+                                TestCaseVE(..)
+                              , TestCaseVV(..)
                               , allEscTestCases
                               , inheritTestCases
                               , escSingleTestCases
@@ -8,6 +8,8 @@ module EscapeArtistSpec.TestData (
                               , sumTestCases
                               , allEqTestCases
                               , allNotEqTestCases
+                              , monoidArgs
+                              , monoidTestCases
                               , showTestCases
                               ) where
 
@@ -20,8 +22,8 @@ import EscapeArtist.Internal
 import EscapeArtist.Constants
 import Test.QuickCheck
 
-data TestCase = forall a. (ToEscapable a) => TestCase a String
-data TestCaseEq = TestCaseEq Escapable Escapable
+data TestCaseVE = forall a. (ToEscapable a) => TestCaseVE a String
+data TestCaseVV = TestCaseVV Escapable Escapable
 
 -----------------------------------------------------------
 
@@ -60,7 +62,7 @@ openCloseCons = [
         ]
 
 genTestCases valueList = [
-                TestCase (cons v) e |
+                TestCaseVE (cons v) e |
                 (open, close, cons) <- openCloseCons,
                 (v, vs) <- valueList,
                 let e = open ++ vs ++ close
@@ -115,7 +117,7 @@ doubleTestCases = genTestCases doubleValueExp
 
 -- Atom tests
 
-atomTestCases = [TestCase (Atom v) e | (v, e) <- stringValueExp]
+atomTestCases = [TestCaseVE (Atom v) e | (v, e) <- stringValueExp]
 
 -- Other types of ToEscapable tests
 
@@ -124,7 +126,7 @@ data SomeToEscapable = A deriving (Show)
 instance ToEscapable SomeToEscapable where
     toEscapable (A) = Red $ "A"
 
-toEscTestCases = [TestCase 5 "5", TestCase "Some String" "Some String", TestCase A (red ++ "A" ++ defaultColor)]
+toEscTestCases = [TestCaseVE 5 "5", TestCaseVE "Some String" "Some String", TestCaseVE A (red ++ "A" ++ defaultColor)]
 
 -- Put them all together to run through the same test
 
@@ -150,15 +152,15 @@ escSingleTestCases = charTestCases
 
 -- Inherit tests
 
-inheritTestCases = [TestCase (Underline $ Bright 6) (underlineOn ++ brightOn ++ "6" ++ brightOff ++ underlineOff)]
+inheritTestCases = [TestCaseVE (Underline $ Bright 6) (underlineOn ++ brightOn ++ "6" ++ brightOff ++ underlineOff)]
 
 -----------------------------------------------------------
 
 -- Sum tests
 
-sumTestCases1esc = Sum [Red 6, Blue "Color", Yellow "Hello"]
-sumTestCases1exp = concat [red, "6", defaultColor, blue, "Color", defaultColor, yellow, "Hello", defaultColor]
-sumTestCases = [TestCase sumTestCases1esc sumTestCases1exp]
+singleSum = Sum [Red 6, Blue "Color", Yellow "Hello"]
+singleSumExp = concat [red, "6", defaultColor, blue, "Color", defaultColor, yellow, "Hello", defaultColor]
+sumTestCases = [TestCaseVE singleSum singleSumExp]
 
 oneNestedSum = Bright $ Red $ Underline $ Sum [Underline $ Yellow "Hello", Green 1000 ]
 oneNestedSumExp = concat [
@@ -182,9 +184,9 @@ threeNestedSumExp = concat [
     ]
 
 nestedSumTestCases = [
-    TestCase oneNestedSum oneNestedSumExp,
-    TestCase twoNestedSum twoNestedSumExp,
-    TestCase threeNestedSum threeNestedSumExp
+    TestCaseVE oneNestedSum oneNestedSumExp,
+    TestCaseVE twoNestedSum twoNestedSumExp,
+    TestCaseVE threeNestedSum threeNestedSumExp
     ]
 
 -----------------------------------------------------------
@@ -198,20 +200,20 @@ allEscTestCases = inheritTestCases ++ escSingleTestCases ++ sumTestCases ++ nest
 -- Equality tests
 
 eq1List = [Red 6, Red "6", Red $ BSC.pack "6", Red $ BSLC.pack "6", Red $ T.pack "6", Red $ TL.pack "6"]
-eq1TestCases = [TestCaseEq x y | x <- eq1List, y <- eq1List]
+eq1TestCases = [TestCaseVV x y | x <- eq1List, y <- eq1List]
 
 eq2List = [Blue (3.5 :: Float), Blue (3.5 :: Double), Blue "3.5", Blue $ T.pack "3.5"]
-eq2testCases = [TestCaseEq x y | x <- eq2List, y <- eq2List]
+eq2testCases = [TestCaseVV x y | x <- eq2List, y <- eq2List]
 
 allEqTestCases = eq1TestCases ++ eq2testCases
 
 notEqList11 = [Yellow 10, Blue "100", Green (3.4 :: Float), Cyan "3000", White 'W']
 notEqList12 = [Yellow 11, Blue "101", Green (3.5 :: Float), Cyan "3001", White 'Z']
-notEq1TestCases = [TestCaseEq x y | x <- notEqList11, y <- notEqList12]
+notEq1TestCases = [TestCaseVV x y | x <- notEqList11, y <- notEqList12]
 
 notEqList21 = [White 1, White 2, White 3, White 4, White 5]
 notEqList22 = [White 11, White 12, White 13, White 14, White 15]
-notEq2TestCases = [TestCaseEq x y | x <- notEqList21, y <- notEqList22]
+notEq2TestCases = [TestCaseVV x y | x <- notEqList21, y <- notEqList22]
 
 allNotEqTestCases = notEq1TestCases ++ notEq2TestCases
 
@@ -227,6 +229,17 @@ instance Arbitrary Escapable where
         twoNestedSum,
         threeNestedSum
         ]
+
+monoidArgs = [
+    Red 6,
+    Underline $ Inverse $ Green 10,
+    singleSum,
+    oneNestedSum,
+    twoNestedSum,
+    threeNestedSum
+    ]
+
+monoidTestCases = [(a, b, c) | a <- monoidArgs, b <- monoidArgs, c <- monoidArgs]
 
 -----------------------------------------------------------
 
@@ -266,4 +279,4 @@ showValueExp = [
 
     (Atom "text", "Atom \"text\"")
     ]
-showTestCases = [TestCase v e | (v, e) <- showValueExp]
+showTestCases = [TestCaseVE v e | (v, e) <- showValueExp]
