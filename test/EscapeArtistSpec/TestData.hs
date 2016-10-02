@@ -1,6 +1,5 @@
 module EscapeArtistSpec.TestData (
                                 TestCaseVE(..)
-                              , TestCaseVV(..)
                               , allEscTestCases
                               , inheritTestCases
                               , escSingleTestCases
@@ -23,7 +22,6 @@ import EscapeArtist.Constants
 import Test.QuickCheck
 
 data TestCaseVE = forall a. (ToEscapable a) => TestCaseVE a String
-data TestCaseVV = TestCaseVV Escapable Escapable
 
 -----------------------------------------------------------
 
@@ -200,20 +198,20 @@ allEscTestCases = inheritTestCases ++ escSingleTestCases ++ sumTestCases ++ nest
 -- Equality tests
 
 eq1List = [Red 6, Red "6", Red $ BSC.pack "6", Red $ BSLC.pack "6", Red $ T.pack "6", Red $ TL.pack "6"]
-eq1TestCases = [TestCaseVV x y | x <- eq1List, y <- eq1List]
+eq1TestCases = [(x, y) | x <- eq1List, y <- eq1List]
 
 eq2List = [Blue (3.5 :: Float), Blue (3.5 :: Double), Blue "3.5", Blue $ T.pack "3.5"]
-eq2testCases = [TestCaseVV x y | x <- eq2List, y <- eq2List]
+eq2testCases = [(x, y) | x <- eq2List, y <- eq2List]
 
 allEqTestCases = eq1TestCases ++ eq2testCases
 
 notEqList11 = [Yellow 10, Blue "100", Green (3.4 :: Float), Cyan "3000", White 'W']
 notEqList12 = [Yellow 11, Blue "101", Green (3.5 :: Float), Cyan "3001", White 'Z']
-notEq1TestCases = [TestCaseVV x y | x <- notEqList11, y <- notEqList12]
+notEq1TestCases = [(x, y) | x <- notEqList11, y <- notEqList12]
 
 notEqList21 = [White 1, White 2, White 3, White 4, White 5]
 notEqList22 = [White 11, White 12, White 13, White 14, White 15]
-notEq2TestCases = [TestCaseVV x y | x <- notEqList21, y <- notEqList22]
+notEq2TestCases = [(x, y) | x <- notEqList21, y <- notEqList22]
 
 allNotEqTestCases = notEq1TestCases ++ notEq2TestCases
 

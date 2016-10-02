@@ -52,9 +52,9 @@ spec = do
 
     describe "Eq Escapable" $ do
         it "considers escapables equal when strings of contained values are same" $ forM_ allEqTestCases $ do
-            \(TestCaseVV a b) -> a `shouldBe` b
+            \(a, b) -> a `shouldBe` b
         it "considers escapables not equal when strings of contained values are not same" $ forM_ allNotEqTestCases $ do
-            \(TestCaseVV a b) -> a `shouldNotBe` b
+            \(a, b) -> a `shouldNotBe` b
 
     describe "Monoid Escapable" $ do
         it "obeys left identity" $ forM_ monoidArgs $
