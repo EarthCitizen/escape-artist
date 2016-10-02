@@ -27,6 +27,7 @@ spec = do
             it "outputs parent escape codes around each nested sum element" $ forM_ nestedSumTestCases $ do
                 \(TestCase escapable expectation) -> do
                     escToString escapable `shouldBe` expectation
+
     describe "putEsc" $ do
         context "when passed any instance of ToEscapable" $ do
             it "outputs contained values with corresponding escape codes" $ forM_ allEscTestCases $
@@ -34,6 +35,7 @@ spec = do
                     (out, result) <- capture $ putEsc $ escapable
                     out `shouldBe` expectation
                     result `shouldBe` ()
+
     describe "putEscLn" $ do
         context "when passed any instance of ToEscapable" $ do
             it "outputs contained values with corresponding escape codes and newline" $ forM_ allEscTestCases $
