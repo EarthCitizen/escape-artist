@@ -20,14 +20,14 @@ infixr 7 ^$
 
 -- | The constructors used to apply attributes to values
 -- for terminal output
-data Escapable = forall a. (ToEscapable a) => Black   a -- ^ Forground color black
-               | forall a. (ToEscapable a) => Red     a -- ^ Forground color red
-               | forall a. (ToEscapable a) => Green   a -- ^ Forground color green
-               | forall a. (ToEscapable a) => Yellow  a -- ^ Forground color yellow
-               | forall a. (ToEscapable a) => Blue    a -- ^ Forground color blue
-               | forall a. (ToEscapable a) => Magenta a -- ^ Forground color magenta
-               | forall a. (ToEscapable a) => Cyan    a -- ^ Forground color cyan
-               | forall a. (ToEscapable a) => White   a -- ^ Forground color white
+data Escapable = forall a. (ToEscapable a) => FgBlack   a -- ^ Forground color black
+               | forall a. (ToEscapable a) => FgRed     a -- ^ Forground color red
+               | forall a. (ToEscapable a) => FgGreen   a -- ^ Forground color green
+               | forall a. (ToEscapable a) => FgYellow  a -- ^ Forground color yellow
+               | forall a. (ToEscapable a) => FgBlue    a -- ^ Forground color blue
+               | forall a. (ToEscapable a) => FgMagenta a -- ^ Forground color magenta
+               | forall a. (ToEscapable a) => FgCyan    a -- ^ Forground color cyan
+               | forall a. (ToEscapable a) => FgWhite   a -- ^ Forground color white
 
                | forall a. (ToEscapable a) => BgBlack   a -- ^ Background color black
                | forall a. (ToEscapable a) => BgRed     a -- ^ Background color red
@@ -38,10 +38,10 @@ data Escapable = forall a. (ToEscapable a) => Black   a -- ^ Forground color bla
                | forall a. (ToEscapable a) => BgCyan    a -- ^ Background color cyan
                | forall a. (ToEscapable a) => BgWhite   a -- ^ Background color white
 
-               | forall a. (ToEscapable a) => Default   a -- ^ Applies default terminal foreground color
+               | forall a. (ToEscapable a) => FgDefault a -- ^ Applies default terminal foreground color
                | forall a. (ToEscapable a) => BgDefault a -- ^ Applies default terminal background color
                | forall a. (ToEscapable a) => Inherit   a -- ^ Inherit attributes from the parent, but apply none directly
-               | forall a. (ToEscapable a) => Normal    a -- ^ Applied value will not inherit any attribute from parent
+               | forall a. (ToEscapable a) => Default   a -- ^ Applied value will have defaults of terminal
 
                | forall a. (ToEscapable a) => Blink        a -- ^ Blinking text
                | forall a. (ToEscapable a) => BlinkOff     a -- ^ Will not inherit blink attribute from parent
@@ -55,14 +55,14 @@ data Escapable = forall a. (ToEscapable a) => Black   a -- ^ Forground color bla
                | Atom String
 
 instance Show Escapable where
-    show (Black     a) = "Black ("     ++ show a ++ ")"
-    show (Red       a) = "Red ("       ++ show a ++ ")"
-    show (Green     a) = "Green ("     ++ show a ++ ")"
-    show (Yellow    a) = "Yellow ("    ++ show a ++ ")"
-    show (Blue      a) = "Blue ("      ++ show a ++ ")"
-    show (Magenta   a) = "Magenta ("   ++ show a ++ ")"
-    show (Cyan      a) = "Cyan ("      ++ show a ++ ")"
-    show (White     a) = "White ("     ++ show a ++ ")"
+    show (FgBlack   a) = "FgBlack ("   ++ show a ++ ")"
+    show (FgRed     a) = "FgRed ("     ++ show a ++ ")"
+    show (FgGreen   a) = "FgGreen ("   ++ show a ++ ")"
+    show (FgYellow  a) = "FgYellow ("  ++ show a ++ ")"
+    show (FgBlue    a) = "FgBlue ("    ++ show a ++ ")"
+    show (FgMagenta a) = "FgMagenta (" ++ show a ++ ")"
+    show (FgCyan    a) = "FgCyan ("    ++ show a ++ ")"
+    show (FgWhite   a) = "FgWhite ("   ++ show a ++ ")"
 
     show (BgBlack   a) = "BgBlack ("   ++ show a ++ ")"
     show (BgRed     a) = "BgRed ("     ++ show a ++ ")"
@@ -73,10 +73,10 @@ instance Show Escapable where
     show (BgCyan    a) = "BgCyan ("    ++ show a ++ ")"
     show (BgWhite   a) = "BgWhite ("   ++ show a ++ ")"
 
-    show (Default   a) = "Default ("   ++ show a ++ ")"
+    show (FgDefault a) = "FgDefault (" ++ show a ++ ")"
     show (BgDefault a) = "BgDefault (" ++ show a ++ ")"
     show (Inherit   a) = "Inherit ("   ++ show a ++ ")"
-    show (Normal    a) = "Normal ("    ++ show a ++ ")"
+    show (Default   a) = "Default ("   ++ show a ++ ")"
 
     show (Blink        a) = "Blink ("        ++ show a ++ ")"
     show (BlinkOff     a) = "BlinkOff ("     ++ show a ++ ")"
@@ -124,14 +124,14 @@ toCompStr a = case options of
                   <|> tryTL a
 
 instance Eq Escapable where
-    (Black     a) == (Black     b) = toCompStr a == toCompStr b
-    (Red       a) == (Red       b) = toCompStr a == toCompStr b
-    (Green     a) == (Green     b) = toCompStr a == toCompStr b
-    (Yellow    a) == (Yellow    b) = toCompStr a == toCompStr b
-    (Blue      a) == (Blue      b) = toCompStr a == toCompStr b
-    (Magenta   a) == (Magenta   b) = toCompStr a == toCompStr b
-    (Cyan      a) == (Cyan      b) = toCompStr a == toCompStr b
-    (White     a) == (White     b) = toCompStr a == toCompStr b
+    (FgBlack     a) == (FgBlack   b) = toCompStr a == toCompStr b
+    (FgRed       a) == (FgRed     b) = toCompStr a == toCompStr b
+    (FgGreen     a) == (FgGreen   b) = toCompStr a == toCompStr b
+    (FgYellow    a) == (FgYellow  b) = toCompStr a == toCompStr b
+    (FgBlue      a) == (FgBlue    b) = toCompStr a == toCompStr b
+    (FgMagenta   a) == (FgMagenta b) = toCompStr a == toCompStr b
+    (FgCyan      a) == (FgCyan    b) = toCompStr a == toCompStr b
+    (FgWhite     a) == (FgWhite   b) = toCompStr a == toCompStr b
 
     (BgBlack   a) == (BgBlack   b) = toCompStr a == toCompStr b
     (BgRed     a) == (BgRed     b) = toCompStr a == toCompStr b
@@ -142,10 +142,10 @@ instance Eq Escapable where
     (BgCyan    a) == (BgCyan    b) = toCompStr a == toCompStr b
     (BgWhite   a) == (BgWhite   b) = toCompStr a == toCompStr b
 
-    (Default   a) == (Default   b) = toCompStr a == toCompStr b
+    (FgDefault a) == (FgDefault b) = toCompStr a == toCompStr b
     (BgDefault a) == (BgDefault b) = toCompStr a == toCompStr b
     (Inherit   a) == (Inherit   b) = toCompStr a == toCompStr b
-    (Normal    a) == (Normal    b) = toCompStr a == toCompStr b
+    (Default   a) == (Default   b) = toCompStr a == toCompStr b
 
     (Blink        a) == (Blink        b) = toCompStr a == toCompStr b
     (BlinkOff     a) == (BlinkOff     b) = toCompStr a == toCompStr b
@@ -156,8 +156,8 @@ instance Eq Escapable where
     (Inverse      a) == (Inverse      b) = toCompStr a == toCompStr b
     (InverseOff   a) == (InverseOff   b) = toCompStr a == toCompStr b
 
-    (Sum       a) == (Sum       b) = toCompStr a == toCompStr b
-    (Atom      a) == (Atom      b) = toCompStr a == toCompStr b
+    (Sum  a) == (Sum  b) = toCompStr a == toCompStr b
+    (Atom a) == (Atom b) = toCompStr a == toCompStr b
     _ == _ = False
 
 class (Show a, Typeable a) => ToEscapable a where
@@ -220,40 +220,40 @@ recur :: String -> String -> Escapable -> String
 recur = escToStrEncl
 
 dc :: String
-dc = defaultColor
+dc = defaultFgColor
 
 dbc :: String
 dbc = defaultBgColor
 
-res :: String
-res = reset
+def :: String
+def = defaultAll
 
 te :: (ToEscapable a) => a -> Escapable
 te = toEscapable
 
 escToStrEncl :: String -> String -> Escapable -> String
-escToStrEncl pref suff (Black     a) = recur (pref ++ black  ) (dc ++ suff) (te a)
-escToStrEncl pref suff (Red       a) = recur (pref ++ red    ) (dc ++ suff) (te a)
-escToStrEncl pref suff (Green     a) = recur (pref ++ green  ) (dc ++ suff) (te a)
-escToStrEncl pref suff (Yellow    a) = recur (pref ++ yellow ) (dc ++ suff) (te a)
-escToStrEncl pref suff (Blue      a) = recur (pref ++ blue   ) (dc ++ suff) (te a)
-escToStrEncl pref suff (Magenta   a) = recur (pref ++ magenta) (dc ++ suff) (te a)
-escToStrEncl pref suff (Cyan      a) = recur (pref ++ cyan   ) (dc ++ suff) (te a)
-escToStrEncl pref suff (White     a) = recur (pref ++ white  ) (dc ++ suff) (te a)
+escToStrEncl pref suff (FgBlack   a) = recur (pref ++ fgBlack  ) (dc ++ suff) (te a)
+escToStrEncl pref suff (FgRed     a) = recur (pref ++ fgRed    ) (dc ++ suff) (te a)
+escToStrEncl pref suff (FgGreen   a) = recur (pref ++ fgGreen  ) (dc ++ suff) (te a)
+escToStrEncl pref suff (FgYellow  a) = recur (pref ++ fgYellow ) (dc ++ suff) (te a)
+escToStrEncl pref suff (FgBlue    a) = recur (pref ++ fgBlue   ) (dc ++ suff) (te a)
+escToStrEncl pref suff (FgMagenta a) = recur (pref ++ fgMagenta) (dc ++ suff) (te a)
+escToStrEncl pref suff (FgCyan    a) = recur (pref ++ fgCyan   ) (dc ++ suff) (te a)
+escToStrEncl pref suff (FgWhite   a) = recur (pref ++ fgWhite  ) (dc ++ suff) (te a)
 
-escToStrEncl pref suff (BgBlack   a) = recur (pref ++ bgblack  ) (dbc ++ suff) (te a)
-escToStrEncl pref suff (BgRed     a) = recur (pref ++ bgred    ) (dbc ++ suff) (te a)
-escToStrEncl pref suff (BgGreen   a) = recur (pref ++ bggreen  ) (dbc ++ suff) (te a)
-escToStrEncl pref suff (BgYellow  a) = recur (pref ++ bgyellow ) (dbc ++ suff) (te a)
-escToStrEncl pref suff (BgBlue    a) = recur (pref ++ bgblue   ) (dbc ++ suff) (te a)
-escToStrEncl pref suff (BgMagenta a) = recur (pref ++ bgmagenta) (dbc ++ suff) (te a)
-escToStrEncl pref suff (BgCyan    a) = recur (pref ++ bgcyan   ) (dbc ++ suff) (te a)
-escToStrEncl pref suff (BgWhite   a) = recur (pref ++ bgwhite  ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgBlack   a) = recur (pref ++ bgBlack  ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgRed     a) = recur (pref ++ bgRed    ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgGreen   a) = recur (pref ++ bgGreen  ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgYellow  a) = recur (pref ++ bgYellow ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgBlue    a) = recur (pref ++ bgBlue   ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgMagenta a) = recur (pref ++ bgMagenta) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgCyan    a) = recur (pref ++ bgCyan   ) (dbc ++ suff) (te a)
+escToStrEncl pref suff (BgWhite   a) = recur (pref ++ bgWhite  ) (dbc ++ suff) (te a)
 
-escToStrEncl pref suff (Default   a) = recur (pref ++ dc ) suff (te a)
+escToStrEncl pref suff (FgDefault a) = recur (pref ++ dc ) suff (te a)
 escToStrEncl pref suff (BgDefault a) = recur (pref ++ dbc) suff (te a)
 escToStrEncl pref suff (Inherit   a) = recur pref          suff (te a)
-escToStrEncl pref suff (Normal    a) = recur (pref ++ res) suff (te a)
+escToStrEncl pref suff (Default   a) = recur (pref ++ def) suff (te a)
 
 escToStrEncl pref suff (Blink        a) = recur (pref ++ blinkOn     ) (blinkOff     ++ suff) (te a)
 escToStrEncl pref suff (BlinkOff     a) = recur (pref ++ blinkOff    ) suff                   (te a)

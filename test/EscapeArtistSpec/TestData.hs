@@ -26,28 +26,28 @@ data TestCaseVE = forall a. (ToEscapable a) => TestCaseVE a String
 -----------------------------------------------------------
 
 openCloseCons = [
-        (black,   defaultColor, Black  ),
-        (red,     defaultColor, Red    ),
-        (green,   defaultColor, Green  ),
-        (yellow,  defaultColor, Yellow ),
-        (blue,    defaultColor, Blue   ),
-        (magenta, defaultColor, Magenta),
-        (cyan,    defaultColor, Cyan   ),
-        (white,   defaultColor, White  ),
+        (fgBlack,   defaultFgColor, FgBlack  ),
+        (fgRed,     defaultFgColor, FgRed    ),
+        (fgGreen,   defaultFgColor, FgGreen  ),
+        (fgYellow,  defaultFgColor, FgYellow ),
+        (fgBlue,    defaultFgColor, FgBlue   ),
+        (fgMagenta, defaultFgColor, FgMagenta),
+        (fgCyan,    defaultFgColor, FgCyan   ),
+        (fgWhite,   defaultFgColor, FgWhite  ),
 
-        (bgblack,   defaultBgColor, BgBlack  ),
-        (bgred,     defaultBgColor, BgRed    ),
-        (bggreen,   defaultBgColor, BgGreen  ),
-        (bgyellow,  defaultBgColor, BgYellow ),
-        (bgblue,    defaultBgColor, BgBlue   ),
-        (bgmagenta, defaultBgColor, BgMagenta),
-        (bgcyan,    defaultBgColor, BgCyan   ),
-        (bgwhite,   defaultBgColor, BgWhite  ),
+        (bgBlack,   defaultBgColor, BgBlack  ),
+        (bgRed,     defaultBgColor, BgRed    ),
+        (bgGreen,   defaultBgColor, BgGreen  ),
+        (bgYellow,  defaultBgColor, BgYellow ),
+        (bgBlue,    defaultBgColor, BgBlue   ),
+        (bgMagenta, defaultBgColor, BgMagenta),
+        (bgCyan,    defaultBgColor, BgCyan   ),
+        (bgWhite,   defaultBgColor, BgWhite  ),
 
-        (defaultColor,   "", Default  ),
+        (defaultFgColor, "", FgDefault  ),
         (defaultBgColor, "", BgDefault),
         ("",             "", Inherit  ),
-        (reset,          "", Normal   ),
+        (defaultAll,     "", Default   ),
 
         (blinkOn,      blinkOff,     Blink       ),
         (blinkOff,     "",           BlinkOff    ),
@@ -122,9 +122,9 @@ atomTestCases = [TestCaseVE (Atom v) e | (v, e) <- stringValueExp]
 data SomeToEscapable = A deriving (Show)
 
 instance ToEscapable SomeToEscapable where
-    toEscapable (A) = Red $ "A"
+    toEscapable (A) = FgRed $ "A"
 
-toEscTestCases = [TestCaseVE 5 "5", TestCaseVE "Some String" "Some String", TestCaseVE A (red ++ "A" ++ defaultColor)]
+toEscTestCases = [TestCaseVE 5 "5", TestCaseVE "Some String" "Some String", TestCaseVE A (fgRed ++ "A" ++ defaultFgColor)]
 
 -- Put them all together to run through the same test
 
@@ -156,29 +156,29 @@ inheritTestCases = [TestCaseVE (Underline $ Bright 6) (underlineOn ++ brightOn +
 
 -- Sum tests
 
-singleSum = Sum [Red 6, Blue "Color", Yellow "Hello"]
-singleSumExp = concat [red, "6", defaultColor, blue, "Color", defaultColor, yellow, "Hello", defaultColor]
+singleSum = Sum [FgRed 6, FgBlue "Color", FgYellow "Hello"]
+singleSumExp = concat [fgRed, "6", defaultFgColor, fgBlue, "Color", defaultFgColor, fgYellow, "Hello", defaultFgColor]
 sumTestCases = [TestCaseVE singleSum singleSumExp]
 
-oneNestedSum = Bright $ Red $ Underline $ Sum [Underline $ Yellow "Hello", Green 1000 ]
+oneNestedSum = Bright $ FgRed $ Underline $ Sum [Underline $ FgYellow "Hello", FgGreen 1000 ]
 oneNestedSumExp = concat [
-    brightOn, red, underlineOn, underlineOn, yellow, "Hello", defaultColor, underlineOff, underlineOff, defaultColor, brightOff,
-    brightOn, red, underlineOn, green, "1000", defaultColor, underlineOff, defaultColor, brightOff
+    brightOn, fgRed, underlineOn, underlineOn, fgYellow, "Hello", defaultFgColor, underlineOff, underlineOff, defaultFgColor, brightOff,
+    brightOn, fgRed, underlineOn, fgGreen, "1000", defaultFgColor, underlineOff, defaultFgColor, brightOff
     ]
 
-twoNestedSum = Underline $ Sum [Underline $ Yellow "Hello", Bright $ Sum [Green 1000, Blue 999]]
+twoNestedSum = Underline $ Sum [Underline $ FgYellow "Hello", Bright $ Sum [FgGreen 1000, FgBlue 999]]
 twoNestedSumExp = concat [
-    underlineOn, underlineOn, yellow, "Hello", defaultColor, underlineOff, underlineOff,
-    underlineOn, brightOn, green, "1000", defaultColor, brightOff, underlineOff,
-    underlineOn, brightOn, blue,  "999",  defaultColor, brightOff, underlineOff
+    underlineOn, underlineOn, fgYellow, "Hello", defaultFgColor, underlineOff, underlineOff,
+    underlineOn, brightOn, fgGreen, "1000", defaultFgColor, brightOff, underlineOff,
+    underlineOn, brightOn, fgBlue,  "999",  defaultFgColor, brightOff, underlineOff
     ]
 
-threeNestedSum = Inverse $ Sum [Underline $ Yellow "Hello", Bright $ Sum [Inverse $ Sum [Green 1000, Cyan "C"], Blue 999]]
+threeNestedSum = Inverse $ Sum [Underline $ FgYellow "Hello", Bright $ Sum [Inverse $ Sum [FgGreen 1000, FgCyan "C"], FgBlue 999]]
 threeNestedSumExp = concat [
-    inverseOn, underlineOn, yellow, "Hello", defaultColor, underlineOff, inverseOff,
-    inverseOn, brightOn, inverseOn, green, "1000", defaultColor, inverseOff, brightOff, inverseOff,
-    inverseOn, brightOn, inverseOn, cyan,  "C",    defaultColor, inverseOff, brightOff, inverseOff,
-    inverseOn, brightOn, blue, "999", defaultColor, brightOff, inverseOff
+    inverseOn, underlineOn, fgYellow, "Hello", defaultFgColor, underlineOff, inverseOff,
+    inverseOn, brightOn, inverseOn, fgGreen, "1000", defaultFgColor, inverseOff, brightOff, inverseOff,
+    inverseOn, brightOn, inverseOn, fgCyan,  "C",    defaultFgColor, inverseOff, brightOff, inverseOff,
+    inverseOn, brightOn, fgBlue, "999", defaultFgColor, brightOff, inverseOff
     ]
 
 nestedSumTestCases = [
@@ -198,14 +198,14 @@ allEscTestCases = inheritTestCases ++ escSingleTestCases ++ sumTestCases ++ nest
 -- Equality tests
 
 forAllCons = [
-    Black,
-    Red,
-    Green,
-    Yellow,
-    Blue,
-    Magenta,
-    Cyan,
-    White,
+    FgBlack,
+    FgRed,
+    FgGreen,
+    FgYellow,
+    FgBlue,
+    FgMagenta,
+    FgCyan,
+    FgWhite,
     BgBlack,
     BgRed,
     BgGreen,
@@ -214,10 +214,10 @@ forAllCons = [
     BgMagenta,
     BgCyan,
     BgWhite,
-    Default,
+    FgDefault,
     BgDefault,
     Inherit,
-    Normal,
+    Default,
     Blink,
     BlinkOff,
     Bright,
@@ -243,7 +243,7 @@ eqTestCases = fnConsSameValSame 'Z'
             -- same when strings
             ++ zip (fnCVRep (3.5 :: Float)) (fnCVRep (3.5 :: Double))
             ++ [(Atom "6", Atom "6")]
-            ++ [(Sum [Red 6], Sum [Red 6])]
+            ++ [(Sum [FgRed 6], Sum [FgRed 6])]
 
 li1 = fnCVCyc [1, 10, 5]
 li2 = fnCVCyc [1000, 10000, 5000]
@@ -256,7 +256,7 @@ lc2 = fnCVCyc "ZXCVBN"
 
 notEqConsSameValueNotTestCases = zip (li1 ++ ls1 ++ lc1) (li2 ++ ls2 ++ lc2)
                                ++ [(Atom "not", Atom "same")]
-                               ++ [(Sum [Blue "not"], Sum [Blue "same"])]
+                               ++ [(Sum [FgBlue "not"], Sum [FgBlue "same"])]
 
 forAllConsEnum = zip [1..] forAllCons
 
@@ -265,8 +265,8 @@ notEqConsNotValueSameTestCases = [(c1 v, c2 v) | (c1e, c1) <- forAllConsEnum,
                                                  let v = "Any Value",
                                                  c1e /= c2e
                                                  ]
-                               ++ [(Atom "same", Red "same")]
-                               ++ [(Sum [White "same"], Red "same")]
+                               ++ [(Atom "same", FgRed "same")]
+                               ++ [(Sum [FgWhite "same"], FgRed "same")]
 
 notEqTestCases = notEqConsSameValueNotTestCases
                ++ notEqConsNotValueSameTestCases
@@ -277,16 +277,16 @@ notEqTestCases = notEqConsSameValueNotTestCases
 
 instance Arbitrary Escapable where
     arbitrary = oneof $ map return [
-        Red 6,
-        Underline $ Inverse $ Green 10,
+        FgRed 6,
+        Underline $ Inverse $ FgGreen 10,
         oneNestedSum,
         twoNestedSum,
         threeNestedSum
         ]
 
 monoidArgs = [
-    Red 6,
-    Underline $ Inverse $ Green 10,
+    FgRed 6,
+    Underline $ Inverse $ FgGreen 10,
     singleSum,
     oneNestedSum,
     twoNestedSum,
@@ -300,14 +300,14 @@ monoidTestCases = [(a, b, c) | a <- monoidArgs, b <- monoidArgs, c <- monoidArgs
 -- Show test data
 
 showValueExp = [
-    (Black 1,         "Black (1)"),
-    (Red 2,           "Red (2)"),
-    (Green 3,         "Green (3)"),
-    (Yellow 4,        "Yellow (4)"),
-    (Blue 5,          "Blue (5)"),
-    (Magenta 6,       "Magenta (6)"),
-    (Cyan 7,          "Cyan (7)"),
-    (White 8,         "White (8)"),
+    (FgBlack 1,       "FgBlack (1)"),
+    (FgRed 2,         "FgRed (2)"),
+    (FgGreen 3,       "FgGreen (3)"),
+    (FgYellow 4,      "FgYellow (4)"),
+    (FgBlue 5,        "FgBlue (5)"),
+    (FgMagenta 6,     "FgMagenta (6)"),
+    (FgCyan 7,        "FgCyan (7)"),
+    (FgWhite 8,       "FgWhite (8)"),
     (BgBlack 9,       "BgBlack (9)"),
     (BgRed 10,        "BgRed (10)"),
     (BgGreen 11,      "BgGreen (11)"),
@@ -316,10 +316,10 @@ showValueExp = [
     (BgMagenta 14,    "BgMagenta (14)"),
     (BgCyan 15,       "BgCyan (15)"),
     (BgWhite 16,      "BgWhite (16)"),
-    (Default 17,      "Default (17)"),
+    (FgDefault 17,    "FgDefault (17)"),
     (BgDefault 18,    "BgDefault (18)"),
     (Inherit 19,      "Inherit (19)"),
-    (Normal 20,       "Normal (20)"),
+    (Default 20,       "Default (20)"),
     (Blink 21,        "Blink (21)"),
     (BlinkOff 22,     "BlinkOff (22)"),
     (Bright 23,       "Bright (23)"),
@@ -329,7 +329,7 @@ showValueExp = [
     (Inverse 27,      "Inverse (27)"),
     (InverseOff 28,   "InverseOff (28)"),
 
-    (Sum [Red 6, Blue 3], "Sum [Red (6),Blue (3)]"),
+    (Sum [FgRed 6, FgBlue 3], "Sum [FgRed (6),FgBlue (3)]"),
 
     (Atom "text", "Atom \"text\"")
     ]

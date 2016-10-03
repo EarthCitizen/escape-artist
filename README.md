@@ -28,11 +28,11 @@ The data type used to perform text decoration is `Escapable`. This defines the c
 ```haskell
 {-# LANGUAGE ExtendedDefaultRules #-}
 
-Red 6
-Red "6"
-Red '6'
-Red (6 :: Float)
-Red (6 :: Double)
+FgRed 6
+FgRed "6"
+FgRed '6'
+FgRed (6 :: Float)
+FgRed (6 :: Double)
 ```
 
 And can all dwell in the same list:
@@ -43,7 +43,7 @@ And can all dwell in the same list:
 import Data.List (intersperse)
 import EscapeArtist
 
-let redList = [Red 6, Red "6", Red '6', Red (6 :: Float), Red (6 :: Double)]
+let redList = [FgRed 6, FgRed "6", FgRed '6', FgRed (6 :: Float), FgRed (6 :: Double)]
 
 putEscLn $ mconcat $ intersperse (Inherit " ") redList
 ```
@@ -53,10 +53,10 @@ putEscLn $ mconcat $ intersperse (Inherit " ") redList
 The following data types already come with an implementation of `ToEscapable`:
 
 * `Char`
-* `Data.ByteString.ByteString`
-* `Data.ByteString.Lazy.ByteString`
-* `Data.Text.Text`
-* `Data.Text.Lazy.Text`
+* `ByteString of Data.ByteString`
+* `ByteString of Data.ByteString.Lazy`
+* `Text of Data.Text`
+* `Text of Data.Text.Lazy`
 * `Double`
 * `Float`
 * `Int`
@@ -77,12 +77,12 @@ import EscapeArtist
 data ABC = A | B deriving (Show, Eq)
 
 instance ToEscapable ABC where
-   toEscapable (A) = Red $ show A
-   toEscapable (B) = Green $ show B
+   toEscapable (A) = FgRed $ show A
+   toEscapable (B) = FgGreen $ show B
 
 instance (ToEscapable a) => ToEscapable (Maybe a) where
-    toEscapable (Just a) = Green "Just" <> Inherit " " <> Yellow a
-    toEscapable a = Red $ show a
+    toEscapable (Just a) = FgGreen "Just" <> Inherit " " <> FgYellow a
+    toEscapable a = FgRed $ show a
 
 putEscLn A
 putEscLn B
@@ -97,7 +97,7 @@ When constructors are combined with the application operator (`$`), the effects 
 ```haskell
 import EscapeArtist
 
-let combined = Red $ Underline $ Blink "Hello World!"
+let combined = FgRed $ Underline $ Blink "Hello World!"
 ```
 
 would be equivalent to the following in XML:
@@ -122,7 +122,7 @@ would be equivalent to the following in XML:
 import Data.Monoid ((<>))
 import EscapeArtist
 
-let series = Yellow 5 <> White 6
+let series = FgYellow 5 <> FgWhite 6
 
 putEscLn series
 ```
@@ -135,7 +135,7 @@ When a constructor is applied to a series of appended `Escapable`s using the `$`
 import Data.Monoid ((<>))
 import EscapeArtist
 
-let result = Underline $ Yellow 5 <> White 6
+let result = Underline $ FgYellow 5 <> FgWhite 6
 
 putEscLn result
 ```
@@ -157,7 +157,7 @@ XML equivalent:
 
 ### Foreground Color
 
-`Black Red Green Yellow Magenta Cyan White`
+`FgBlack FgRed FgGreen FgYellow FgBlue FgMagenta FgCyan FgWhite`
 
 ### Background Color
 
@@ -167,10 +167,10 @@ XML equivalent:
 
 Name           | Effect on Applied Value
 -------------- | -----------------------
-`Default`      | Default foreground color of the terminal
+`FgDefault`    | Default foreground color of the terminal
 `BgDefault`    | Default background color of the terminal
-`Inherit`    | Applies attributes of parent constructors. Useful for a value interspersed in a series with other `Escapable`s. See examples below.
-`Normal`       | Even when other constructors are applied, the contained value will have the default attributes of the terminal
+`Inherit`      | Applies attributes of parent constructors. Useful for a value interspersed in a series with other `Escapable`s. See examples below.
+`Default`      | Even when other constructors are applied, the contained value will have the default attributes of the terminal
 `Blink`        | Output blinks in terminal
 `BlinkOff`     | NOT to end a blinking series, but rather to nest a non-blinking segment inside a series of blinking outputs
 `Bright`       | Enables bright output for foreground colors
@@ -202,7 +202,7 @@ Symbol | Purpose
 import Data.Monoid ((<>))
 import EscapeArtist
 
-spacesInherit = Red '@' <> Inherit ' ' <> Yellow '@' <> Inherit ' ' <> Green '@'
+spacesInherit = FgRed '@' <> Inherit ' ' <> FgYellow '@' <> Inherit ' ' <> FgGreen '@'
 
 putEscLn spacesInherit
 ```
@@ -233,7 +233,7 @@ putEscLn $ BgBlue spacesInherit
 import Data.Monoid ((<>))
 import EscapeArtist
 
-underlineOff = Underline $ Cyan "I am underlined" <> UnderlineOff " but I am not " <> Magenta "and I am over here"
+underlineOff = Underline $ FgCyan "I am underlined" <> UnderlineOff " but I am not " <> FgMagenta "and I am over here"
 
 putEscLn $ underlineOff
 ```
@@ -250,7 +250,7 @@ This operator allows you to avoid parentheses in cases where you need to use `$`
 import Data.Monoid ((<>))
 import EscapeArtist
 
-op1 = Underline $ Bright ^$ Green "GREEN" <> Normal " " <> Yellow "YELLOW"
+op1 = Underline $ Bright ^$ FgGreen "GREEN" <> Default " " <> FgYellow "YELLOW"
 
 putEscLn op1
 ```
@@ -260,7 +260,7 @@ putEscLn op1
 Without `^$`, this would have to be written as:
 
 ```haskell
-Underline $ (Bright $ Green "GREEN") <> Normal " " <> Yellow "YELLOW"
+Underline $ (Bright $ FgGreen "GREEN") <> Default " " <> FgYellow "YELLOW"
 ```
 
 ### Some Slightly More Advanced Examples
@@ -270,7 +270,7 @@ import Data.Monoid (mempty, (<>))
 import EscapeArtist
 
 rainbowString :: String -> Escapable
-rainbowString s = fn s (cycle [Red, White, Green, Blue, Yellow, Cyan])
+rainbowString s = fn s (cycle [FgRed, FgWhite, FgGreen, FgBlue, FgYellow, FgCyan])
     where fn [] _ = mempty
           fn _ [] = mempty
           fn (s:ss) ca@(c:cs)
@@ -287,7 +287,7 @@ import EscapeArtist
 import Text.Regex
 
 replaceNumbers :: String -> String
-replaceNumbers searchIn = subRegex (mkRegex "([0-9]+)") searchIn (escToString $ Red "\\1")
+replaceNumbers searchIn = subRegex (mkRegex "([0-9]+)") searchIn (escToString $ FgRed "\\1")
 
 putStrLn $ replaceNumbers "Line 7 of 23"
 ```
@@ -306,14 +306,14 @@ type ColumnNumber = Integer
 data ErrorType = SyntaxError FileName LineNumber ColumnNumber deriving (Show)
 
 instance ToEscapable ErrorType where
-    toEscapable (SyntaxError fn ln cn) = Normal "Syntax error in file "
-                                       <> Yellow ^$ Underline fn
-                                       <> Normal " at "
-                                       <> Red (show ln ++ ":" ++ show cn)
+    toEscapable (SyntaxError fn ln cn) = Default "Syntax error in file "
+                                       <> FgYellow ^$ Underline fn
+                                       <> Default " at "
+                                       <> FgRed (show ln ++ ":" ++ show cn)
 
 instance ToEscapable (Either ErrorType String) where
     toEscapable (Left e) = toEscapable e
-    toEscapable (Right m) = Green m
+    toEscapable (Right m) = FgGreen m
 
 gotSyntaxError :: Either ErrorType String
 gotSyntaxError = Left $ SyntaxError "some/File.hs" 1 23

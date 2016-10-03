@@ -46,9 +46,9 @@ spec = do
 
     describe "^$" $ do
         it "produces the same result as $" $ do
-            (Red ^$ Underline ^$ Blink 6) `shouldBe` (Red $ Underline $ Blink 6)
+            (FgRed ^$ Underline ^$ Blink 6) `shouldBe` (FgRed $ Underline $ Blink 6)
         it "gets processed before <>" $ do
-            (Red ^$ Underline 5 <> Blue 3 <> Yellow 9) `shouldBe` (Sum [Red (Underline 5), Blue 3, Yellow 9])
+            (FgRed ^$ Underline 5 <> FgBlue 3 <> FgYellow 9) `shouldBe` (Sum [FgRed (Underline 5), FgBlue 3, FgYellow 9])
 
     describe "Eq Escapable" $ do
         it "considers escapables equal when constructors and strings of contained values are same" $ forM_ eqTestCases $ do

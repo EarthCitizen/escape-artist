@@ -2,33 +2,33 @@
 
 module EscapeArtist.Constants where
 
-black, red, green, yellow, blue, magenta, cyan, white :: String
+fgBlack, fgRed, fgGreen, fgYellow, fgBlue, fgMagenta, fgCyan, fgWhite :: String
 
-black   = "\ESC[30m"
-red     = "\ESC[31m"
-green   = "\ESC[32m"
-yellow  = "\ESC[33m"
-blue    = "\ESC[34m"
-magenta = "\ESC[35m"
-cyan    = "\ESC[36m"
-white   = "\ESC[37m"
+fgBlack   = "\ESC[30m"
+fgRed     = "\ESC[31m"
+fgGreen   = "\ESC[32m"
+fgYellow  = "\ESC[33m"
+fgBlue    = "\ESC[34m"
+fgMagenta = "\ESC[35m"
+fgCyan    = "\ESC[36m"
+fgWhite   = "\ESC[37m"
 
-bgblack, bgred, bggreen, bgyellow, bgblue, bgmagenta, bgcyan, bgwhite :: String
+bgBlack, bgRed, bgGreen, bgYellow, bgBlue, bgMagenta, bgCyan, bgWhite :: String
 
-bgblack   = "\ESC[40m"
-bgred     = "\ESC[41m"
-bggreen   = "\ESC[42m"
-bgyellow  = "\ESC[43m"
-bgblue    = "\ESC[44m"
-bgmagenta = "\ESC[45m"
-bgcyan    = "\ESC[46m"
-bgwhite   = "\ESC[47m"
+bgBlack   = "\ESC[40m"
+bgRed     = "\ESC[41m"
+bgGreen   = "\ESC[42m"
+bgYellow  = "\ESC[43m"
+bgBlue    = "\ESC[44m"
+bgMagenta = "\ESC[45m"
+bgCyan    = "\ESC[46m"
+bgWhite   = "\ESC[47m"
 
-reset, defaultColor, defaultBgColor :: String
+defaultAll, defaultFgColor, defaultBgColor :: String
 
-reset = "\ESC[0m"
+defaultAll = "\ESC[0m"
 
-defaultColor = "\ESC[39m"
+defaultFgColor = "\ESC[39m"
 
 defaultBgColor = "\ESC[49m"
 
