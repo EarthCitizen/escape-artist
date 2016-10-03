@@ -51,9 +51,9 @@ spec = do
             (Red ^$ Underline 5 <> Blue 3 <> Yellow 9) `shouldBe` (Sum [Red (Underline 5), Blue 3, Yellow 9])
 
     describe "Eq Escapable" $ do
-        it "considers escapables equal when strings of contained values are same" $ forM_ allEqTestCases $ do
+        it "considers escapables equal when constructors and strings of contained values are same" $ forM_ eqTestCases $ do
             \(a, b) -> a `shouldBe` b
-        it "considers escapables not equal when strings of contained values are not same" $ forM_ allNotEqTestCases $ do
+        it "considers escapables not equal when constructors or strings of contained values are not same" $ forM_ notEqTestCases $ do
             \(a, b) -> a `shouldNotBe` b
 
     describe "Monoid Escapable" $ do

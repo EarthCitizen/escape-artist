@@ -5,8 +5,8 @@ module EscapeArtistSpec.TestData (
                               , escSingleTestCases
                               , nestedSumTestCases
                               , sumTestCases
-                              , allEqTestCases
-                              , allNotEqTestCases
+                              , eqTestCases
+                              , notEqTestCases
                               , monoidArgs
                               , monoidTestCases
                               , showTestCases
@@ -197,23 +197,79 @@ allEscTestCases = inheritTestCases ++ escSingleTestCases ++ sumTestCases ++ nest
 
 -- Equality tests
 
-eq1List = [Red 6, Red "6", Red $ BSC.pack "6", Red $ BSLC.pack "6", Red $ T.pack "6", Red $ TL.pack "6"]
-eq1TestCases = [(x, y) | x <- eq1List, y <- eq1List]
+forAllCons = [
+    Black,
+    Red,
+    Green,
+    Yellow,
+    Blue,
+    Magenta,
+    Cyan,
+    White,
+    BgBlack,
+    BgRed,
+    BgGreen,
+    BgYellow,
+    BgBlue,
+    BgMagenta,
+    BgCyan,
+    BgWhite,
+    Default,
+    BgDefault,
+    Inherit,
+    Normal,
+    Blink,
+    BlinkOff,
+    Bright,
+    BrightOff,
+    Underline,
+    UnderlineOff,
+    Inverse,
+    InverseOff
+    ]
 
-eq2List = [Blue (3.5 :: Float), Blue (3.5 :: Double), Blue "3.5", Blue $ T.pack "3.5"]
-eq2testCases = [(x, y) | x <- eq2List, y <- eq2List]
+fnConsSameValSame = (\v -> zipWith (\c v -> (c v, c v)) forAllCons $ repeat v)
+fnCVCyc = (zipWith (\c v -> c v) forAllCons) . cycle
+fnCVRep = (zipWith (\c v -> c v) forAllCons) . repeat
 
-allEqTestCases = eq1TestCases ++ eq2testCases
+eqTestCases = fnConsSameValSame 'Z'
+            ++ fnConsSameValSame "@%^&*&^%$#$%"
+            ++ (fnConsSameValSame $ BSC.pack "4")
+            ++ (fnConsSameValSame $ BSLC.pack "7")
+            ++ (fnConsSameValSame $ T.pack "999")
+            ++ (fnConsSameValSame $ TL.pack "Some Text")
+            ++ fnConsSameValSame 6
+            -- This case hadles different values which are the
+            -- same when strings
+            ++ zip (fnCVRep (3.5 :: Float)) (fnCVRep (3.5 :: Double))
+            ++ [(Atom "6", Atom "6")]
+            ++ [(Sum [Red 6], Sum [Red 6])]
 
-notEqList11 = [Yellow 10, Blue "100", Green (3.4 :: Float), Cyan "3000", White 'W']
-notEqList12 = [Yellow 11, Blue "101", Green (3.5 :: Float), Cyan "3001", White 'Z']
-notEq1TestCases = [(x, y) | x <- notEqList11, y <- notEqList12]
+li1 = fnCVCyc [1, 10, 5]
+li2 = fnCVCyc [1000, 10000, 5000]
 
-notEqList21 = [White 1, White 2, White 3, White 4, White 5]
-notEqList22 = [White 11, White 12, White 13, White 14, White 15]
-notEq2TestCases = [(x, y) | x <- notEqList21, y <- notEqList22]
+ls1 = fnCVCyc ["asdf", "@@#$%", "+_)(+_)(+_)(+_)()"]
+ls2 = fnCVCyc ["99999", "^&*(9876(*&^9876))", "************"]
 
-allNotEqTestCases = notEq1TestCases ++ notEq2TestCases
+lc1 = fnCVCyc "QWERTY"
+lc2 = fnCVCyc "ZXCVBN"
+
+notEqConsSameValueNotTestCases = zip (li1 ++ ls1 ++ lc1) (li2 ++ ls2 ++ lc2)
+                               ++ [(Atom "not", Atom "same")]
+                               ++ [(Sum [Blue "not"], Sum [Blue "same"])]
+
+forAllConsEnum = zip [1..] forAllCons
+
+notEqConsNotValueSameTestCases = [(c1 v, c2 v) | (c1e, c1) <- forAllConsEnum,
+                                                 (c2e, c2) <- forAllConsEnum,
+                                                 let v = "Any Value",
+                                                 c1e /= c2e
+                                                 ]
+                               ++ [(Atom "same", Red "same")]
+                               ++ [(Sum [White "same"], Red "same")]
+
+notEqTestCases = notEqConsSameValueNotTestCases
+               ++ notEqConsNotValueSameTestCases
 
 -----------------------------------------------------------
 
