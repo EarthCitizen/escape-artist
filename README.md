@@ -321,9 +321,9 @@ gotSyntaxError = Left $ SyntaxError "some/File.hs" 1 23
 gotMessage :: Either ErrorType String
 gotMessage = Right "Status OK"
 
-putEscLn $ gotSyntaxError
+putEscLn gotSyntaxError
 putStrLn ""
-putEscLn $ gotMessage
+putEscLn gotMessage
 ```
 
 <img src="images/either_error.png?raw=true" height="53">
