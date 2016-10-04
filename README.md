@@ -233,9 +233,9 @@ putEscLn $ BgBlue spacesInherit
 import Data.Monoid ((<>))
 import EscapeArtist
 
-underlineOff = Underline $ FgCyan "I am underlined" <> UnderlineOff " but I am not " <> FgMagenta "and I am over here"
+underlines = Underline $ FgCyan "I am underlined" <> UnderlineOff " but I am not " <> FgMagenta "and I am over here"
 
-putEscLn $ underlineOff
+putEscLn underlines
 ```
 
 <img src="images/underline_off.png?raw=true" height="20">

@@ -15,6 +15,23 @@ import EscapeArtist.Constants
 
 infixr 7 ^$
 
+-- | The same as '$', but with higher precedence. One level of precedence higher than 'Data.Monoid.<>'. This allows
+-- avoiding parentheses when using '$' and 'Data.Monoid.<>' in the same expression. For example:
+--
+-- @
+-- Underline $ (Bright $ FgGreen \"GREEN\") <> Default \" \" <> FgYellow \"YELLOW\"
+-- @
+--
+-- can be written as:
+--
+-- @
+-- Underline $ Bright ^$ FgGreen \"GREEN\" <> Default \" \" <> FgYellow \"YELLOW\"
+-- @
+--
+-- In this example, 'Bright' is applied only to the 'String' \"GREEN\", that is concatenated
+-- with a space and the yellow text \"YELLOW\", then 'Underline' is applied to the entire
+-- expression.
+--
 (^$) :: (a -> b) -> a -> b
 (^$) = ($)
 
@@ -212,7 +229,7 @@ instance ToEscapable Double where
 instance ToEscapable Escapable where
     toEscapable = id
 
--- | Convert any instance of ToEscapable to a String
+-- | Convert any instance of 'ToEscapable' to a 'String'
 escToString :: (ToEscapable a) => a -> String
 escToString esc = escToStrEncl "" "" $ toEscapable esc
 
@@ -276,10 +293,10 @@ instance Monoid Escapable where
     mappend a        (Sum bs) = Sum $ mconcat [[a], bs ]
     mappend a        b        = Sum [a, b]
 
--- | Convert any instance of ToEscapable to a String and output it to the terminal
+-- | Convert any instance of 'ToEscapable' to a 'String' and output it to the terminal
 putEscLn :: (ToEscapable a) => a -> IO ()
 putEscLn = putStrLn . escToString
 
--- | Convert any instance of ToEscapable to a String and output it to the terminal follow by a newline
+-- | Convert any instance of 'ToEscapable' to a 'String' and output it to the terminal follow by a newline
 putEsc :: (ToEscapable a) => a -> IO ()
 putEsc = putStr . escToString

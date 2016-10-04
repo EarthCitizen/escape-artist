@@ -5,12 +5,13 @@ description:         Please see README.md
 homepage:            https://github.com/EarthCitizen/escape-artist#readme
 license:             BSD3
 license-file:        LICENSE
-author:              Author name here
-maintainer:          example@example.com
-copyright:           2016 Author name here
-category:            Web
+author:              Ryan Daniels
+maintainer:          rd.github@gmail.com
+copyright:           2016 Ryan Daniels
+category:            Text
 build-type:          Simple
 cabal-version:       >=1.10
+extra-doc-files:     images/underline_off_sm.png
 
 library
   hs-source-dirs:      src
@@ -37,7 +38,6 @@ test-suite escape-artist-test
                      , silently
                      , text
                      , QuickCheck
-  -- Extra include prevents needing to expose constants module
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances, NoMonomorphismRestriction
   default-language:    Haskell2010
