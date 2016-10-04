@@ -20,14 +20,14 @@ infixr 7 ^$
 
 -- | The constructors used to apply attributes to values
 -- for terminal output
-data Escapable = forall a. (ToEscapable a) => FgBlack   a -- ^ Forground color black
-               | forall a. (ToEscapable a) => FgRed     a -- ^ Forground color red
-               | forall a. (ToEscapable a) => FgGreen   a -- ^ Forground color green
-               | forall a. (ToEscapable a) => FgYellow  a -- ^ Forground color yellow
-               | forall a. (ToEscapable a) => FgBlue    a -- ^ Forground color blue
-               | forall a. (ToEscapable a) => FgMagenta a -- ^ Forground color magenta
-               | forall a. (ToEscapable a) => FgCyan    a -- ^ Forground color cyan
-               | forall a. (ToEscapable a) => FgWhite   a -- ^ Forground color white
+data Escapable = forall a. (ToEscapable a) => FgBlack   a -- ^ Foreground color black
+               | forall a. (ToEscapable a) => FgRed     a -- ^ Foreground color red
+               | forall a. (ToEscapable a) => FgGreen   a -- ^ Foreground color green
+               | forall a. (ToEscapable a) => FgYellow  a -- ^ Foreground color yellow
+               | forall a. (ToEscapable a) => FgBlue    a -- ^ Foreground color blue
+               | forall a. (ToEscapable a) => FgMagenta a -- ^ Foreground color magenta
+               | forall a. (ToEscapable a) => FgCyan    a -- ^ Foreground color cyan
+               | forall a. (ToEscapable a) => FgWhite   a -- ^ Foreground color white
 
                | forall a. (ToEscapable a) => BgBlack   a -- ^ Background color black
                | forall a. (ToEscapable a) => BgRed     a -- ^ Background color red
