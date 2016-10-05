@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/EarthCitizen/escape-artist.svg?branch=master)](https://travis-ci.org/EarthCitizen/escape-artist)
 [![Coverage Status](https://coveralls.io/repos/github/EarthCitizen/escape-artist/badge.svg?branch=master)](https://coveralls.io/github/EarthCitizen/escape-artist?branch=master)
 
-A Haskell library for ASCII escape codes made easy. Decorate your terminal text expressively while staying in your normal Haskell coding style.
+A Haskell library for text decoration with ANSI escape sequences made easy. Decorate your terminal text easily and expressively.
 
 ## Getting Started
 

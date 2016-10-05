@@ -1,6 +1,6 @@
 name:                escape-artist
 version:             0.1.0
-synopsis:            Haskell ASCII Escape Codes Made Easy
+synopsis:            ANSI Escape Sequence Text Decoration Made Easy
 description:         Please see README.md
 homepage:            https://github.com/EarthCitizen/escape-artist#readme
 license:             BSD3
