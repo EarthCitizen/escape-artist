@@ -107,14 +107,6 @@ instance Show Escapable where
     show (Sum       a) = "Sum "  ++ show a
     show (Atom      a) = "Atom " ++ show a
 
--- TODO: Replace Atom contents with this type?
--- data Atom = BSAtom  BS.ByteString
---           | BSLAtom BSL.ByteString
---           | SAtom   String
---           | TAtom   T.Text
---           | TLAtom  TL.Text
---           deriving (Eq, Show)
-
 tryCast :: forall a b. (Show b, Typeable a, Typeable b) => a -> (b -> String) -> Maybe String
 tryCast a f = case cast a of
                 (Just s) -> Just $ f s
