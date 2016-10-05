@@ -263,7 +263,9 @@ Without `^$`, this would have to be written as:
 Underline $ (Bright $ FgGreen "GREEN") <> Default " " <> FgYellow "YELLOW"
 ```
 
-### Some Slightly More Advanced Examples
+## Advanced Examples
+
+### Fun with Colors
 
 ```haskell
 import Data.Monoid (mempty, (<>))
@@ -282,6 +284,8 @@ putEscLn $ rainbowString "Hello World!"
 
 <img src="images/rainbow_string.png?raw=true" height="20">
 
+### Colorize Sections of a String
+
 ```haskell
 import EscapeArtist
 import Text.Regex
@@ -293,6 +297,8 @@ putStrLn $ replaceNumbers "Line 7 of 23"
 ```
 
 <img src="images/highlight_numbers.png?raw=true" height="20">
+
+### Implement `ToEscapable` for Custom and Existing Data Types
 
 ```haskell
 {-# LANGUAGE FlexibleInstances #-}
