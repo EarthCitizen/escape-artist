@@ -8,7 +8,7 @@ Stability   : stable
 Portability : Terminal supporting ANSI escape sequences
 
 A library for text decoration with ANSI escape sequences made easy. Decorate your terminal text easily and expressively.
-Any complex data type, existing or custom, can be easily colorized by implementing the class 'ToEscapable', then
+Any complex data type, existing or custom, can be simply colorized by implementing the class 'ToEscapable', then
 output to terminal or converted to 'String' using the provided functions.
 
 === Simple Example
