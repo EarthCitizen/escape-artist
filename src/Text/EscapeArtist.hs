@@ -22,7 +22,7 @@ underlines = Underline $ FgCyan "I am underlined" <> UnderlineOff " but I am not
 putEscLn underlines
 @
 
-<<images/underline_off_sm.png>>
+<<https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/underline_off.png>>
 
 === Implementing 'ToEscapable'
 

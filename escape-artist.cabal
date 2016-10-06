@@ -11,7 +11,6 @@ copyright:           2016 Ryan Daniels
 category:            Text
 build-type:          Simple
 cabal-version:       >= 1.10
-extra-doc-files:     images/*.png
 extra-source-files:  README.md
 
 library
