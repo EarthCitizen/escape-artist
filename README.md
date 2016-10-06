@@ -140,7 +140,7 @@ let result = Underline $ FgYellow 5 <> FgWhite 6
 putEscLn result
 ```
 
-<img src="images/56yw.png?raw=true" height="20">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/masterimages/56yw.png)
 
 XML equivalent:
 ```XML
