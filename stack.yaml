@@ -39,7 +39,13 @@ packages:
 - '.'
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
-extra-deps: []
+extra-deps:
+- bytestring-0.10.8.1
+- hspec-2.2.4
+- hspec-core-2.2.4
+- hspec-discover-2.2.4
+- QuickCheck-2.9.2
+- text-1.2.2.1
 
 # Override default flag values for local packages and extra-deps
 flags: {}

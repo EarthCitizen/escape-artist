@@ -1,5 +1,5 @@
 name:                escape-artist
-version:             0.1.0
+version:             1.0.0
 synopsis:            ANSI Escape Sequence Text Decoration Made Easy
 description:         Please see README.md
 homepage:            https://github.com/EarthCitizen/escape-artist#readme
@@ -10,7 +10,7 @@ maintainer:          rd.github@gmail.com
 copyright:           2016 Ryan Daniels
 category:            Text
 build-type:          Simple
-cabal-version:       >=1.10
+cabal-version:       >= 1.10
 extra-doc-files:     images/underline_off_sm.png
 
 library
@@ -20,8 +20,8 @@ library
                      , EscapeArtist.Internal
   default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances, NoMonomorphismRestriction
   build-depends:       base >= 4.7 && < 5
-                     , bytestring
-                     , text
+                     , bytestring >= 0.10.8.1 && < 0.11
+                     , text >= 1.2.2.1 && < 1.3
   ghc-options:
   default-language:    Haskell2010
 
@@ -31,13 +31,13 @@ test-suite escape-artist-test
   other-modules:       EscapeArtistSpec
                      , EscapeArtistSpec.TestData
   main-is:             Spec.hs
-  build-depends:       base
-                     , bytestring
+  build-depends:       base >= 4.7 && < 5
+                     , bytestring >= 0.10.8.1 && < 0.11
                      , escape-artist
-                     , hspec
-                     , silently
-                     , text
-                     , QuickCheck
+                     , hspec >= 2.2.4 && < 2.3
+                     , silently >= 1.2.5 && < 1.3
+                     , text >= 1.2.2.1 && < 1.3
+                     , QuickCheck >= 2.9.2 && < 2.10
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances, NoMonomorphismRestriction
   default-language:    Haskell2010
