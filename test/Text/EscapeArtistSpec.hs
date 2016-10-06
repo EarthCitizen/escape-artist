@@ -2,7 +2,6 @@ module Text.EscapeArtistSpec (spec) where
 
 import Control.Monad (forM_)
 import Data.Monoid ((<>), mempty)
-import Text.EscapeArtist.Constants
 import Text.EscapeArtist.Internal
 import Text.EscapeArtistSpec.TestData
 import System.IO.Silently (capture)

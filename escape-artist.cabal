@@ -11,13 +11,14 @@ copyright:           2016 Ryan Daniels
 category:            Text
 build-type:          Simple
 cabal-version:       >= 1.10
-extra-doc-files:     images/underline_off_sm.png
+extra-doc-files:     images/*.png
+extra-source-files:  README.md
 
 library
   hs-source-dirs:      src
   exposed-modules:     Text.EscapeArtist
-                     , Text.EscapeArtist.Constants
                      , Text.EscapeArtist.Internal
+                     , Text.EscapeArtist.Internal.Constants
   default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances, NoMonomorphismRestriction
   build-depends:       base >= 4.7 && < 5
                      , bytestring >= 0.10.8.1 && < 0.11

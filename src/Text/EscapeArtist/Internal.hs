@@ -11,7 +11,7 @@ import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import Data.Typeable (Typeable, cast)
 import Data.Word (Word, Word8, Word16, Word32, Word64)
-import Text.EscapeArtist.Constants
+import Text.EscapeArtist.Internal.Constants
 
 infixr 7 ^$
 

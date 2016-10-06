@@ -18,7 +18,7 @@ import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import Data.Word
 import Text.EscapeArtist.Internal
-import Text.EscapeArtist.Constants
+import Text.EscapeArtist.Internal.Constants
 import Test.QuickCheck
 
 data TestCaseVE = forall a. (ToEscapable a) => TestCaseVE a String
