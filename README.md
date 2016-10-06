@@ -255,7 +255,7 @@ op1 = Underline $ Bright ^$ FgGreen "GREEN" <> Default " " <> FgYellow "YELLOW"
 putEscLn op1
 ```
 
-<img src="images/high_prec_apply_op.png?raw=true" height="20">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/high_prec_apply_op.png)
 
 Without `^$`, this would have to be written as:
 
@@ -282,7 +282,7 @@ rainbowString s = fn s (cycle [FgRed, FgWhite, FgGreen, FgBlue, FgYellow, FgCyan
 putEscLn $ rainbowString "Hello World!"
 ```
 
-<img src="images/rainbow_string.png?raw=true" height="20">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/rainbow_string.png)
 
 ### Colorize Sections of a String
 
@@ -296,7 +296,7 @@ replaceNumbers searchIn = subRegex (mkRegex "([0-9]+)") searchIn (escToString $ 
 putStrLn $ replaceNumbers "Line 7 of 23"
 ```
 
-<img src="images/highlight_numbers.png?raw=true" height="20">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/highlight_numbers.png)
 
 ### Implement `ToEscapable` for Custom and Existing Data Types
 
@@ -332,4 +332,4 @@ putStrLn ""
 putEscLn gotMessage
 ```
 
-<img src="images/either_error.png?raw=true" height="53">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/either_error.png)
