@@ -17,7 +17,7 @@ output to terminal or converted to 'String' using the provided functions.
 import Data.Monoid ((<>))
 import Text.EscapeArtist
 
-underlines = Underline $ FgCyan "I am underlined" <> UnderlineOff " but I am not " <> FgMagenta "and I am over here"
+underlines = Underline $ FgCyan \"I am underlined\" <> UnderlineOff \" but I am not \" <> FgMagenta \"and I am over here\"
 
 putEscLn underlines
 @
@@ -37,7 +37,7 @@ instance ToEscapable ABC where
    toEscapable (B) = FgGreen $ show B
 
 instance (ToEscapable a) => ToEscapable (Maybe a) where
-    toEscapable (Just a) = FgGreen "Just" <> Inherit " " <> FgYellow a
+    toEscapable (Just a) = FgGreen \"Just\" <> Inherit \" \" <> FgYellow a
     toEscapable a = FgRed $ show a
 @
 
