@@ -90,7 +90,7 @@ putEscLn $ Just 15
 putEscLn (Nothing :: Maybe Int)
 ```
 
-<img src="images/abc_maybe.png?raw=true" height="150">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/abc_maybe.png)
 
 When constructors are combined with the application operator (`$`), the effects accumulate and wrap around the applied value:
 
