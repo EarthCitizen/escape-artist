@@ -238,7 +238,7 @@ underlines = Underline $ FgCyan "I am underlined" <> UnderlineOff " but I am not
 putEscLn underlines
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/images/underline_off.png)
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/underline_off.png)
 
 The same type of functionality applies as well to `BlinkOff`, `BrightOff` and `InverseOff`.
 
