@@ -207,25 +207,25 @@ spacesInherit = FgRed '@' <> Inherit ' ' <> FgYellow '@' <> Inherit ' ' <> FgGre
 putEscLn spacesInherit
 ```
 
-<img src="images/inherit_none.png?raw=true" height="20">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_none.png)
 
 ```haskell
 putEscLn $ Underline spacesInherit
 ```
 
-<img src="images/inherit_underline.png?raw=true" height="22">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_underline.png)
 
 ```haskell
 putEscLn $ Inverse spacesInherit
 ```
 
-<img src="images/inherit_inverse.png?raw=true" height="24">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_inverse.png)
 
 ```haskell
 putEscLn $ BgBlue spacesInherit
 ```
 
-<img src="images/inherit_bgblue.png?raw=true" height="24">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_bgblue.png)
 
 ### UnderlineOff
 
@@ -238,7 +238,7 @@ underlines = Underline $ FgCyan "I am underlined" <> UnderlineOff " but I am not
 putEscLn underlines
 ```
 
-<img src="images/underline_off.png?raw=true" height="20">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/images/underline_off.png)
 
 The same type of functionality applies as well to `BlinkOff`, `BrightOff` and `InverseOff`.
 
