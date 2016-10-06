@@ -48,7 +48,7 @@ let redList = [FgRed 6, FgRed "6", FgRed '6', FgRed (6 :: Float), FgRed (6 :: Do
 putEscLn $ mconcat $ intersperse (Inherit " ") redList
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/six.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/six.png)
 
 The following data types already come with an implementation of `ToEscapable`:
 
@@ -90,7 +90,7 @@ putEscLn $ Just 15
 putEscLn (Nothing :: Maybe Int)
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/abc_maybe.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/abc_maybe.png)
 
 When constructors are combined with the application operator (`$`), the effects accumulate and wrap around the applied value:
 
@@ -140,7 +140,7 @@ let result = Underline $ FgYellow 5 <> FgWhite 6
 putEscLn result
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/56yw.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/56yw.png)
 
 XML equivalent:
 ```XML
@@ -207,25 +207,25 @@ spacesInherit = FgRed '@' <> Inherit ' ' <> FgYellow '@' <> Inherit ' ' <> FgGre
 putEscLn spacesInherit
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_none.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_none.png)
 
 ```haskell
 putEscLn $ Underline spacesInherit
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_underline.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_underline.png)
 
 ```haskell
 putEscLn $ Inverse spacesInherit
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_inverse.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_inverse.png)
 
 ```haskell
 putEscLn $ BgBlue spacesInherit
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_bgblue.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/inherit_bgblue.png)
 
 ### UnderlineOff
 
@@ -238,7 +238,7 @@ underlines = Underline $ FgCyan "I am underlined" <> UnderlineOff " but I am not
 putEscLn underlines
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/underline_off.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/underline_off.png)
 
 The same type of functionality applies as well to `BlinkOff`, `BrightOff` and `InverseOff`.
 
@@ -255,7 +255,7 @@ op1 = Underline $ Bright ^$ FgGreen "GREEN" <> Default " " <> FgYellow "YELLOW"
 putEscLn op1
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/high_prec_apply_op.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/high_prec_apply_op.png)
 
 Without `^$`, this would have to be written as:
 
@@ -282,7 +282,7 @@ rainbowString s = fn s (cycle [FgRed, FgWhite, FgGreen, FgBlue, FgYellow, FgCyan
 putEscLn $ rainbowString "Hello World!"
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/rainbow_string.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/rainbow_string.png)
 
 ### Colorize Sections of a String
 
@@ -296,7 +296,7 @@ replaceNumbers searchIn = subRegex (mkRegex "([0-9]+)") searchIn (escToString $ 
 putStrLn $ replaceNumbers "Line 7 of 23"
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/highlight_numbers.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/highlight_numbers.png)
 
 ### Implement `ToEscapable` for Custom and Existing Data Types
 
@@ -332,4 +332,4 @@ putStrLn ""
 putEscLn gotMessage
 ```
 
-![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/either_error.png)
+![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/either_error.png)
