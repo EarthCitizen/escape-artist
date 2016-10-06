@@ -10,7 +10,7 @@ import qualified Data.ByteString.Lazy.Char8 as BSLC
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import Data.Typeable (Typeable, cast)
-import Data.Word
+import Data.Word (Word, Word8, Word16, Word32, Word64)
 import EscapeArtist.Constants
 
 infixr 7 ^$

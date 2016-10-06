@@ -5,9 +5,9 @@ import Data.Monoid ((<>), mempty)
 import EscapeArtist.Constants
 import EscapeArtist.Internal
 import EscapeArtistSpec.TestData
-import System.IO.Silently
+import System.IO.Silently (capture)
 import Test.QuickCheck
-import Test.Hspec
+import Test.Hspec (context, describe, it, shouldBe, shouldNotBe, Spec)
 
 spec :: Spec
 spec = do
