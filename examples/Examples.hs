@@ -1,7 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 import Data.Monoid (mempty, (<>))
-import EscapeArtist
+import Text.EscapeArtist
 import Text.Regex
 
 rainbowString :: String -> Escapable

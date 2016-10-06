@@ -1,5 +1,5 @@
 {-|
-Module      : EscapeArtist
+Module      : Text.EscapeArtist
 Description : ANSI Escape Sequence Text Decoration Made Easy
 Copyright   : (c) Ryan Daniels 2016
 License     : BSD3
@@ -15,7 +15,7 @@ output to terminal or converted to 'String' using the provided functions.
 
 @
 import Data.Monoid ((<>))
-import EscapeArtist
+import Text.EscapeArtist
 
 underlines = Underline $ FgCyan "I am underlined" <> UnderlineOff " but I am not " <> FgMagenta "and I am over here"
 
@@ -28,7 +28,7 @@ putEscLn underlines
 
 @
 import Data.Monoid ((<>))
-import EscapeArtist
+import Text.EscapeArtist
 
 data ABC = A | B deriving (Show, Eq)
 
@@ -48,6 +48,6 @@ See comprehensive documentation with many examples here:
 <https://github.com/EarthCitizen/escape-artist#readme>
 -}
 
-module EscapeArtist (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (^$)) where
+module Text.EscapeArtist (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (^$)) where
 
-import EscapeArtist.Internal hiding (Atom, Sum)
+import Text.EscapeArtist.Internal hiding (Atom, Sum)

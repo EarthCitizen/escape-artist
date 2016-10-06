@@ -1,6 +1,6 @@
 {-# OPTIONS_HADDOCK hide #-}
 
-module EscapeArtist.Constants where
+module Text.EscapeArtist.Constants where
 
 fgBlack, fgRed, fgGreen, fgYellow, fgBlue, fgMagenta, fgCyan, fgWhite :: String
 

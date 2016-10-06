@@ -15,9 +15,9 @@ extra-doc-files:     images/underline_off_sm.png
 
 library
   hs-source-dirs:      src
-  exposed-modules:     EscapeArtist
-                     , EscapeArtist.Constants
-                     , EscapeArtist.Internal
+  exposed-modules:     Text.EscapeArtist
+                     , Text.EscapeArtist.Constants
+                     , Text.EscapeArtist.Internal
   default-extensions:  ExistentialQuantification, ExtendedDefaultRules, FlexibleInstances, NoMonomorphismRestriction
   build-depends:       base >= 4.7 && < 5
                      , bytestring >= 0.10.8.1 && < 0.11
@@ -28,8 +28,8 @@ library
 test-suite escape-artist-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
-  other-modules:       EscapeArtistSpec
-                     , EscapeArtistSpec.TestData
+  other-modules:       Text.EscapeArtistSpec
+                     , Text.EscapeArtistSpec.TestData
   main-is:             Spec.hs
   build-depends:       base >= 4.7 && < 5
                      , bytestring >= 0.10.8.1 && < 0.11

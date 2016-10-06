@@ -41,7 +41,7 @@ And can all dwell in the same list:
 {-# LANGUAGE ExtendedDefaultRules #-}
 
 import Data.List (intersperse)
-import EscapeArtist
+import Text.EscapeArtist
 
 let redList = [FgRed 6, FgRed "6", FgRed '6', FgRed (6 :: Float), FgRed (6 :: Double)]
 
@@ -72,7 +72,7 @@ Implementing `ToEscapable` for other data types is fairly simple:
 
 ```haskell
 import Data.Monoid ((<>))
-import EscapeArtist
+import Text.EscapeArtist
 
 data ABC = A | B deriving (Show, Eq)
 
@@ -95,7 +95,7 @@ putEscLn (Nothing :: Maybe Int)
 When constructors are combined with the application operator (`$`), the effects accumulate and wrap around the applied value:
 
 ```haskell
-import EscapeArtist
+import Text.EscapeArtist
 
 let combined = FgRed $ Underline $ Blink "Hello World!"
 ```
@@ -120,7 +120,7 @@ would be equivalent to the following in XML:
 {-# LANGUAGE ExtendedDefaultRules #-}
 
 import Data.Monoid ((<>))
-import EscapeArtist
+import Text.EscapeArtist
 
 let series = FgYellow 5 <> FgWhite 6
 
@@ -133,7 +133,7 @@ When a constructor is applied to a series of appended `Escapable`s using the `$`
 {-# LANGUAGE ExtendedDefaultRules #-}
 
 import Data.Monoid ((<>))
-import EscapeArtist
+import Text.EscapeArtist
 
 let result = Underline $ FgYellow 5 <> FgWhite 6
 
@@ -200,7 +200,7 @@ Symbol | Purpose
 
 ```haskell
 import Data.Monoid ((<>))
-import EscapeArtist
+import Text.EscapeArtist
 
 spacesInherit = FgRed '@' <> Inherit ' ' <> FgYellow '@' <> Inherit ' ' <> FgGreen '@'
 
@@ -231,7 +231,7 @@ putEscLn $ BgBlue spacesInherit
 
 ```haskell
 import Data.Monoid ((<>))
-import EscapeArtist
+import Text.EscapeArtist
 
 underlines = Underline $ FgCyan "I am underlined" <> UnderlineOff " but I am not " <> FgMagenta "and I am over here"
 
@@ -248,7 +248,7 @@ This operator allows you to avoid parentheses in cases where you need to use `$`
 
 ```haskell
 import Data.Monoid ((<>))
-import EscapeArtist
+import Text.EscapeArtist
 
 op1 = Underline $ Bright ^$ FgGreen "GREEN" <> Default " " <> FgYellow "YELLOW"
 
@@ -269,7 +269,7 @@ Underline $ (Bright $ FgGreen "GREEN") <> Default " " <> FgYellow "YELLOW"
 
 ```haskell
 import Data.Monoid (mempty, (<>))
-import EscapeArtist
+import Text.EscapeArtist
 
 rainbowString :: String -> Escapable
 rainbowString s = fn s (cycle [FgRed, FgWhite, FgGreen, FgBlue, FgYellow, FgCyan])
@@ -287,7 +287,7 @@ putEscLn $ rainbowString "Hello World!"
 ### Colorize Sections of a String
 
 ```haskell
-import EscapeArtist
+import Text.EscapeArtist
 import Text.Regex
 
 replaceNumbers :: String -> String
@@ -304,7 +304,7 @@ putStrLn $ replaceNumbers "Line 7 of 23"
 {-# LANGUAGE FlexibleInstances #-}
 
 import Data.Monoid ((<>))
-import EscapeArtist
+import Text.EscapeArtist
 
 type FileName = String
 type LineNumber = Integer

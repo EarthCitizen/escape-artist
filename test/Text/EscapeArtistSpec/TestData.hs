@@ -1,4 +1,4 @@
-module EscapeArtistSpec.TestData (
+module Text.EscapeArtistSpec.TestData (
                                 TestCaseVE(..)
                               , allEscTestCases
                               , inheritTestCases
@@ -17,8 +17,8 @@ import qualified Data.ByteString.Lazy.Char8 as BSLC
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import Data.Word
-import EscapeArtist.Internal
-import EscapeArtist.Constants
+import Text.EscapeArtist.Internal
+import Text.EscapeArtist.Constants
 import Test.QuickCheck
 
 data TestCaseVE = forall a. (ToEscapable a) => TestCaseVE a String
