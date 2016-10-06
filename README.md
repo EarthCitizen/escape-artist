@@ -48,7 +48,7 @@ let redList = [FgRed 6, FgRed "6", FgRed '6', FgRed (6 :: Float), FgRed (6 :: Do
 putEscLn $ mconcat $ intersperse (Inherit " ") redList
 ```
 
-<img src="images/six.png?raw=true" height="20">
+![] (https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/six.png)
 
 The following data types already come with an implementation of `ToEscapable`:
 
