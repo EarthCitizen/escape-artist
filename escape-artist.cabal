@@ -28,12 +28,12 @@ description:
     data ABC = A | B deriving (Show, Eq)
     .
     instance ToEscapable ABC where
-       toEscapable (A) = FgRed $ show A
-       toEscapable (B) = FgGreen $ show B
+    &#x20;   toEscapable (A) = FgRed $ show A
+    &#x20;   toEscapable (B) = FgGreen $ show B
     .
     instance (ToEscapable a) => ToEscapable (Maybe a) where
-        toEscapable (Just a) = FgGreen \"Just\" \<\> Inherit \" \" \<\> FgYellow a
-        toEscapable a = FgRed $ show a
+    &#x20;    toEscapable (Just a) = FgGreen \"Just\" \<\> Inherit \" \" \<\> FgYellow a
+    &#x20;    toEscapable a = FgRed $ show a
     @
     .
     Comprehensive Documentation
