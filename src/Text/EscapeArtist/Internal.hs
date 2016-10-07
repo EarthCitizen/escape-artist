@@ -169,6 +169,61 @@ instance Eq Escapable where
     (Atom a) == (Atom b) = toCompStr a == toCompStr b
     _ == _ = False
 
+{-|
+Implement 'ToEscapable' by composing constructors of the type 'Escapable'.
+This can be done for any data type with the exception of the following, which
+already come with an implementation which renders directly to 'String':
+
+* 'Char'
+* 'Data.ByteString.ByteString'
+* 'Data.ByteString.Lazy.ByteString' (Lazy)
+* 'Data.Text.Text'
+* 'Data.Text.Lazy.Text' (Lazy)
+* 'Double'
+* 'Float'
+* 'Int'
+* 'Integer'
+* 'String'
+* 'Word'
+* 'Word8'
+* 'Word16'
+* 'Word32'
+* 'Word64'
+
+@
+\{\-\# LANGUAGE FlexibleInstances \#\-\}
+
+import Data.Monoid ((<>))
+import Text.EscapeArtist
+
+type FileName = String
+type LineNumber = Integer
+type ColumnNumber = Integer
+
+data ErrorType = SyntaxError FileName LineNumber ColumnNumber deriving (Show)
+
+instance ToEscapable ErrorType where
+    toEscapable (SyntaxError fn ln cn) = Default "Syntax error in file "
+                                       <> FgYellow ^$ Underline fn
+                                       <> Default " at "
+                                       <> FgRed (show ln ++ ":" ++ show cn)
+
+instance ToEscapable (Either ErrorType String) where
+    toEscapable (Left e) = toEscapable e
+    toEscapable (Right m) = FgGreen m
+
+mkSyntaxError :: FileName -> LineNumber -> ColumnNumber -> Either ErrorType String
+mkSyntaxError fn ln cn = Left $ SyntaxError fn ln cn
+
+mkStatusOK :: Either ErrorType String
+mkStatusOK = Right "Status OK"
+
+putEscLn $ mkSyntaxError "some/File.hs" 1 23
+putEscLn mkStatusOK
+@
+
+<<https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/either_error.png>>
+-}
 class (Show a, Typeable a) => ToEscapable a where
     -- | Convert the given type to an Escapable
     toEscapable :: a -> Escapable
@@ -285,10 +340,10 @@ instance Monoid Escapable where
     mappend a        (Sum bs) = Sum $ mconcat [[a], bs ]
     mappend a        b        = Sum [a, b]
 
--- | Convert any instance of 'ToEscapable' to a 'String' and output it to the terminal
+-- | Convert any instance of 'ToEscapable' to a 'String' and output it to the terminal followed by a newline
 putEscLn :: (ToEscapable a) => a -> IO ()
 putEscLn = putStrLn . escToString
 
--- | Convert any instance of 'ToEscapable' to a 'String' and output it to the terminal follow by a newline
+-- | Convert any instance of 'ToEscapable' to a 'String' and output it to the terminal
 putEsc :: (ToEscapable a) => a -> IO ()
 putEsc = putStr . escToString

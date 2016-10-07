@@ -41,7 +41,9 @@ instance (ToEscapable a) => ToEscapable (Maybe a) where
     toEscapable a = FgRed $ show a
 @
 
-=== Comprehensive Documentation
+=== Notes
+
+See the documentation on 'ToEscapable' below for a more advanced example.
 
 See comprehensive documentation with many examples here:
 

@@ -321,15 +321,14 @@ instance ToEscapable (Either ErrorType String) where
     toEscapable (Left e) = toEscapable e
     toEscapable (Right m) = FgGreen m
 
-gotSyntaxError :: Either ErrorType String
-gotSyntaxError = Left $ SyntaxError "some/File.hs" 1 23
+mkSyntaxError :: FileName -> LineNumber -> ColumnNumber -> Either ErrorType String
+mkSyntaxError fn ln cn = Left $ SyntaxError fn ln cn
 
-gotMessage :: Either ErrorType String
-gotMessage = Right "Status OK"
+mkStatusOK :: Either ErrorType String
+mkStatusOK = Right "Status OK"
 
-putEscLn gotSyntaxError
-putStrLn ""
-putEscLn gotMessage
+putEscLn $ mkSyntaxError "some/File.hs" 1 23
+putEscLn mkStatusOK
 ```
 
 ![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/either_error.png)
