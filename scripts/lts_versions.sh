@@ -26,12 +26,8 @@ function run_test() {
     make_stack_yaml $1
     STACK_YAML="${STACK_YAML_NAME}"
     export STACK_YAML
-    stack clean
     stack setup
-    if [[ $OS != $MAC ]]
-    then
-        sed -i 's/-fno-PIE/-no-pie/g' ~/.stack/programs/x86_64-linux/ghc-nopie-*/lib/ghc-*/settings
-    fi
+    stack clean
     stack test
     local -r RES=$?
     rm "${STACK_YAML_NAME}"

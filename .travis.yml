@@ -19,7 +19,6 @@ script:
 - stack --version
 - bash scripts/lts_versions.sh
 - stack setup
-- sed -i 's/-fno-PIE/-no-pie/g' ~/.stack/programs/x86_64-linux/ghc-nopie-*/lib/ghc-*/settings
 - stack --no-terminal build --test --coverage
 - stack --no-terminal runhaskell scripts/VisualTest.hs
 
