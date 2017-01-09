@@ -13,29 +13,13 @@ before_install:
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-- export PATH=/opt/ghc/$GHCVER/bin:$PATH
-
-matrix:
-  include:
-  - env: GHCVER=7.10.3 STACK_YAML=stack.yaml
-    addons:
-      apt:
-        sources:
-        - hvr-ghc
-        packages:
-        - ghc-7.10.3
-  - env: GHCVER=8.0.1 STACK_YAML=stack-8.0.yaml
-    addons:
-      apt:
-        sources:
-        - hvr-ghc
-        packages:
-        - ghc-8.0.1
 
 script:
-  - stack --no-terminal --skip-ghc-check build --test --coverage
-  - stack --no-terminal --skip-ghc-check runhaskell scripts/VisualTest.hs
+- bash scripts/lts_versions.sh
+- stack setup
+- stack --no-terminal build --test --coverage
+- stack --no-terminal runhaskell scripts/VisualTest.hs
 
 after_script:
-  - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
-  - ./shc --partial-coverage --repo-token=${COVERALLS_TOKEN} escape-artist escape-artist-test
+- travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
+- ./shc --partial-coverage --repo-token=${COVERALLS_TOKEN} escape-artist escape-artist-test
