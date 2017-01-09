@@ -6,12 +6,17 @@ set -e
 trap "exit" INT
 
 function get_lts_versions() {
-    #echo \
-    #     2.{1..5} \
-    echo 3.{0..5} \
-         4.{0..2} \
-         5.{0..5} \
-         6.{0..5} | tr ' ' '\n'
+    (
+        if [[ $( uname ) != 'Darwin' ]]
+        then
+            echo 2.{0..5}
+        fi
+        echo 3.{0..5} \
+             4.{0..2} \
+             5.{0..5} \
+             6.{0..5} \
+             7.{0..5}
+    ) | tr ' ' '\n'
 }
 
 function run_test() {
