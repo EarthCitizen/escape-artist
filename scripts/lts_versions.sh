@@ -5,9 +5,12 @@ set -e
 
 trap "exit" INT
 
+readonly OS=$( uname )
+readonly MAC='Darwin'
+
 function get_lts_versions() {
     (
-        if [[ $( uname ) != 'Darwin' ]]
+        if [[ $OS != $MAC ]]
         then
             echo 2.{0..5}
         fi
@@ -25,6 +28,10 @@ function run_test() {
     export STACK_YAML
     stack clean
     stack setup
+    if [[ $OS != $MAC ]]
+    then
+        sed -i 's/-fno-PIE/-no-pie/g' ~/.stack/programs/x86_64-linux/ghc-nopie-*/lib/ghc-*/settings
+    fi
     stack test
     local -r RES=$?
     rm "${STACK_YAML_NAME}"
