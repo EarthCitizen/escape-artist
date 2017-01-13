@@ -13,9 +13,9 @@ before_install:
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-- export CONF_CC_OPTS_STAGE2=-fno-PIE
-- export CONF_GCC_LINKER_OPTS_STAGE2=-no-pie
-- export CONF_LD_LINKER_OPTS_STAGE2=-no-pie
+- git clone https://github.com/commercialhaskell/stack
+- (cd stack; stack install)
+- hash -r
 
 script:
 - uname -a
