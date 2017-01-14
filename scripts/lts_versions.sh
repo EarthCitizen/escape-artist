@@ -10,10 +10,10 @@ readonly MAC='Darwin'
 
 function get_lts_versions() {
     (
-        if [[ $OS != $MAC ]]
-        then
-            echo 2.{0..5}
-        fi
+        #if [[ $OS != $MAC ]]
+        #then
+        #    echo 2.{0..5}
+        #fi
         echo 3.{0..5} \
              4.{0..2} \
              5.{0..5} \
