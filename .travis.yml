@@ -16,12 +16,11 @@ addons:
     - ghc-8.0.1
     - cabal-install-1.24
 
-before_script:
+before_install:
 # Download and unpack the stack executable
 - mkdir -p ~/.local/bin
 - mkdir -p ~/.cabal/bin
 - export PATH=/opt/ghc/8.0.1/bin:/opt/cabal/1.24/bin:$HOME/.cabal/bin:$HOME/.local/bin:$PATH
-- ghc --version
 #- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 - git clone https://github.com/commercialhaskell/stack
 - cd stack
@@ -35,9 +34,9 @@ script:
 - uname -a
 - stack --version
 - bash scripts/lts_versions.sh
-- stack setup
-- stack --no-terminal build --test --coverage
-- stack --no-terminal runhaskell scripts/VisualTest.hs
+#- stack setup
+#- stack --no-terminal build --test --coverage
+#- stack --no-terminal runhaskell scripts/VisualTest.hs
 
 after_script:
 - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
