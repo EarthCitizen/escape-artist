@@ -10,6 +10,8 @@ cache:
 
 addons:
   apt:
+    sources:
+    - hvr-ghc
     packages:
     - ghc-8.0.1
     - cabal-install
