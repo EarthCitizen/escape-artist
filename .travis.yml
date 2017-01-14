@@ -17,11 +17,11 @@ addons:
     - cabal-install
 
 before_script:
-- ghc --version
 # Download and unpack the stack executable
 - mkdir -p ~/.local/bin
 - mkdir -p ~/.cabal/bin
-- export PATH=$HOME/.cabal/bin:$HOME/.local/bin:$PATH
+- export PATH=/opt/ghc/8.0.1/bin:$HOME/.cabal/bin:$HOME/.local/bin:$PATH
+- ghc --version
 #- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 - git clone https://github.com/commercialhaskell/stack
 - cd stack
