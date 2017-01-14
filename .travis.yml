@@ -8,9 +8,13 @@ cache:
   directories:
   - $HOME/.stack
 
+addons:
+  apt:
+    packages:
+    - ghc
+    - cabal-install
+
 before_install:
-- sudo apt-get install ghc
-- sudo apt-get install cabal-install
 # Download and unpack the stack executable
 - mkdir -p ~/.local/bin
 - mkdir -p ~/.cabal/bin
