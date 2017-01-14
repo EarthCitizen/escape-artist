@@ -14,7 +14,7 @@ addons:
     - hvr-ghc
     packages:
     - ghc-8.0.1
-    - cabal-install
+    - cabal-install-1.24
 
 before_script:
 # Download and unpack the stack executable
