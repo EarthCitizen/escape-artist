@@ -11,10 +11,11 @@ cache:
 addons:
   apt:
     packages:
-    - ghc
+    - ghc-8.0.1
     - cabal-install
 
 before_install:
+- ghc --version
 # Download and unpack the stack executable
 - mkdir -p ~/.local/bin
 - mkdir -p ~/.cabal/bin
