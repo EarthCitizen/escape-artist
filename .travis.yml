@@ -16,7 +16,7 @@ addons:
     - ghc-8.0.1
     - cabal-install
 
-before_install:
+before_script:
 - ghc --version
 # Download and unpack the stack executable
 - mkdir -p ~/.local/bin
