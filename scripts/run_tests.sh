@@ -122,7 +122,7 @@ case "$1" in
         ;;
     version)
         [[ $# -ne "2" ]] && usage
-        run_lts_tests_param
+        run_lts_tests_param "$2"
         ;;
     *)
         usage
