@@ -3,7 +3,7 @@
 import Data.Monoid ((<>))
 import Text.EscapeArtist
 import Data.List (intersperse)
-import Text.Regex
+-- import Text.Regex
 
 main = do
     putStrLn "Foreground Colors"

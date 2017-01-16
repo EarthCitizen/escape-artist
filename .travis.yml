@@ -7,6 +7,7 @@ language: c
 cache:
   directories:
   - $HOME/.stack
+  - $HOME/.stack_build
 
 addons:
   apt:
@@ -18,26 +19,19 @@ addons:
 
 before_install:
 # Download and unpack the stack executable
-- mkdir -p ~/.local/bin
-- mkdir -p ~/.cabal/bin
+- mkdir -p $HOME/.local/bin
+- mkdir -p $HOME/.cabal/bin
 - export PATH=/opt/ghc/8.0.1/bin:/opt/cabal/1.24/bin:$HOME/.cabal/bin:$HOME/.local/bin:$PATH
 #- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-- git clone https://github.com/commercialhaskell/stack
-- cd stack
-- cabal update
-- cabal install
-- cd ..
-- rm -rf stack
+- bash scripts/install_stack.sh
 - hash -r
 
 script:
 - uname -a
+- echo 'Stack location:' $( which stack )
 - stack --version
-- bash scripts/lts_versions.sh
-#- stack setup
-#- stack --no-terminal build --test --coverage
-#- stack --no-terminal runhaskell scripts/VisualTest.hs
+- bash scripts/run_tests.sh
 
 after_script:
-- travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
-- ./shc --partial-coverage --repo-token=${COVERALLS_TOKEN} escape-artist escape-artist-test
+- travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-8.0.1.tar.bz2 | tar -xj
+- ./shc --partial-coverage --repo-token=${COVERALLS_TOKEN} escape-artist escape-artist-spec-test

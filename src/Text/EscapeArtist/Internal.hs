@@ -2,6 +2,10 @@
 
 module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (^$)) where
 
+#if ! MIN_VERSION_base(4,8,0)
+    import Data.Monoid (Monoid, mappend, mconcat, mempty)
+#endif
+
 import Control.Applicative ((<|>))
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
