@@ -2,11 +2,11 @@ set -x
 
 STACK_GIT_LOC="$HOME/.stack_build"
 
-if which stack && [[ $( stack --version ) == 'Version 1.3.3 '* ]]
+if which stack && [[ $( stack --version | head -1 ) == 'Version 1.3.3'* ]]
 then
     echo 'Found stack already installed:'
     echo $( which stack )
-    stack --version
+    stack --version | head -1
     exit 0
 fi
 
@@ -28,4 +28,4 @@ hash -r
 
 echo 'Installed stack:'
 echo $( which stack )
-stack --version
+stack --version | head -1
