@@ -10,15 +10,16 @@ then
     exit 0
 fi
 
-if [[ -d "$STACK_GIT_LOC" ]]
+mkdir -p "$STACK_GIT_LOC"
+cd "$STACK_GIT_LOC"
+
+if [[ -e '.git' ]]
 then
-    cd "$STACK_GIT_LOC"
     git pull
     cabal update
     cabal install
 else
-    git clone https://github.com/commercialhaskell/stack "$STACK_GIT_LOC"
-    cd "$STACK_GIT_LOC"
+    git clone https://github.com/commercialhaskell/stack .
     cabal update
     cabal install
 fi
