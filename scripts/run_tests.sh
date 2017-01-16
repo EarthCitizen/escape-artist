@@ -3,12 +3,30 @@ readonly STACK_YAML_NAME='tmp_stack.yaml'
 # set -x
 set -e
 
-trap "exit" INT
+function exit_clean() {
+    echo 'exit clean'
+    rm -f "$STACK_YAML_NAME"
+    exit 1
+}
+
+trap 'exit_clean' INT
 
 readonly OS=$( uname )
 readonly MAC='Darwin'
 
-function get_lts_versions() {
+
+function usage() {
+    echo 'Usage:'
+    echo
+    echo "$( basename $0 ) <all | default | version <range>>"
+    exit 1
+}
+
+function get_lts_versions_param() {
+    ( eval echo "$VERSION_PARAM" ) | tr ' ' '\n'
+}
+
+function get_lts_versions_all() {
     (
         if [[ $OS != $MAC ]]
         then
@@ -49,12 +67,31 @@ function run_lts_test() {
     return $RES
 }
 
-function run_default_test() {
+function run_tests_default() {
     print_test_header "(stack.yaml)"
     unset STACK_YAML
     stack --no-terminal setup > /dev/null
     stack --no-terminal clean > /dev/null
     stack --no-terminal build --test --coverage
+    if [[ $OS != $MAC ]]
+    then
+        travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-8.0.1.tar.bz2 | tar -xj
+        ./shc --partial-coverage --repo-token=${COVERALLS_TOKEN} escape-artist escape-artist-spec-test
+    fi
+}
+
+function run_lts_tests_all() {
+    for version in $( get_lts_versions_all )
+    do
+        run_lts_test $version
+    done
+}
+
+function run_lts_tests_param() {
+    for version in $( get_lts_versions_param "$1" )
+    do
+        run_lts_test $version
+    done
 }
 
 function make_tmp_lts_stack_yaml() {
@@ -74,9 +111,20 @@ extra-deps:
 " > "$STACK_YAML_NAME"
 }
 
-for version in $( get_lts_versions )
-do
-    run_lts_test $version
-done
-
-run_default_test
+case "$1" in
+    all)
+        [[ $# -ne "1" ]] && usage
+        run_lts_tests_all
+        ;;
+    default)
+        [[ $# -ne "1" ]] && usage
+        run_tests_default
+        ;;
+    version)
+        [[ $# -ne "2" ]] && usage
+        run_lts_tests_param
+        ;;
+    *)
+        usage
+        ;;
+esac
