@@ -1,3 +1,5 @@
+set -x
+
 STACK_GIT_LOC="$HOME/.stack_build"
 
 if which stack && [[ $( stack --version ) == 'Version 1.3.3 '* ]]
