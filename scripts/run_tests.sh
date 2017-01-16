@@ -73,10 +73,10 @@ function run_tests_default() {
     stack --no-terminal setup > /dev/null
     stack --no-terminal clean > /dev/null
     stack --no-terminal build --test --coverage
-    if [[ $OS != $MAC ]]
+    if [[ ! -z "$COVERALLS_TOKEN" ]]
     then
         curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-8.0.1.tar.bz2 | tar -xj
-        ./shc --partial-coverage --repo-token=${COVERALLS_TOKEN} escape-artist escape-artist-spec-test
+        ./shc --partial-coverage "--repo-token=${COVERALLS_TOKEN}" escape-artist escape-artist-spec-test
     fi
 }
 
