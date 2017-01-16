@@ -16,6 +16,7 @@ import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy.Char8 as BSLC
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
+import Data.Typeable (Typeable)
 import Data.Word
 import Text.EscapeArtist.Internal
 import Text.EscapeArtist.Internal.Constants
@@ -120,6 +121,10 @@ atomTestCases = [TestCaseVE (Atom v) e | (v, e) <- stringValueExp]
 -- Other types of ToEscapable tests
 
 data SomeToEscapable = A deriving (Show)
+
+#if ! MIN_VERSION_base(4,8,0)
+deriving instance Typeable SomeToEscapable
+#endif
 
 instance ToEscapable SomeToEscapable where
     toEscapable (A) = FgRed $ "A"
