@@ -23,7 +23,7 @@ function usage() {
 }
 
 function get_lts_versions_param() {
-    ( eval echo "$VERSION_PARAM" ) | tr ' ' '\n'
+    ( eval echo "$1" ) | tr ' ' '\n'
 }
 
 function get_lts_versions_all() {
