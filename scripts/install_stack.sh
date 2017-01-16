@@ -21,6 +21,8 @@ else
     cabal install
 fi
 
+hash -r
+
 echo 'Installed stack:'
 echo $( which stack )
 stack --version
