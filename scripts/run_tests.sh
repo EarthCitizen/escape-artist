@@ -1,6 +1,6 @@
 readonly STACK_YAML_NAME='tmp_stack.yaml'
 
-set -x
+# set -x
 set -e
 
 function exit_clean() {
