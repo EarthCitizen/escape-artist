@@ -18,12 +18,12 @@ readonly MAC='Darwin'
 function usage() {
     echo 'Usage:'
     echo
-    echo "$( basename $0 ) <all | default | version <range>>"
+    echo "$( basename $0 ) <all | default | range <major> <minor_from> <minor_to>>"
     exit 1
 }
 
-function get_lts_versions_param() {
-    ( eval "echo $1" ) | tr ' ' '\n'
+function get_lts_versions_range() {
+    ( eval echo "$1.{$2..$3}" ) | tr ' ' '\n'
 }
 
 function get_lts_versions_all() {
@@ -80,15 +80,8 @@ function run_tests_default() {
     fi
 }
 
-function run_lts_tests_all() {
-    for version in $( get_lts_versions_all )
-    do
-        run_lts_test $version
-    done
-}
-
-function run_lts_tests_param() {
-    for version in $( get_lts_versions_param "$1" )
+function run_lts_tests() {
+    for version in $@
     do
         run_lts_test $version
     done
@@ -114,15 +107,15 @@ extra-deps:
 case "$1" in
     all)
         [[ $# -ne "1" ]] && usage
-        run_lts_tests_all
+        run_lts_tests $( get_lts_versions_all )
         ;;
     default)
         [[ $# -ne "1" ]] && usage
         run_tests_default
         ;;
-    version)
-        [[ $# -ne "2" ]] && usage
-        run_lts_tests_param "$2"
+    range)
+        [[ $# -ne "4" ]] && usage
+        run_lts_tests $( get_lts_versions_range "$2" "$3" "$4" )
         ;;
     *)
         usage
