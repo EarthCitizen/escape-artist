@@ -2,7 +2,7 @@ name:                escape-artist
 version:             1.1.0
 synopsis:            ANSI Escape Sequence Text Decoration Made Easy
 description:
-    A library for text decoration with ANSI escape sequences made easy. Decorate your terminal text easily and expressively.
+    A library for text decoration with ANSI escape sequences made easy. Decorate your terminal text expressively.
     Any complex data type, existing or custom, can be simply colorized by implementing the class 'ToEscapable', then
     output to terminal or converted to 'String' using the provided functions.
     .
@@ -35,6 +35,9 @@ description:
     &#x20;    toEscapable (Just a) = FgGreen \"Just\" \<\> Inherit \" \" \<\> FgYellow a
     &#x20;    toEscapable a = FgRed $ show a
     @
+    .
+    NOTE: For GHC < 7.10 you will also need to explicitly derive 'Typeable' for custom data types
+    implementing 'ToEscapable'. See the section Explicitly Derived Typeable in the documentation.
     .
     Comprehensive Documentation
     .

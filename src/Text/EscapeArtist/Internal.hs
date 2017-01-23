@@ -230,6 +230,10 @@ putEscLn $ mkSyntaxError "some/File.hs" 1 23
 putEscLn mkStatusOK
 @
 
+/Note:/ For GHC < 7.10 you will also need to explicitly derive 'Data.Typeable.Typeable' for custom data types
+implementing 'ToEscapable'. See the section __/Explicitly Derived Typeable/__ in the
+<https://github.com/EarthCitizen/escape-artist#explicitly-derived-typeable documentation>.
+
 <<https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/either_error.png>>
 -}
 class (Show a, Typeable a) => ToEscapable a where

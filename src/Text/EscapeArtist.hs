@@ -7,7 +7,7 @@ Maintainer  : rd.github@gmail.com
 Stability   : stable
 Portability : Terminal supporting ANSI escape sequences
 
-A library for text decoration with ANSI escape sequences made easy. Decorate your terminal text easily and expressively.
+A library for text decoration with ANSI escape sequences made easy. Decorate your terminal text expressively.
 Any complex data type, existing or custom, can be simply colorized by implementing the class 'ToEscapable', then
 output to terminal or converted to 'String' using the provided functions.
 
@@ -45,7 +45,11 @@ instance (ToEscapable a) => ToEscapable (Maybe a) where
 
 See the documentation on 'ToEscapable' below for a more advanced example.
 
-See comprehensive documentation with many examples here:
+For GHC < 7.10 you will also need to explicitly derive 'Data.Typeable.Typeable' for custom data types
+implementing 'ToEscapable'. See the section __/Explicitly Derived Typeable/__ in the
+<https://github.com/EarthCitizen/escape-artist#explicitly-derived-typeable documentation>.
+
+Comprehensive documentation with many examples here:
 
 <https://github.com/EarthCitizen/escape-artist#readme>
 -}

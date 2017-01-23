@@ -90,6 +90,8 @@ putEscLn $ Just 15
 putEscLn (Nothing :: Maybe Int)
 ```
 
+*NOTE:* For GHC < 7.10 you will also need to explicitly derive `Typeable` for custom data types implementing `ToEscapable`. See the section [Explicitly Derived `Typeable`] (#explicitly-derived-typeable).
+
 ![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/abc_maybe.png)
 
 When constructors are combined with the application operator (`$`), the effects accumulate and wrap around the applied value:
@@ -331,4 +333,30 @@ putEscLn $ mkSyntaxError "some/File.hs" 1 23
 putEscLn mkStatusOK
 ```
 
+*NOTE:* For GHC < 7.10 you will also need to explicitly derive `Typeable` for custom data types implementing `ToEscapable`. See the section [Explicitly Derived `Typeable`] (#explicitly-derived-typeable).
+
 ![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/either_error.png)
+
+### Explicitly Derived `Typeable`
+
+`Typeable` must be explicitly derived for GHC < 7.10. This can be done as part of the data type declaration:
+
+```haskell
+{-# LANGUAGE DeriveDataTypeable #-}
+
+data ABC = A | B deriving (Show, Eq, Typeable)
+```
+
+Or to more easily allow conditional compilation, use stand-alone deriving:
+
+```haskell
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE StandaloneDeriving #-}
+
+data ABC = A | B deriving (Show, Eq)
+
+#if ! MIN_VERSION_base(4,8,0)
+deriving instance Typeable ABC
+#endif
+```
