@@ -1,19 +1,18 @@
-readonly STACK_YAML_NAME='tmp_stack.yaml'
+readonly SCRIPTROOT=$( cd $( dirname $0 ); pwd )
+readonly PROJROOT=$( cd $SCRIPTROOT/..; pwd )
+readonly VAR_STACK_YAML="$PROJROOT/stack-ghc-7.8.4.yaml"
 
 # set -x
 set -e
 
-function exit_clean() {
-    echo 'exit clean'
-    rm -f "$STACK_YAML_NAME"
+function exit_int() {
     exit 1
 }
 
-trap 'exit_clean' INT
+trap 'exit_int' INT
 
 readonly OS=$( uname )
 readonly MAC='Darwin'
-
 
 function usage() {
     echo 'Usage:'
@@ -41,30 +40,25 @@ function get_lts_versions_all() {
 }
 
 function print_test_header() {
-    local -r LTS_VERSION="$1"
     echo
     echo
     echo '============================================='
     echo
-    echo "     Running Test for LTS ${LTS_VERSION}"
+    echo "     Running Test for LTS $1"
     echo
     echo '============================================='
     echo
     echo
 }
 
-function run_lts_test() {
-    local -r LTS_VERSION="$1"
-    print_test_header "$LTS_VERSION"
-    make_tmp_lts_stack_yaml "$LTS_VERSION"
-    STACK_YAML="$STACK_YAML_NAME"
+function run_test_lts() {
+    local -r LTS_VERSION="lts-$1"
+    print_test_header "$1"
+    STACK_YAML="$VAR_STACK_YAML"
     export STACK_YAML
-    stack --no-terminal setup > /dev/null
-    stack --no-terminal clean > /dev/null
-    stack --no-terminal build --test
-    local -r RES=$?
-    rm "$STACK_YAML_NAME"
-    return $RES
+    stack --no-terminal --resolver "$LTS_VERSION" setup > /dev/null
+    stack --no-terminal --resolver "$LTS_VERSION" clean > /dev/null
+    stack --no-terminal --resolver "$LTS_VERSION" build --test
 }
 
 function run_tests_default() {
@@ -76,38 +70,21 @@ function run_tests_default() {
     if [[ ! -z "$COVERALLS_TOKEN" ]]
     then
         curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-8.0.1.tar.bz2 | tar -xj
-        ./shc --partial-coverage "--repo-token=${COVERALLS_TOKEN}" escape-artist escape-artist-spec-test
+        ./shc --partial-coverage "--repo-token=$COVERALLS_TOKEN" escape-artist escape-artist-spec-test
     fi
 }
 
-function run_lts_tests() {
+function run_tests_lts() {
     for version in $@
     do
-        run_lts_test $version
+        run_test_lts $version
     done
-}
-
-function make_tmp_lts_stack_yaml() {
-local -r LTS_VERSION="$1"
-printf "
-resolver: lts-${LTS_VERSION}
-packages:
-- '.'
-extra-deps:
-- hspec-2.2.4
-- QuickCheck-2.9.2
-- silently-1.2.5
-- hspec-expectations-0.7.2
-- hspec-core-2.2.4
-- hspec-discover-2.2.4
-- quickcheck-io-0.1.4
-" > "$STACK_YAML_NAME"
 }
 
 case "$1" in
     all)
         [[ $# -ne "1" ]] && usage
-        run_lts_tests $( get_lts_versions_all )
+        run_tests_lts $( get_lts_versions_all )
         ;;
     default)
         [[ $# -ne "1" ]] && usage
@@ -115,7 +92,7 @@ case "$1" in
         ;;
     range)
         [[ $# -ne "4" ]] && usage
-        run_lts_tests $( get_lts_versions_range "$2" "$3" "$4" )
+        run_tests_lts $( get_lts_versions_range "$2" "$3" "$4" )
         ;;
     *)
         usage
