@@ -115,7 +115,7 @@ instance Show Escapable where
     show (Sum       a) = "Sum "  ++ show a
     show (Atom      a) = "Atom " ++ show a
 
-tryCast :: forall a b. (Show b, Typeable a, Typeable b) => a -> (b -> String) -> Maybe String
+tryCast :: forall a b. (Typeable a, Typeable b) => a -> (b -> String) -> Maybe String
 tryCast a f = case cast a of
                 (Just s) -> Just $ f s
                 _ -> Nothing
