@@ -1,4 +1,5 @@
 set -x
+set -e
 
 STACK_GIT_LOC="$HOME/.stack_build"
 
