@@ -23,7 +23,7 @@ stack build
 
 ### Using
 
-The data type used to perform text decoration is `Escapable`. This defines the constructors for the decoration. Each constructor takes a single argument which can be any type which has implemented the class `ToEscapable`. This means that all of the following are perfectly valid:
+The data type used to perform text decoration is `Escapable`. This defines the constructors for the decoration. Each constructor takes a single argument. It can be any type that has implemented the `ToEscapable` class. This means that all of the following are perfectly valid:
 
 ```haskell
 {-# LANGUAGE ExtendedDefaultRules #-}
@@ -90,7 +90,7 @@ putEscLn $ Just 15
 putEscLn (Nothing :: Maybe Int)
 ```
 
-*NOTE:* For GHC < 7.10 you will also need to explicitly derive `Typeable` for custom data types implementing `ToEscapable`. See the section [Explicitly Derived `Typeable`] (#explicitly-derived-typeable).
+**NOTE**: _For **G**lasgow **H**askell **C**ompiler (GHC) < 7.10 you will also need to explicitly derive `Typeable` for custom data types implementing `ToEscapable`. See the section [Explicitly Derived `Typeable`] (#explicitly-derived-typeable)._
 
 ![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/abc_maybe.png)
 
@@ -114,7 +114,7 @@ would be equivalent to the following in XML:
 </red>
 ```
 
-*NOTE:* This library does not produce nor interact with XML. This example is just for the purpose of explanation.
+**NOTE**: _This library does not produce nor interact with XML. This example is just for the purpose of explanation_.
 
 `Escapable` is an instance of `Monoid`, so a series of `Escapable`s can be appended together into a single value:
 
@@ -153,7 +153,7 @@ XML equivalent:
     <white>6</white>
 </underline>
 ```
-*NOTE:* The `Underline` is re-applied to each member of the series, and not once for all of them.
+**NOTE**: _The `Underline` is re-applied to each member of the series, and not once for all of them_.
 
 ## Constructors
 
@@ -169,26 +169,26 @@ XML equivalent:
 
 Name           | Effect on Applied Value
 -------------- | -----------------------
-`FgDefault`    | Default foreground color of the terminal
-`BgDefault`    | Default background color of the terminal
+`FgDefault`    | Default foreground color of the terminal.
+`BgDefault`    | Default background color of the terminal.
 `Inherit`      | Applies attributes of parent constructors. Useful for a value interspersed in a series with other `Escapable`s. See examples below.
-`Default`      | Even when other constructors are applied, the contained value will have the default attributes of the terminal
-`Blink`        | Output blinks in terminal
-`BlinkOff`     | NOT to end a blinking series, but rather to nest a non-blinking segment inside a series of blinking outputs
-`Bright`       | Enables bright output for foreground colors
-`BrightOff`    | NOT to end a bright series, but rather to nest a non-bright segment inside a series of bright outputs
-`Underline`    | Underlines the output
-`UnderlineOff` | NOT to end an underlined series, but rather to nest a non-underlined segment inside a series of underlined outputs
-`Inverse`      | Switches the foreground and background colors
-`InverseOff`   | NOT to end an inverse series, but rather to nest a non-inverse segment inside a series of inverse outputs
+`Default`      | Even when other constructors are applied, the contained value will have the default attributes of the terminal.
+`Blink`        | Output blinks in terminal.
+`BlinkOff`     | NOT to end a blinking series, but rather to nest a non-blinking segment inside a series of blinking outputs.
+`Bright`       | Enables bright output for foreground colors.
+`BrightOff`    | NOT to end a bright series, but rather to nest a non-bright segment inside a series of bright outputs.
+`Underline`    | Underlines the output.
+`UnderlineOff` | NOT to end an underlined series, but rather to nest a non-underlined segment inside a series of underlined outputs.
+`Inverse`      | Switches the foreground and background colors.
+`InverseOff`   | NOT to end an inverse series, but rather to nest a non-inverse segment inside a series of inverse outputs.
 
 ## Functions
 
 Name          | Description
 ------------- | -----------
-`escToString` | Renders anything implementing `ToEscapable` to a `String`
-`putEsc`      | Renders anything implementing `ToEscapable` to a `String`, then writes it to standard out
-`putEscLn`    | Renders anything implementing `ToEscapable` to a `String`, then writes it to standard out followed by a newline
+`escToString` | Renders anything implementing `ToEscapable` to a `String`.
+`putEsc`      | Renders anything implementing `ToEscapable` to a `String`, then writes it to standard out.
+`putEscLn`    | Renders anything implementing `ToEscapable` to a `String`, then writes it to standard out followed by a newline.
 
 ## Operators
 
@@ -333,7 +333,7 @@ putEscLn $ mkSyntaxError "some/File.hs" 1 23
 putEscLn mkStatusOK
 ```
 
-*NOTE:* For GHC < 7.10 you will also need to explicitly derive `Typeable` for custom data types implementing `ToEscapable`. See the section [Explicitly Derived `Typeable`] (#explicitly-derived-typeable).
+**NOTE**: _For GHC < 7.10 you will also need to explicitly derive `Typeable` for custom data types implementing `ToEscapable`. See the section [Explicitly Derived `Typeable`] (#explicitly-derived-typeable)_.
 
 ![](https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/either_error.png)
 
