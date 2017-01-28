@@ -17,13 +17,13 @@ cd "$STACK_GIT_LOC"
 if [[ -e '.git' ]]
 then
     git pull
-    cabal update
-    cabal install
 else
     git clone https://github.com/commercialhaskell/stack .
-    cabal update
-    cabal install
 fi
+
+cabal update
+cabal new-build
+cabal install
 
 hash -r
 
