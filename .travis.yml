@@ -12,13 +12,13 @@ cache:
     - $HOME/.stack
     - $HOME/.stack_build
 
-addons:
-    apt:
-        sources:
-        - hvr-ghc
-        packages:
-        - ghc-8.0.1
-        - cabal-install-1.24
+#addons:
+#    apt:
+#        sources:
+#        - hvr-ghc
+#        packages:
+#        - ghc-8.0.1
+#        - cabal-install-1.24
 
 env:
 # 2.x
