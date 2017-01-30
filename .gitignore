@@ -5,4 +5,4 @@ dist
 *.prof
 *.tix
 scripts/make_eq.sh
-docker/ghc-7.8.4/.project-copy
+.project-copy
