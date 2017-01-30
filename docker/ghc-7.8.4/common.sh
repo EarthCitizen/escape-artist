@@ -1,6 +1,6 @@
 readonly PROJROOT=$( cd $DOCKERROOT/../..; pwd )
 readonly PROJCOPY="$DOCKERROOT/.project-copy"
-readonly IMAGENAMEVER='rdgithub/stack-1.3.3:20170130'
+readonly IMAGENAMEVER='ghc-7.8.4'
 
 function make_project_copy() {
     echo PROJROOT=$PROJROOT
@@ -14,13 +14,13 @@ function make_project_copy() {
 
     rm -rf "$PROJCOPY"/*
 
-    cp -R "$PROJROOT/src"       \
-          "$PROJROOT/scripts"   \
-          "$PROJROOT/test"      \
-          "$PROJROOT/LICENSE"   \
+    cp -R "$PROJROOT/examples" \
+          "$PROJROOT/src"      \
+          "$PROJROOT/scripts"  \
+          "$PROJROOT/test"     \
+          "$PROJROOT/LICENSE"  \
           "$PROJROOT/escape-artist.cabal"  \
           "$PROJCOPY"
 
-    cp "$PROJROOT/stack-ghc-7.8.4.yaml" "$PROJCOPY/stack-ghc-7.8.4.yaml"
     cp "$PROJROOT/stack-ghc-7.8.4.yaml" "$PROJCOPY/stack.yaml"
 }

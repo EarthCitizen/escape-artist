@@ -4,8 +4,6 @@ ENV HOME=/root
 
 ENV PATH=$HOME/.cabal/bin:$HOME/.local/bin:$PATH
 
-# RUN apt-get -y install software-properties-common
-
 COPY stack-setup /stack-setup
 
 COPY .project-copy/ /stack-setup/

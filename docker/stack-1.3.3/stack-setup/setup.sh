@@ -1,3 +1,5 @@
+set -e
+
 readonly SETUPROOT=$( cd $( dirname $0 ); pwd )
 
 function get_dependencies() {

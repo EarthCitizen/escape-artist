@@ -1,5 +1,9 @@
+set -e
+
 readonly DOCKERROOT=$( cd $( dirname $0 ); pwd )
 
-. "$DOCKERROOT/setup.sh"
+. "$DOCKERROOT/common.sh"
 
-docker build -t ghc-7.8.4 "$DOCKERROOT"
+make_project_copy
+
+docker build -t "$IMAGENAMEVER" "$DOCKERROOT"

@@ -1,5 +1,9 @@
+set -e
+
 readonly DOCKERROOT=$( cd $( dirname $0 ); pwd )
 
-. "$DOCKERROOT/setup.sh"
+. "$DOCKERROOT/common.sh"
 
-docker run -i -t -v "$PROJCOPY:/escape-artist" ghc-7.8.4
+make_project_copy
+
+docker run -it -v "$PROJCOPY:/escape-artist" "$IMAGENAMEVER"
