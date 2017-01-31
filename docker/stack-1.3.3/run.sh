@@ -6,4 +6,4 @@ readonly DOCKERROOT=$( cd $( dirname $0 ); pwd )
 
 make_project_copy
 
-docker run -it -v "$PROJCOPY:/escape-artist" "$IMAGENAMEVER"
+docker run -t -v "$PROJCOPY:/work" --entrypoint /bin/bash "$IMAGENAMEVER" scripts/run_tests.sh all

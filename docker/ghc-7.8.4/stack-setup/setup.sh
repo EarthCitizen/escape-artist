@@ -1,3 +1,5 @@
+set -e
+
 readonly SETUPROOT=$( cd $( dirname $0 ); pwd )
 readonly STACK_YAML="$SETUPROOT/stack.yaml"
 

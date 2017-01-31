@@ -1,9 +1,10 @@
+# set -x
+set -e
+
 readonly SCRIPTROOT=$( cd $( dirname $0 ); pwd )
 readonly PROJROOT=$( cd $SCRIPTROOT/..; pwd )
 readonly VAR_STACK_YAML="$PROJROOT/stack-ghc-7.8.4.yaml"
-
-# set -x
-set -e
+readonly STACK_OPTS='--allow-different-user --no-terminal'
 
 function exit_int() {
     exit 1
@@ -56,17 +57,17 @@ function run_test_lts() {
     print_test_header "$1"
     STACK_YAML="$VAR_STACK_YAML"
     export STACK_YAML
-    stack --no-terminal --resolver "$LTS_VERSION" setup > /dev/null
-    stack --no-terminal --resolver "$LTS_VERSION" clean > /dev/null
-    stack --no-terminal --resolver "$LTS_VERSION" build --test
+    stack $STACK_OPTS --resolver "$LTS_VERSION" setup > /dev/null
+    stack $STACK_OPTS --resolver "$LTS_VERSION" clean > /dev/null
+    stack $STACK_OPTS --resolver "$LTS_VERSION" build --test
 }
 
 function run_tests_default() {
     print_test_header "(stack.yaml)"
     unset STACK_YAML
-    stack --no-terminal setup > /dev/null
-    stack --no-terminal clean > /dev/null
-    stack --no-terminal build --test --coverage
+    stack $STACK_OPTS setup > /dev/null
+    stack $STACK_OPTS clean > /dev/null
+    stack $STACK_OPTS build --test --coverage
     if [[ ! -z "$COVERALLS_TOKEN" ]]
     then
         curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-8.0.1.tar.bz2 | tar -xj
