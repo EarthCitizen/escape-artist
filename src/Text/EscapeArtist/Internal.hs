@@ -141,14 +141,14 @@ toCompStr a = case options of
                   <|> tryTL a
 
 instance Eq Escapable where
-    (FgBlack     a) == (FgBlack   b) = toCompStr a == toCompStr b
-    (FgRed       a) == (FgRed     b) = toCompStr a == toCompStr b
-    (FgGreen     a) == (FgGreen   b) = toCompStr a == toCompStr b
-    (FgYellow    a) == (FgYellow  b) = toCompStr a == toCompStr b
-    (FgBlue      a) == (FgBlue    b) = toCompStr a == toCompStr b
-    (FgMagenta   a) == (FgMagenta b) = toCompStr a == toCompStr b
-    (FgCyan      a) == (FgCyan    b) = toCompStr a == toCompStr b
-    (FgWhite     a) == (FgWhite   b) = toCompStr a == toCompStr b
+    (FgBlack   a) == (FgBlack   b) = toCompStr a == toCompStr b
+    (FgRed     a) == (FgRed     b) = toCompStr a == toCompStr b
+    (FgGreen   a) == (FgGreen   b) = toCompStr a == toCompStr b
+    (FgYellow  a) == (FgYellow  b) = toCompStr a == toCompStr b
+    (FgBlue    a) == (FgBlue    b) = toCompStr a == toCompStr b
+    (FgMagenta a) == (FgMagenta b) = toCompStr a == toCompStr b
+    (FgCyan    a) == (FgCyan    b) = toCompStr a == toCompStr b
+    (FgWhite   a) == (FgWhite   b) = toCompStr a == toCompStr b
 
     (BgBlack   a) == (BgBlack   b) = toCompStr a == toCompStr b
     (BgRed     a) == (BgRed     b) = toCompStr a == toCompStr b
