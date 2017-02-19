@@ -120,7 +120,7 @@ atomTestCases = [TestCaseVE (Atom v) e | (v, e) <- stringValueExp]
 
 -- Other types of ToEscapable tests
 
-data SomeToEscapable = A deriving (Show)
+data SomeToEscapable = A deriving (Eq, Show)
 
 #if ! MIN_VERSION_base(4,8,0)
 deriving instance Typeable SomeToEscapable
@@ -246,7 +246,7 @@ eqTestCases = fnConsSameValSame 'Z'
             ++ fnConsSameValSame 6
             -- This case hadles different values which are the
             -- same when strings
-            ++ zip (fnCVRep (3.5 :: Float)) (fnCVRep (3.5 :: Double))
+            ++ zip (fnCVRep (3.5 :: Float)) (fnCVRep (3.5 :: Float))
             ++ [(Atom "6", Atom "6")]
             ++ [(Sum [FgRed 6], Sum [FgRed 6])]
 

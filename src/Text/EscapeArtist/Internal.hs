@@ -6,7 +6,6 @@ module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, put
 import Data.Monoid (Monoid, mappend, mconcat, mempty)
 #endif
 
-import Control.Applicative ((<|>))
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy as BSL
@@ -115,66 +114,46 @@ instance Show Escapable where
     show (Sum       a) = "Sum "  ++ show a
     show (Atom      a) = "Atom " ++ show a
 
-tryCast :: forall a b. (Typeable a, Typeable b) => a -> (b -> String) -> Maybe String
-tryCast a f = case cast a of
-                (Just s) -> Just $ f s
-                _ -> Nothing
-
-tryString, tryChar, tryBS, tryBSL, tryT, tryTL :: Typeable a => a -> Maybe String
-
-tryString a = tryCast a id
-tryChar   a = tryCast a (\b -> [b :: Char]  )
-tryBS     a = tryCast a (\b -> BSC.unpack  b)
-tryBSL    a = tryCast a (\b -> BSLC.unpack b)
-tryT      a = tryCast a (\b -> T.unpack    b)
-tryTL     a = tryCast a (\b -> TL.unpack   b)
-
-toCompStr :: forall a. (Show a, Typeable a) => a -> String
-toCompStr a = case options of
-                (Just s) -> s
-                _ -> show a
-    where options = tryString a
-                  <|> tryChar a
-                  <|> tryBS a
-                  <|> tryBSL a
-                  <|> tryT a
-                  <|> tryTL a
+extEq :: forall a b. (Eq a, Eq b, Typeable a, Typeable b) => a -> b -> Bool
+extEq x y = case cast x of
+    Nothing -> False
+    Just x' -> x' == y
 
 instance Eq Escapable where
-    (FgBlack   a) == (FgBlack   b) = toCompStr a == toCompStr b
-    (FgRed     a) == (FgRed     b) = toCompStr a == toCompStr b
-    (FgGreen   a) == (FgGreen   b) = toCompStr a == toCompStr b
-    (FgYellow  a) == (FgYellow  b) = toCompStr a == toCompStr b
-    (FgBlue    a) == (FgBlue    b) = toCompStr a == toCompStr b
-    (FgMagenta a) == (FgMagenta b) = toCompStr a == toCompStr b
-    (FgCyan    a) == (FgCyan    b) = toCompStr a == toCompStr b
-    (FgWhite   a) == (FgWhite   b) = toCompStr a == toCompStr b
+    (FgBlack   a) == (FgBlack   b) = extEq a b
+    (FgRed     a) == (FgRed     b) = extEq a b
+    (FgGreen   a) == (FgGreen   b) = extEq a b
+    (FgYellow  a) == (FgYellow  b) = extEq a b
+    (FgBlue    a) == (FgBlue    b) = extEq a b
+    (FgMagenta a) == (FgMagenta b) = extEq a b
+    (FgCyan    a) == (FgCyan    b) = extEq a b
+    (FgWhite   a) == (FgWhite   b) = extEq a b
 
-    (BgBlack   a) == (BgBlack   b) = toCompStr a == toCompStr b
-    (BgRed     a) == (BgRed     b) = toCompStr a == toCompStr b
-    (BgGreen   a) == (BgGreen   b) = toCompStr a == toCompStr b
-    (BgYellow  a) == (BgYellow  b) = toCompStr a == toCompStr b
-    (BgBlue    a) == (BgBlue    b) = toCompStr a == toCompStr b
-    (BgMagenta a) == (BgMagenta b) = toCompStr a == toCompStr b
-    (BgCyan    a) == (BgCyan    b) = toCompStr a == toCompStr b
-    (BgWhite   a) == (BgWhite   b) = toCompStr a == toCompStr b
+    (BgBlack   a) == (BgBlack   b) = extEq a b
+    (BgRed     a) == (BgRed     b) = extEq a b
+    (BgGreen   a) == (BgGreen   b) = extEq a b
+    (BgYellow  a) == (BgYellow  b) = extEq a b
+    (BgBlue    a) == (BgBlue    b) = extEq a b
+    (BgMagenta a) == (BgMagenta b) = extEq a b
+    (BgCyan    a) == (BgCyan    b) = extEq a b
+    (BgWhite   a) == (BgWhite   b) = extEq a b
 
-    (FgDefault a) == (FgDefault b) = toCompStr a == toCompStr b
-    (BgDefault a) == (BgDefault b) = toCompStr a == toCompStr b
-    (Inherit   a) == (Inherit   b) = toCompStr a == toCompStr b
-    (Default   a) == (Default   b) = toCompStr a == toCompStr b
+    (FgDefault a) == (FgDefault b) = extEq a b
+    (BgDefault a) == (BgDefault b) = extEq a b
+    (Inherit   a) == (Inherit   b) = extEq a b
+    (Default   a) == (Default   b) = extEq a b
 
-    (Blink        a) == (Blink        b) = toCompStr a == toCompStr b
-    (BlinkOff     a) == (BlinkOff     b) = toCompStr a == toCompStr b
-    (Bright       a) == (Bright       b) = toCompStr a == toCompStr b
-    (BrightOff    a) == (BrightOff    b) = toCompStr a == toCompStr b
-    (Underline    a) == (Underline    b) = toCompStr a == toCompStr b
-    (UnderlineOff a) == (UnderlineOff b) = toCompStr a == toCompStr b
-    (Inverse      a) == (Inverse      b) = toCompStr a == toCompStr b
-    (InverseOff   a) == (InverseOff   b) = toCompStr a == toCompStr b
+    (Blink        a) == (Blink        b) = extEq a b
+    (BlinkOff     a) == (BlinkOff     b) = extEq a b
+    (Bright       a) == (Bright       b) = extEq a b
+    (BrightOff    a) == (BrightOff    b) = extEq a b
+    (Underline    a) == (Underline    b) = extEq a b
+    (UnderlineOff a) == (UnderlineOff b) = extEq a b
+    (Inverse      a) == (Inverse      b) = extEq a b
+    (InverseOff   a) == (InverseOff   b) = extEq a b
 
-    (Sum  a) == (Sum  b) = toCompStr a == toCompStr b
-    (Atom a) == (Atom b) = toCompStr a == toCompStr b
+    (Sum  a) == (Sum  b) = extEq a b
+    (Atom a) == (Atom b) = extEq a b
     _ == _ = False
 
 {-|
@@ -236,7 +215,7 @@ implementing 'ToEscapable'. See the section __/Explicitly Derived Typeable/__ in
 
 <<https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/either_error.png>>
 -}
-class (Show a, Typeable a) => ToEscapable a where
+class (Show a, Typeable a, Eq a) => ToEscapable a where
     -- | Convert the given type to an Escapable
     toEscapable :: a -> Escapable
 
