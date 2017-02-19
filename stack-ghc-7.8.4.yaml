@@ -47,6 +47,7 @@ extra-deps:
 - silently-1.2.5
 - hspec-expectations-0.7.2
 - quickcheck-io-0.1.4
+- HUnit-1.3.1.2
 
 # Override default flag values for local packages and extra-deps
 flags: {}
