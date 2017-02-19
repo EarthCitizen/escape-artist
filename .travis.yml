@@ -30,9 +30,11 @@ env:
 # 5.x
 - CMD="range 5 0 18"
 # 6.x
-- CMD="range 6 0 27"
+- CMD="range 6 0 30"
 # 7.x
-- CMD="range 7 0 16"
+- CMD="range 7 0 19"
+# 8.x
+- CMD="range 8 0 0"
 # Default in stack.yaml
 - CMD="default"
 
