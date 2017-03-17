@@ -20,6 +20,10 @@ cache:
 #        - ghc-8.0.1
 #        - cabal-install-1.24
 
+addons:
+    apt:
+        packages:
+        - libgmp-dev
 env:
 # 2.x
 - CMD="range 2 0 22"
