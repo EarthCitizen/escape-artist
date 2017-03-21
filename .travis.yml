@@ -83,10 +83,6 @@ before_install:
 - mkdir -p $HOME/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
 # - export PATH=/opt/ghc/bin:/opt/cabal/bin:$HOME/.cabal/bin:$HOME/.local/bin:$PATH
-# For compiling stack from source
-# - bash scripts/install_stack.sh
-# Download and unpack the stack executable
-#- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C $HOME/.local/bin '*/stack'
 - travis_retry bash scripts/install_stack_download.sh
 - hash -r
 
