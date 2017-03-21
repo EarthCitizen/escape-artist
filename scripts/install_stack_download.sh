@@ -9,7 +9,5 @@ then
     exit 0
 fi
 
-curl -sSL https://get.haskellstack.org/ | sh
-
-#curl -L https://www.stackage.org/stack/linux-x86_64 | \
-#tar xz --wildcards --strip-components=1 -C $HOME/.local/bin '*/stack'
+curl -L https://www.stackage.org/stack/linux-x86_64 | \
+tar xz --wildcards --strip-components=1 -C $HOME/.local/bin '*/stack'
