@@ -322,14 +322,26 @@ escToStrEncl pref suff (InverseOff   a) = recur (pref ++ inverseOff  ) suff     
 escToStrEncl pref suff (Sum  a) = concatMap (recur pref suff) a
 escToStrEncl pref suff (Atom a) = concat [pref, a, suff]
 
+#if MIN_VERSION_base(4,11,0)
+instance Semigroup Escapable where
+    (<>) (Sum []) b        = b
+    (<>) a        (Sum []) = a
+    (<>) (Sum as) (Sum bs) = Sum $ as ++ bs
+    (<>) (Sum as) b        = Sum $ as ++ [b]
+    (<>) a        (Sum bs) = Sum $ a  :  bs
+    (<>) a        b        = Sum [a, b]
+#endif
+
 instance Monoid Escapable where
     mempty = Sum []
+#if ! MIN_VERSION_base(4,11,0)
     mappend (Sum []) b        = b
     mappend a        (Sum []) = a
     mappend (Sum as) (Sum bs) = Sum $ mconcat [as,  bs ]
     mappend (Sum as) b        = Sum $ mconcat [as,  [b]]
     mappend a        (Sum bs) = Sum $ mconcat [[a], bs ]
     mappend a        b        = Sum [a, b]
+#endif
 
 -- | Convert any instance of 'ToEscapable' to a 'String' and output it to the terminal followed by a newline
 putEscLn :: (ToEscapable a) => a -> IO ()

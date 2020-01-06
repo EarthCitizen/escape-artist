@@ -3,7 +3,7 @@ set -e
 
 readonly SCRIPTROOT=$( cd $( dirname $0 ); pwd )
 readonly PROJROOT=$( cd $SCRIPTROOT/..; pwd )
-readonly VAR_STACK_YAML="$PROJROOT/stack-ghc-7.8.4.yaml"
+readonly VAR_STACK_YAML="$PROJROOT/stack.yaml"
 readonly STACK_OPTS='--allow-different-user --no-terminal'
 
 function exit_int() {
@@ -32,12 +32,18 @@ function get_lts_versions_all() {
         then
             echo 2.{0..22}
         fi
-        echo 3.{0..22} \
-             4.{0..2} \
-             5.{0..18} \
-             6.{0..30} \
-             7.{0..19} \
-             8.{0..0}
+        echo 3.{0..22}  \
+             4.{0..2}   \
+             5.{0..18}  \
+             6.{0..30}  \
+             7.{0..19}  \
+             8.{0..24}  \
+             9.{0..21}  \
+             10.{0..10} \
+             11.{0..22} \
+             12.{0..26} \
+             13.{0..30} \
+             14.{0..20}
     ) | tr ' ' '\n'
 }
 
