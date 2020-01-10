@@ -14,8 +14,6 @@ addons:
         packages:
         - libgmp-dev
 env:
-# 2.x
-- CMD="range 2 0 22"
 # 3.x
 - CMD="range 3 0 22"
 # 4.x
@@ -23,9 +21,9 @@ env:
 # 5.x
 - CMD="range 5 0 18"
 # 6.x
-- CMD="range 6 0 30"
+- CMD="range 6 0 35"
 # 7.x
-- CMD="range 7 0 19"
+- CMD="range 7 0 24"
 # 8.x
 - CMD="range 8 0 24"
 # 9.x
@@ -43,39 +41,6 @@ env:
 # Default in stack.yaml
 - CMD="default"
 
-## 2.x
-#- CMD="range 2 0 4"
-#- CMD="range 2 5 9"
-#- CMD="range 2 10 14"
-#- CMD="range 2 15 19"
-#- CMD="range 2 20 22"
-## 3.x
-#- CMD="range 3 0 4"
-#- CMD="range 3 5 9"
-#- CMD="range 3 10 14"
-#- CMD="range 3 15 19"
-#- CMD="range 3 20 22"
-## 4.x
-#- CMD="range 4 0 2"
-## 5.x
-#- CMD="range 5 0 4"
-#- CMD="range 5 5 9"
-#- CMD="range 5 10 14"
-#- CMD="range 5 15 18"
-## 6.x
-#- CMD="range 6 0 4"
-#- CMD="range 6 5 9"
-#- CMD="range 6 10 14"
-#- CMD="range 6 15 19"
-#- CMD="range 6 20 24"
-#- CMD="range 6 25 27"
-## 7.x
-#- CMD="range 7 0 4"
-#- CMD="range 7 5 9"
-#- CMD="range 7 10 14"
-#- CMD="range 7 15 16"
-## Default in stack.yaml
-#- CMD="default"#
 
 before_install:
 - mkdir -p $HOME/.local/bin
