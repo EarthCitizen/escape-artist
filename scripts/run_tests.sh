@@ -28,10 +28,6 @@ function get_lts_versions_range() {
 
 function get_lts_versions_all() {
     (
-        if [[ $OS != $MAC ]]
-        then
-            echo 2.{0..22}
-        fi
         echo 3.{0..22}  \
              4.{0..2}   \
              5.{0..18}  \

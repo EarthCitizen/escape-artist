@@ -2,10 +2,6 @@
 
 module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (^$)) where
 
-#if ! MIN_VERSION_base(4,8,0)
-import Data.Monoid (Monoid, mappend, mconcat, mempty)
-#endif
-
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy as BSL
@@ -73,10 +69,6 @@ data Escapable = forall a. (ToEscapable a) => FgBlack   a -- ^ Foreground color 
                | forall a. (ToEscapable a) => InverseOff   a -- ^ Will not inherit inverse attribute from parent
                | Sum [Escapable]
                | Atom String
-
-#if ! MIN_VERSION_base(4,8,0)
-deriving instance Typeable Escapable
-#endif
 
 instance Show Escapable where
     show (FgBlack   a) = "FgBlack ("   ++ show a ++ ")"
