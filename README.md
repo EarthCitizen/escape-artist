@@ -193,6 +193,7 @@ Name          | Description
 Symbol | Purpose
 ------ | -------
 `^$`   | Same as `$`, but one level of precedence higher than `<>` for avoiding the use of parentheses when needing to use `$` in the same expression as `<>`. See examples below.
+`/<>/` | The same as `<>`, except that any argument that is not of type `Escapable` will be wrapped in `Inherit` before being combined with the other argument via `<>`.
 
 ## Examples
 
