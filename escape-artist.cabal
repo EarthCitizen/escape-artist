@@ -36,9 +36,6 @@ description:
     &#x20;    toEscapable a = FgRed $ show a
     @
     .
-    NOTE: For GHC < 7.10 you will also need to explicitly derive 'Typeable' for custom data types
-    implementing 'ToEscapable'. See the section Explicitly Derived Typeable in the documentation.
-    .
     Comprehensive Documentation
     .
     See comprehensive documentation with many examples here:
@@ -66,7 +63,7 @@ library
                      , text >= 1.2.0.4 && < 1.3
   if impl(ghc < 7.10.0)
     build-depends: unsupported-ghc-version > 1 && < 1
-  ghc-options:         -Wall
+  ghc-options:         -Wall -Wno-type-defaults
   default-language:    Haskell2010
 
 test-suite escape-artist-spec-test
