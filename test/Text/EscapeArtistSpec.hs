@@ -49,6 +49,12 @@ spec = do
         it "gets processed before <>" $ do
             (FgRed ^$ Underline 5 <> FgBlue 3 <> FgYellow 9) `shouldBe` (Sum [FgRed (Underline 5), FgBlue 3, FgYellow 9])
 
+    describe "/<>/" $ do
+        it "produces the same result as <>" $ do
+            (FgRed "A" /<>/ FgBlue 10) `shouldBe` (FgRed "A" <> FgBlue 10)
+        it "wraps non-Escapable values in Inherit" $ do
+            (5 /<>/ FgRed "A" /<>/ 'C') `shouldBe` (Sum [Inherit 5, FgRed "A", Inherit 'C']) 
+
     describe "Eq Escapable" $ do
         it "considers escapables equal when constructors and contained values are same" $ forM_ eqTestCases $ do
             \(a, b) -> a `shouldBe` b
