@@ -193,6 +193,7 @@ Name          | Description
 Symbol | Purpose
 ------ | -------
 `^$`   | Same as `$`, but one level of precedence higher than `<>` for avoiding the use of parentheses when needing to use `$` in the same expression as `<>`. See examples below.
+`/<>/` | The same as `<>`, except that any argument that is not of type `Escapable` will be wrapped in `Inherit` before being combined with the other argument via `<>`.
 
 ## Examples
 
@@ -242,7 +243,7 @@ putEscLn underlines
 
 The same type of functionality applies as well to `BlinkOff`, `BrightOff` and `InverseOff`.
 
-### Operator ^$
+### Operator `^$`
 
 This operator allows you to avoid parentheses in cases where you need to use `$` and `<>` in he same expression.
 
@@ -261,6 +262,19 @@ Without `^$`, this would have to be written as:
 
 ```haskell
 Underline $ (Bright $ FgGreen "GREEN") <> Default " " <> FgYellow "YELLOW"
+```
+
+### Operator `/<>/`
+
+This operator allows `Inherit` to be omitted.
+
+```haskell
+BgRed $ Inherit 4 <> BgCyan " " <> Inherit 5 <> BgGreen " " <> Inherit 9
+```
+can simply be written as:
+
+```haskell
+BgRed $ 4 /<>/ BgCyan " " /<>/ 5 /<>/ BgGreen " " /<>/ 9
 ```
 
 ## Advanced Examples
