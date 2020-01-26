@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.0.0 - 2020-01-26
+### Added
+- `/<>/` - Default inherit operator
+### Changed
+- Removed support for GHC < 7.10.0
+- Now supports latest (as of 2020-01) GHC versions
+
 ## 1.1.0 - 2017-01-24
 ### Changed
 - Now supports a wider range of versions for `text`, `bytestring` and `base`
