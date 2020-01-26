@@ -1,5 +1,5 @@
 name:                escape-artist
-version:             1.2.0
+version:             1.2.0.0
 synopsis:            ANSI Escape Sequence Text Decoration Made Easy
 description:
     A library for text decoration with ANSI escape sequences made easy. Decorate your terminal text expressively.
