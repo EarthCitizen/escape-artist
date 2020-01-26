@@ -274,10 +274,8 @@ BgRed $ Inherit 4 <> BgCyan " " <> Inherit 5 <> BgGreen " " <> Inherit 9
 can simply be written as:
 
 ```haskell
-BgRed $ 4 \/<>\/ BgCyan " " \/<>\/ 5 \/<>\/ BgGreen " " \/<>\/ 9
+BgRed $ 4 /<>/ BgCyan " " /<>/ 5 /<>/ BgGreen " " /<>/ 9
 ```
-
-In this example, 'Inherit' can be omitted.
 
 ## Advanced Examples
 
