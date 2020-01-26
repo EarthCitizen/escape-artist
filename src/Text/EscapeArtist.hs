@@ -45,15 +45,11 @@ instance (ToEscapable a) => ToEscapable (Maybe a) where
 
 See the documentation on 'ToEscapable' below for a more advanced example.
 
-For GHC < 7.10 you will also need to explicitly derive 'Data.Typeable.Typeable' for custom data types
-implementing 'ToEscapable'. See the section __/Explicitly Derived Typeable/__ in the
-<https://github.com/EarthCitizen/escape-artist#explicitly-derived-typeable documentation>.
-
 Comprehensive documentation with many examples here:
 
 <https://github.com/EarthCitizen/escape-artist#readme>
 -}
 
-module Text.EscapeArtist (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (^$)) where
+module Text.EscapeArtist (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (^$), (/<>/)) where
 
 import Text.EscapeArtist.Internal hiding (Atom, Sum)

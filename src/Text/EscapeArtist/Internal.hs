@@ -1,6 +1,6 @@
 {-# OPTIONS_HADDOCK hide #-}
 
-module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (^$)) where
+module Text.EscapeArtist.Internal (Escapable(..), ToEscapable(..), putEscLn, putEsc, escToString, (^$), (/<>/)) where
 
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
@@ -201,10 +201,6 @@ putEscLn $ mkSyntaxError "some/File.hs" 1 23
 putEscLn mkStatusOK
 @
 
-/Note:/ For GHC < 7.10 you will also need to explicitly derive 'Data.Typeable.Typeable' for custom data types
-implementing 'ToEscapable'. See the section __/Explicitly Derived Typeable/__ in the
-<https://github.com/EarthCitizen/escape-artist#explicitly-derived-typeable documentation>.
-
 <<https://raw.githubusercontent.com/EarthCitizen/escape-artist/master/images/either_error.png>>
 -}
 class (Show a, Typeable a, Eq a) => ToEscapable a where
@@ -334,6 +330,31 @@ instance Monoid Escapable where
     mappend a        (Sum bs) = Sum $ mconcat [[a], bs ]
     mappend a        b        = Sum [a, b]
 #endif
+
+defInherit :: forall a. (ToEscapable a, Typeable a) => a -> Escapable
+defInherit a = case cast a of
+                 Nothing -> Inherit a
+                 Just a' -> a'
+
+infixr 6 /<>/
+
+-- | The same as '<>', except that any argument that is not of type 'Escapable' will be wrapped in 'Inherit'
+-- before being combined with the other argument via '<>'. For example:
+--
+-- @
+-- BgRed $ Inherit 4 <> BgCyan " " <> Inherit 5 <> BgGreen " " <> Inherit 9
+-- @
+--
+-- can simply be written as:
+--
+-- @
+-- BgRed $ 4 \/<>\/ BgCyan " " \/<>\/ 5 \/<>\/ BgGreen " " \/<>\/ 9
+-- @
+--
+-- In this example, 'Inherit' can be omitted.
+--
+(/<>/) :: forall a b. (ToEscapable a, ToEscapable b) => a -> b -> Escapable
+(/<>/) a b = defInherit a <> defInherit b
 
 -- | Convert any instance of 'ToEscapable' to a 'String' and output it to the terminal followed by a newline
 putEscLn :: (ToEscapable a) => a -> IO ()
