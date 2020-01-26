@@ -243,7 +243,7 @@ putEscLn underlines
 
 The same type of functionality applies as well to `BlinkOff`, `BrightOff` and `InverseOff`.
 
-### Operator ^$
+### Operator `^$`
 
 This operator allows you to avoid parentheses in cases where you need to use `$` and `<>` in he same expression.
 
@@ -263,6 +263,21 @@ Without `^$`, this would have to be written as:
 ```haskell
 Underline $ (Bright $ FgGreen "GREEN") <> Default " " <> FgYellow "YELLOW"
 ```
+
+### Operator `/<>/`
+
+This operator allows `Inherit` to be omitted.
+
+```haskell
+BgRed $ Inherit 4 <> BgCyan " " <> Inherit 5 <> BgGreen " " <> Inherit 9
+```
+can simply be written as:
+
+```haskell
+BgRed $ 4 \/<>\/ BgCyan " " \/<>\/ 5 \/<>\/ BgGreen " " \/<>\/ 9
+```
+
+In this example, 'Inherit' can be omitted.
 
 ## Advanced Examples
 
