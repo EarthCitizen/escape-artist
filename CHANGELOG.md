@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.0.1 - 2020-01-27
+### Fixed
+- Build failure for GHC versions 8.2.2, 8.0.2, 7.10.3
+
 ## 1.2.0.0 - 2020-01-26
 ### Added
 - `/<>/` - Default inherit operator
