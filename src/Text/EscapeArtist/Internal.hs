@@ -12,6 +12,10 @@ import Data.Typeable (Typeable, cast)
 import Data.Word (Word, Word8, Word16, Word32, Word64)
 import Text.EscapeArtist.Internal.Constants
 
+#if ! MIN_VERSION_base(4,11,0)
+import Data.Monoid ((<>))
+#endif
+
 infixr 7 ^$
 
 -- | The same as '$', but with higher precedence. One level of precedence higher than 'Data.Monoid.<>'. This allows
